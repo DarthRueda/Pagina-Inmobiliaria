@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Api\NoteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -51,3 +52,14 @@ Route::get('category-list', [CategoryController::class, 'getList']);
 Route::get('get-posts', [PostControllerAdvance::class, 'getPosts']);
 Route::get('get-category-posts/{id}', [PostControllerAdvance::class, 'getCategoryByPosts']);
 Route::get('get-post/{id}', [PostControllerAdvance::class, 'getPost']);
+
+//Notes
+Route::get('note', [NoteController::class, 'index'])->name('note.index');
+Route::post('note', [NoteController::class, 'store'])->name('note.store');
+Route::get('note/{id}', [NoteController::class, 'show'])->name('note.show');
+Route::put('note/{id}', [NoteController::class, 'update'])->name('note.update');
+Route::delete('note/{id}', [NoteController::class, 'destroy'])->name('note.destroy');
+
+//Authors
+Route::get('author', [AuthorController::class, 'index'])->name('author.index');
+Route::post('/author', [AuthorController::class, 'store'])->name('author.store');
