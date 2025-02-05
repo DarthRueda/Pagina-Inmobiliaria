@@ -63,3 +63,6 @@ Route::delete('note/{id}', [NoteController::class, 'destroy'])->name('note.destr
 //Authors
 Route::get('author', [AuthorController::class, 'index'])->name('author.index');
 Route::post('/author', [AuthorController::class, 'store'])->name('author.store');
+Route::get('author/{id}', [AuthorController::class, 'show'])->name('author.show');
+Route::delete('author/{id}', [AuthorController::class, 'destroy'])->name('author.destroy');
+Route::put('author/{id}', [AuthorController::class, 'update'])->name('author.update');

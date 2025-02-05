@@ -1,36 +1,85 @@
 <?php
 
+
 namespace App\Http\Controllers\api;
 
+
 use App\Http\Controllers\Controller;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use App\Models\Author;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\proba;
+
 
 class AuthorController extends Controller
 {
-    public function index(): JsonResponse
-    {
-        $authors = Author::all();
-        return response()->json($authors);
-    }
+   public function index(){
+    //    $authors = Author::all();
+    //    return response()->json(['status'=>405,'success'=>true,'data'=>$authors]);
 
-    public function store(Request $request): JsonResponse
-    {
-        $validate = $request->validate([
-            'nombre' => 'required',
-            'apellido' => 'required',
-            'email' => 'required|email|unique:authors',
-        ]);
+    return proba::collection(Author::all());
+   }
 
-        $author = Author::create($validate);
-        return response()->json($author, 201);
-    }
 
-    public function destroy($id): JsonResponse
-    {
-        $author = Author::find($id);
-        $author->delete();
-        return response()->json(null, 204);
-    }
+   public function store(Request $request){
+
+
+       $validator = Validator::make(
+           $request->all(),
+           [
+               'name'=> ['required','max:255'],
+               'surname' => '',
+               'email'=>['required','unique:authors']
+           ]
+       );
+
+
+       $data = $validator->validated();
+
+
+       $author = Author::create($data);
+       return response()->json(['status'=>405,'success'=>true,'data'=>$author]);
+
+
+       //
+
+
+
+
+       /*
+       $author = new Author();
+       $author->name = $request->name;
+       $author->surname = $request->surname;
+       $author->email = $request->email;
+       $author->save();
+       return response()->json(['status'=>405,'success'=>true,'data'=>$author]);
+       */
+   }
+
+   public function update(Request $request, Author $author){
+    
+       $validator = Validator::make(
+           $request->all(),
+           [
+               'name'=> ['required','max:255'],
+               'surname' => '',
+           ]
+       );
+
+       $data = $validator->validated();
+       $author->update($data);
+   }
+
+
+   public function destroy(Author $author){
+
+
+       $author->delete();
+       return response()->json(['status'=>405,'success'=>true,'data'=>'']);
+   }
+
+
+
+
 }
