@@ -117,7 +117,15 @@ export default [
         // },
         name: 'app',
         beforeEnter: requireLogin,
-        meta: { breadCrumb: 'Dashboard' }
+        meta: { breadCrumb: 'Dashboard' },
+        children: [
+            {
+                name: 'user.panel',
+                path: 'panelusuario',
+                component: () => import('../views/user/panelusuario.vue'),
+                meta: { breadCrumb: 'Panel Usuario' }
+            }
+        ]
     },
 
 
