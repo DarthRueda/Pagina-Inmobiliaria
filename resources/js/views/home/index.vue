@@ -264,6 +264,55 @@
 .section-button:hover {
     background-color: #64428C;
 }
+
+@media (max-width: 1000px) {
+    .bloque-hipoteca .row,
+    .bloque-casa .row,
+    .bloque-inmobiliaria .row {
+        flex-direction: column;
+    }
+    .bloque-hipoteca .col-6,
+    .bloque-casa .col-6,
+    .bloque-inmobiliaria .col-6 {
+        width: 100%;
+    }
+    .bloque-hipoteca .col-6 img,
+    .bloque-casa .col-6 img,
+    .bloque-inmobiliaria .col-6 img {
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        max-width: 402px;
+        height: auto;
+    }
+}
+
+@media (max-width: 425px) {
+    .bloque-hipoteca .row,
+    .bloque-casa .row,
+    .bloque-inmobiliaria .row {
+        flex-direction: column;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .bloque-hipoteca .col-6,
+    .bloque-casa .col-6,
+    .bloque-inmobiliaria .col-6 {
+        width: 100%;
+        text-align: center;
+    }
+    .bloque-hipoteca .col-6 img,
+    .bloque-casa .col-6 img,
+    .bloque-inmobiliaria .col-6 img {
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        max-width: 402px;
+        height: auto;
+    }
+}
 </style>
 <script>
 export default {

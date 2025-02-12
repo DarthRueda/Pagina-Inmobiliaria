@@ -3,8 +3,8 @@
         <div class="row justify-content-center my-5">
             <div class="col-md-6">
                 <div class="text-center mb-4">
-                        <h1 class="h1-title">{{ $t('register') }}</h1>
-                        <h2 class="h2-subtitle">{{ $t('Registrate y disfruta de todas las ventajas ') }}</h2>
+                        <h1 class="h1-title">{{ $t('Registrar Empresa') }}</h1>
+                        <h2 class="h2-subtitle">{{ $t('Registra tu empresa y consigue vender pisos de forma facil y accesible ') }}</h2>
                 </div>
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
@@ -43,6 +43,50 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Nombre Comercial -->
+                                <div class="mb-3">
+                                    <label for="nombre_comercial" class="form-label">{{ $t('Nombre Comercial') }}</label>
+                                    <input v-model="registerForm.nombre_comercial" id="nombre_comercial" type="text" class="form-control">
+                                    <!-- Validation Errors -->
+                                    <div class="text-danger mt-1">
+                                        <div v-for="message in validationErrors?.nombre_comercial">
+                                            {{ message }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Direccion -->
+                                <div class="mb-3">
+                                    <label for="direccion" class="form-label">{{ $t('Direccion') }}</label>
+                                    <input v-model="registerForm.direccion" id="direccion" type="text" class="form-control">
+                                    <!-- Validation Errors -->
+                                    <div class="text-danger mt-1">
+                                        <div v-for="message in validationErrors?.direccion">
+                                            {{ message }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Codigo Postal -->
+                                <div class="mb-3">
+                                    <label for="codigo_postal" class="form-label">{{ $t('Codigo Postal') }}</label>
+                                    <input v-model="registerForm.codigo_postal" id="codigo_postal" type="text" class="form-control">
+                                    <!-- Validation Errors -->
+                                    <div class="text-danger mt-1">
+                                        <div v-for="message in validationErrors?.codigo_postal">
+                                            {{ message }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Localidad -->
+                                <div class="mb-3">
+                                    <label for="localidad" class="form-label">{{ $t('Localidad') }}</label>
+                                    <input v-model="registerForm.localidad" id="localidad" type="text" class="form-control">
+                                    <!-- Validation Errors -->
+                                    <div class="text-danger mt-1">
+                                        <div v-for="message in validationErrors?.localidad">
+                                            {{ message }}
+                                        </div>
+                                    </div>
+                                </div>
                                 <!-- Password -->
                                 <div class="mb-4">
                                     <label for="password" class="form-label">
@@ -72,13 +116,8 @@
                                 <!-- Buttons -->
                                 <div class="flex items-center justify-end mt-4">
                                     <button class="btn btn-primary button" :class="{ 'opacity-25': processing }" :disabled="processing">
-                                        {{ $t('Registrar-se') }}
+                                        {{ $t('Registra tu empresa') }}
                                     </button>
-                                </div>
-                                <div class="text-center mt-3">
-                                    <router-link :to="{ name: 'auth.register.empresa' }">
-                                        ¿Eres una empresa? Registrate aqui
-                                    </router-link>
                                 </div>
                             </div>
                         </form>
