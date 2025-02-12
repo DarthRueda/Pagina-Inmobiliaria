@@ -55,6 +55,9 @@
         </div>
         <div class="bloque-casa">
             <div class="row">
+                <div class="col-6">
+                    <img src="/images/Home/casa.png" class="bloque-image">
+                </div>
                 <div class="col-6 text-section">
                     <div class="icon-text">
                         <img src="/images/Home/etiqueta.png" class="icon-image">
@@ -63,9 +66,6 @@
                     <span class="text-bold">Quanto vale mi casa?</span>
                     <span class="text-regular">Calcula su precio según las características y otros pisos de la zona. Acompañarte es darte todas las herramientas gratuitas.</span>
                     <button class="section-button">¡Valora tu vivienda ahora!</button>
-                </div>
-                <div class="col-6">
-                    <img src="/images/Home/casa.png" class="bloque-image">
                 </div>
             </div>
         </div>
@@ -196,6 +196,10 @@
     align-items: center;
     margin-left: 80px;
     margin-right: 80px;
+}
+
+.bloque-casa .row {
+    flex-direction: row-reverse;
 }
 
 .bloque-hipoteca .col-6 img,
