@@ -112,6 +112,13 @@ export default [
                 component: () => import('../views/auth/passwords/Reset.vue'),
                 beforeEnter: guest,
             },
+            {
+                path: 'panelusuario',
+                name: 'user.panel',
+                component: () => import('../views/user/panelusuario.vue'),
+                beforeEnter: requireLogin,
+                meta: { breadCrumb: 'Panel Usuario' }
+            },
         ]
     },
 
