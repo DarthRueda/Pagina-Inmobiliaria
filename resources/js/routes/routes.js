@@ -95,6 +95,12 @@ export default [
                 beforeEnter: guest,
             },
             {
+                path: 'register/empresa',
+                name: 'auth.register.empresa',
+                component: () => import('../views/register/indexempresa.vue'),
+                beforeEnter: guest,
+            },
+            {
                 path: 'forgot-password',
                 name: 'auth.forgot-password',
                 component: () => import('../views/auth/passwords/Email.vue'),
