@@ -66,3 +66,5 @@ Route::post('/author', [AuthorController::class, 'store'])->name('author.store')
 Route::get('author/{id}', [AuthorController::class, 'show'])->name('author.show');
 Route::delete('author/{id}', [AuthorController::class, 'destroy'])->name('author.destroy');
 Route::put('author/{id}', [AuthorController::class, 'update'])->name('author.update');
+
+Route::middleware('auth:api')->get('/user', [UserController::class, 'getUserData']);

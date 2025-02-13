@@ -106,6 +106,13 @@ export default [
                 component: () => import('../views/auth/passwords/Reset.vue'),
                 beforeEnter: guest,
             },
+            {
+                path: 'panelusuario',
+                name: 'user.panel',
+                component: () => import('../views/user/panelusuario.vue'),
+                beforeEnter: requireLogin,
+                meta: { breadCrumb: 'Panel Usuario' }
+            },
         ]
     },
 
@@ -117,15 +124,7 @@ export default [
         // },
         name: 'app',
         beforeEnter: requireLogin,
-        meta: { breadCrumb: 'Dashboard' },
-        children: [
-            {
-                name: 'user.panel',
-                path: 'panelusuario',
-                component: () => import('../views/user/panelusuario.vue'),
-                meta: { breadCrumb: 'Panel Usuario' }
-            }
-        ]
+        meta: { breadCrumb: 'Dashboard' }
     },
 
 
