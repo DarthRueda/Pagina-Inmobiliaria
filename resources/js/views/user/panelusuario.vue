@@ -46,7 +46,10 @@
 </script>
 
 <style scoped>
-
+.row{
+    margin-right: 0;
+    margin-left: 0;
+}
 .options-box {
     border: 1px solid #ccc;
     padding: 10px;
@@ -73,6 +76,7 @@
 .form-row {
     display: flex;
     justify-content: space-between;
+    width: 100%;
 }
 
 .form-group.col-6 {
