@@ -119,6 +119,16 @@ export default [
                 beforeEnter: requireLogin,
                 meta: { breadCrumb: 'Panel Usuario' }
             },
+            {
+                path: 'preciocasa',
+                name: 'preciocasa',
+                component: () => import('../views/calculadoras/preciocasa.vue'),
+            },
+            {
+                path: 'hipoteca',
+                name: 'hipoteca',
+                component: () => import('../views/calculadoras/hipoteca.vue'),
+            },
         ]
     },
 
