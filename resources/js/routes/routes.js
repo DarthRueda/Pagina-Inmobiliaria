@@ -106,6 +106,12 @@ export default [
                 component: () => import('../views/auth/passwords/Reset.vue'),
                 beforeEnter: guest,
             },
+
+            {
+                path: 'inmubles',
+                name: 'list-inmubles',
+                component: () => import('../views/inmuebles/showHomes.vue'),   
+            },
         ]
     },
 
