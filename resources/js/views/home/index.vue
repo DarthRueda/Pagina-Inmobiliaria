@@ -49,7 +49,7 @@
                     </div>
                     <span class="text-bold">Simula tu hipoteca</span>
                     <span class="text-regular">Descubre cuánto puedes pagar por tu próxima vivienda con nuestra calculadora de hipotecas fácil y rápida.</span>
-                    <button class="section-button">¡Haz tu simulación ahora!</button>
+                    <button class="section-button" @click="redirectToHipoteca">¡Haz tu simulación ahora!</button>
                 </div>
             </div>
         </div>
@@ -324,6 +324,9 @@ export default {
     methods: {
         selectOption(option) {
             this.selectedOption = option;
+        },
+        redirectToHipoteca() {
+            this.$router.push('/hipoteca');
         }
     }
 };

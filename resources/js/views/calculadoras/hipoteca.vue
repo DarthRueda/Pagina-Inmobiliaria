@@ -1,30 +1,7 @@
 <template>
   <div class="formulario-hipoteca">
     <h1 class="title">Calcular Hipoteca</h1>
-    <form>
-      <div class="select-container">
-        <label for="provincia" class="form-label">Provincia:</label>
-        <select id="provincia" v-model="form.provincia" class="form-control" @focus="hideIcon" @blur="showIcon">
-          <option v-for="provincia in provincias" :key="provincia" :value="provincia">{{ provincia }}</option>
-        </select>
-        <i class="icon" v-show="iconVisible">▼</i>
-      </div>
-      <div class="select-container">
-        <label for="tipoVivienda" class="form-label">Tipo de vivienda:</label>
-        <select id="tipoVivienda" v-model="form.tipoVivienda" class="form-control" @focus="hideIcon" @blur="showIcon">
-          <option value="Segunda Mano">Segunda Mano</option>
-          <option value="Obra Nueva">Obra Nueva</option>
-        </select>
-        <i class="icon" v-show="iconVisible">▼</i>
-      </div>
-      <div class="select-container">
-        <label for="usoVivienda" class="form-label">Uso de vivienda:</label>
-        <select id="usoVivienda" v-model="form.usoVivienda" class="form-control" @focus="hideIcon" @blur="showIcon">
-          <option value="Habitual">Habitual</option>
-          <option value="Segunda Vivienda">Segunda Vivienda</option>
-        </select>
-        <i class="icon" v-show="iconVisible">▼</i>
-      </div>
+    <form @submit.prevent="calcularHipoteca">
       <div>
         <label for="precioVivienda" class="form-label">Precio Vivienda:</label>
         <input type="text" :value="form.precioVivienda + '€'" class="form-control" readonly>
@@ -36,28 +13,18 @@
         <input type="range" id="ahorroAportado" v-model="form.ahorroAportado" class="form-control slider" :max="form.precioVivienda" step="1000">
       </div>
       <div>
-        <label for="ingresosMensuales" class="form-label">Ingresos mensuales de la unidad familiar:</label>
-        <input type="number" id="ingresosMensuales" v-model="form.ingresosMensuales" class="form-control">
-      </div>
-      <div class="select-container">
-        <label for="situacionLaboral" class="form-label">Situación laboral:</label>
-        <select id="situacionLaboral" v-model="form.situacionLaboral" class="form-control" @focus="hideIcon" @blur="showIcon">
-          <option value="Asalariado/a">Asalariado/a</option>
-          <option value="Autonomo/a">Autonomo/a</option>
-          <option value="Empleado/a público">Empleado/a público</option>
-          <option value="Mixto (Asalariado/a Autonomo/a)">Mixto (Asalariado/a Autonomo/a)</option>
-          <option value="Empresario/a">Empresario/a</option>
-          <option value="Parado/a">Parado/a</option>
-          <option value="Desempleado/a">Desempleado/a</option>
-          <option value="Cooperativista">Cooperativista</option>
-          <option value="Temporero/a">Temporero/a</option>
-          <option value="Pensionista">Pensionista</option>
-          <option value="Estudiante">Estudiante</option>
-        </select>
-        <i class="icon" v-show="iconVisible">▼</i>
+        <label for="terminioAnos" class="form-label">Terminio en años:</label>
+        <input type="text" :value="form.terminioAnos + ' años'" class="form-control" readonly>
+        <input type="range" id="terminioAnos" v-model="form.terminioAnos" class="form-control slider" min="5" max="40" step="1">
       </div>
       <button type="submit" class="form-control button">Calcular</button>
     </form>
+    <div v-if="resultados" class="resultados">
+      <h2>Resultados</h2>
+      <p>Impuestos y despensas: {{ formatNumber(impuestosYDespensas) }}€</p>
+      <p>Importe del prestamo: {{ formatNumber(importePrestamo) }}€</p>
+      <p>Quota mensual: {{ formatNumber(cuotaMensual) }}€</p>
+    </div>
   </div>
 </template>
 
@@ -66,41 +33,45 @@ export default {
   data() {
     return {
       form: {
-        provincia: '',
-        tipoVivienda: '',
-        usoVivienda: '',
         precioVivienda: 10000,
         ahorroAportado: 0,
-        ingresosMensuales: 0,
-        situacionLaboral: ''
+        terminioAnos: 5,
+        tipoInteres: 5
       },
-      provincias: [
-        'Álava', 'Albacete', 'Alicante', 'Almería', 'Asturias', 'Ávila', 'Badajoz', 'Baleares', 'Barcelona', 'Burgos', 
-        'Cáceres', 'Cádiz', 'Cantabria', 'Castellón', 'Ciudad Real', 'Córdoba', 'Cuenca', 'Girona', 'Granada', 'Guadalajara', 
-        'Guipúzcoa', 'Huelva', 'Huesca', 'Jaén', 'La Rioja', 'Las Palmas', 'León', 'Lleida', 'Lugo', 'Madrid', 'Málaga', 
-        'Murcia', 'Navarra', 'Ourense', 'Palencia', 'Pontevedra', 'Salamanca', 'Santa Cruz de Tenerife', 'Segovia', 'Sevilla', 
-        'Soria', 'Tarragona', 'Teruel', 'Toledo', 'Valencia', 'Valladolid', 'Vizcaya', 'Zamora', 'Zaragoza'
-      ],
-      iconVisible: true
+      resultados: false,
+      impuestosYDespensas: 0,
+      importePrestamo: 0,
+      cuotaMensual: 0
     };
   },
   methods: {
-    hideIcon() {
-      this.iconVisible = false;
+    calcularHipoteca() {
+      const notaria = 1105;
+      const registre = 588;
+      const gestoria = 300;
+      const impuestos = this.form.precioVivienda / 10;
+
+      this.impuestosYDespensas = notaria + registre + gestoria + impuestos;
+      this.importePrestamo = this.form.precioVivienda - this.form.ahorroAportado;
+      this.cuotaMensual = this.importePrestamo / (this.form.terminioAnos * 12);
+
+      this.resultados = true;
     },
-    showIcon() {
-      this.iconVisible = true;
+    formatNumber(value) {
+      return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.').replace('.', ',');
     }
   }
 };
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
 .formulario-hipoteca {
     margin-left: 130px;
     margin-right: 130px;
-
 }
+
 .form-control {
   border-radius: 0;
   height: 48px;
@@ -112,7 +83,6 @@ export default {
 .form-label {
   font-size: 24px;
 }
-
 
 .form-check-label {
   font-size: 16px;
@@ -205,4 +175,19 @@ export default {
   margin-bottom: 20px;
 }
 
+.resultados {
+  font-family: 'Inter', sans-serif;
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+.resultados h2 {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.resultados p {
+  font-size: 24px;
+  margin: 10px 0;
+}
 </style>
