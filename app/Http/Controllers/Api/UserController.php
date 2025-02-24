@@ -117,6 +117,11 @@ class UserController extends Controller
         return  $user;
     }
 
+    public function getUserData()
+    {
+        return response()->json(Auth::user());
+    }
+
     public function destroy(User $user)
     {
         $this->authorize('user-delete');
