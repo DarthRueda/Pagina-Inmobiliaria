@@ -17,7 +17,10 @@ return new class extends Migration
             $table->string('password', 255)->notNullable();
             $table->string('telefono', 20)->notNullable();
             $table->string('correo', 255)->notNullable();
-            $table->string('descripcion', 255)->nullable();
+            $table->string('nombre_comercial', 255)->notNullable();
+            $table->string('direccion', 255)->notNullable();
+            $table->string('codigo_postal', 10)->notNullable();
+            $table->string('localidad', 255)->notNullable();
             $table->timestamps();
         });
     }
