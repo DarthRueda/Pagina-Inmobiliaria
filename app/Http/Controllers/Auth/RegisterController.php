@@ -53,6 +53,12 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'telefono' => ['nullable', 'string', 'max:20'],
+            'nombre_comercial' => ['nullable', 'string', 'max:255'],
+            'direccion' => ['nullable', 'string', 'max:255'],
+            'codigo_postal' => ['nullable', 'string', 'max:10'],
+            'localidad' => ['nullable', 'string', 'max:255'],
+            'tipo' => ['nullable', 'unsignedInteger', 'max:1'],
         ]);
     }
 
@@ -68,6 +74,12 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'telefono' => $data['telefono'],
+            'nombre_comercial' => $data['nombre_comercial'],
+            'direccion' => $data['direccion'],
+            'codigo_postal' => $data['codigo_postal'],
+            'localidad' => $data['localidad'],
+            'tipo' => $data['tipo'] ?? 0, 
         ]);
     }
 }

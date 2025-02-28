@@ -40,7 +40,9 @@ export default function useAuth() {
         name: '',
         email: '',
         password: '',
-        password_confirmation: ''
+        telefono: '',
+        password_confirmation: '',
+        tipo: 0,
     })
 
     const registerEmpresaForm = reactive({
@@ -52,7 +54,8 @@ export default function useAuth() {
         nombre_comercial: '',
         direccion: '',
         codigo_postal: '',
-        localidad: ''
+        localidad: '',
+        tipo: 1,
     })
 
     const submitLogin = async () => {
@@ -99,7 +102,7 @@ export default function useAuth() {
                     icon: 'success',
                     title: 'Registration successfully',
                     showConfirmButton: false,
-                    timer: 1500
+                    timer: 1500         
                 })
                 await router.push({ name: 'auth.login' })
             })
@@ -117,7 +120,7 @@ export default function useAuth() {
         processing.value = true
         validationErrors.value = {}
 
-        await axios.post('/register-empresa', registerEmpresaForm)
+        await axios.post('/register', registerEmpresaForm)
             .then(async response => {
                 swal({
                     icon: 'success',
@@ -134,6 +137,7 @@ export default function useAuth() {
             })
             .finally(() => processing.value = false)
     }
+
 
     const submitForgotPassword = async () => {
         if (processing.value) return

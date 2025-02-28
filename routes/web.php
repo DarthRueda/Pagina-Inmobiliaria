@@ -21,8 +21,7 @@ use App\Http\Controllers\InmobiliariaController;
 Route::post('login', [AuthenticatedSessionController::class, 'login']);
 Route::post('register', [AuthenticatedSessionController::class, 'register']);
 Route::post('logout', [AuthenticatedSessionController::class, 'logout']);
-Route::post('/register-inmobiliaria', [InmobiliariaController::class, 'register']);
-Route::post('/register-empresa', [InmobiliariaController::class, 'registerEmpresa']);
+
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
