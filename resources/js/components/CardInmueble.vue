@@ -1,20 +1,32 @@
 <template>
     <div class="card">
-        <img class="card-img" src="" alt="Card image cap">
+        <div class="card-img-container">
+            <img class="card-img" src="" alt="Card image cap">
+            <div class="circle-container">
+                <svg class="card-circle" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" />
+                    <image href="images/inmuebles/corazon.svg" x="22" y="22" height="56px" width="56px"/>
+                </svg>
+            </div>
+        </div>
         <div class="card-body">
             <div class="card-top">
                 <div class="card-content">
                     <div class="card-text-content">
-                        <h5 class="card-title">Casa en Molins de Rei</h5>
+                        <h4 class="card-title">Casa en Molins de Rei</h4>
+                        <h5 class="card-subtitle">55m2 - 2 habitaciones - 2 baños - 7.182€/m2</h5>
                         <p class="card-text">Estupendisima casa con cocina, salón, comedor, habitaciones, suelo nuevo, paredes e incluso techo y puertas,
                             no te lo pierdas, es tupendisima casa con cocina, salón, comedor, habitaciones, suelo nuevo, paredes e incluso techo y puertas,
                             no te lo pierdas, es una oportunidad únicaEstupendisima casa con cocina, salón, comedor, habitaciones, suelo nuevo, paredes e incluso techo y puertas,
                             no te lo pierdas, es una oportunidad única</p>  
                     </div>
                 </div>
-                <h5 class="card-price">340.000</h5>
+                <h5 class="card-price">340.000€</h5>
             </div>
-            <h6>Inmobiliaria Me quiero ir a casa </h6>
+            <h6>Actualizado hace 6 dias</h6>
+            <div class="card-logo">
+                <img src="images/inmuebles/logo.svg" alt="Inmobiliaria Logo" class="logo-img">
+            </div>
         </div>
     </div>
 </template>
@@ -35,42 +47,43 @@ export default {
     display: flex;
     flex-direction: row; 
     align-items: center; 
-    width: 1200px;
+    width: 100%;
     gap: 20px; /* Espacio entre la imagen y el contenido */
     border: 1px solid #835EAE;
     border-radius: 0px !important;
     margin: 0;
     padding: 0;
-    position: relative; /* Para posicionar el círculo */
+    position: relative;
 }
 
-.card::before {
-    content: "";
-    width: 40px; /* Tamaño del círculo */
-    height: 40px;
-    background-color: white; /* Color de fondo del círculo */
-    border: 1px solid black;
-    border-radius: 50%; /* Para hacerlo circular */
-    position: absolute; /* Para posicionar el círculo */
-    left: 280px; /* Ajusta la posición respecto a la imagen */
-    top: 10%; /* Ajusta la posición respecto a la imagen */
-    z-index: 2; /* Para que esté por encima de la imagen */
+.card-img-container {
     display: flex;
-    justify-content: center;
     align-items: center;
-    background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9InhtbG5zOnZpZGVvL3htbG5zLWFuY2hvcj0ibm9uZSIgeG1sbnM9Imh0dHBzOi8vZGV2ZWxvcGVycy5vcmcvbmlmZXN0eS8yMDEzMDAxIj4KPHBhdGggZD0iTTEuNTg2IDMuMDY4TDQuNTg2IDIuNzA4TDExLjUwNCAxMi4yNTQiIHoiLz4KPC9zdmc+Cg=='); /* Aquí pones tu SVG codificado en Base64 */
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    cursor: pointer; /* Cambiar el cursor a 'pointer' para que se vea como un botón */
+    position: relative;
 }
 
 .card-img {
     width: 300px;
-    height: 200px;
+    height: 290px;
     background-color: #835EAE;
     object-fit: cover; 
     border-radius: 0px !important;
+}
+
+.circle-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -20px; /* Adjust this value to position the circle next to the image */
+}
+
+.card-circle {
+    width: 40px;
+    height: 40px;
+    fill: white;
+    stroke: black;
+    stroke-width: 1px;
+    margin-top: -160px; /* Move the circle a bit to the top */
 }
 
 .card-body {
@@ -102,7 +115,8 @@ export default {
 }
 
 .card-price {
-    margin: 30px;
+    margin-top: -40px;
+    font-size: 24px;
 }
 
 .card-text {
@@ -114,5 +128,38 @@ export default {
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
     word-break: break-word; /* Asegura que las palabras largas se dividan */
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.card-title {
+    font-size: 16px;
+}
+
+.card-subtitle {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.card-logo {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.logo-img {
+    width: 112px;
+    height: 47px;
+}
+
+.card-text, h6 {
+    color: grey;
+    transition: color 0.3s ease;
+}
+
+.card:hover .card-text, .card:hover h6 {
+    color: black;
 }
 </style>
