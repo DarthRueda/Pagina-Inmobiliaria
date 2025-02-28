@@ -5,7 +5,7 @@
             <div class="circle-container">
                 <svg class="card-circle" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="40" />
-                    <image href="images/inmuebles/corazon.svg" x="22" y="22" height="56px" width="56px"/>
+                    <image href="images/inmuebles/corazon.svg" x="22" y="22" height="56px" width="56px"/> 
                 </svg>
             </div>
         </div>
