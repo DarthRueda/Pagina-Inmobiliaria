@@ -48,7 +48,7 @@ async function requireAdmin(to, from, next) {
         if( hasAdmin(user.roles)){
             next()
         }else{
-            next('/app')
+            next('/panelusuario')
         }
     } else {
         next('/login')
@@ -106,8 +106,7 @@ export default [
                 component: () => import('../views/auth/passwords/Reset.vue'),
                 beforeEnter: guest,
             },
-
-            {
+          {
                 path: 'inmuebles',
                 name: 'list-inmubles',
                 component: () => import('../views/inmuebles/showHomes.vue'),   
@@ -116,6 +115,22 @@ export default [
                 path: 'propiedades',
                 name: 'list-propiedades',
                 component: () => import('../views/inmuebles/propiedades.vue'),
+              {
+                path: 'panelusuario',
+                name: 'user.panel',
+                component: () => import('../views/user/panelusuario.vue'),
+                beforeEnter: requireLogin,
+                meta: { breadCrumb: 'Panel Usuario' }
+            },
+            {
+                path: 'preciocasa',
+                name: 'preciocasa',
+                component: () => import('../views/calculadoras/preciocasa.vue'),
+            },
+            {
+                path: 'hipoteca',
+                name: 'hipoteca',
+                component: () => import('../views/calculadoras/hipoteca.vue'),
             },
         ]
     },
