@@ -106,7 +106,16 @@ export default [
                 component: () => import('../views/auth/passwords/Reset.vue'),
                 beforeEnter: guest,
             },
+          {
+                path: 'inmuebles',
+                name: 'list-inmubles',
+                component: () => import('../views/inmuebles/showHomes.vue'),   
+            },
             {
+                path: 'propiedades',
+                name: 'list-propiedades',
+                component: () => import('../views/inmuebles/propiedades.vue'),
+              {
                 path: 'panelusuario',
                 name: 'user.panel',
                 component: () => import('../views/user/panelusuario.vue'),
