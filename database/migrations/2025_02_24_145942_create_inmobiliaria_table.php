@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('inmobiliaria', function (Blueprint $table) {
+        Schema::create('inmobiliarias', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 255)->unique()->notNullable();
             $table->string('password', 255)->notNullable();
             $table->string('telefono', 20)->notNullable();
-            $table->string('correo', 255)->notNullable();
+            $table->string('email', 255)->notNullable();
             $table->string('nombre_comercial', 255)->notNullable();
             $table->string('direccion', 255)->notNullable();
             $table->string('codigo_postal', 10)->notNullable();
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('inmobiliaria');
+        Schema::dropIfExists('inmobiliarias');
     }
 };
