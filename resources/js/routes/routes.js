@@ -151,9 +151,9 @@ export default [
                 component: () => import('../views/inmuebles/propiedades.vue'),
             },
             {
-                path: 'propiedades',
-                name: 'list-propiedades',
-                component: () => import('../views/inmuebles/propiedades.vue'),
+                path: 'inmobiliaria',
+                name: 'inmobiliaria',
+                component: () => import('../views/inmuebles/inmobiliaria.vue'),
             },
         ]
     },
