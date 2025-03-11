@@ -58,7 +58,7 @@ class RegisterController extends Controller
             'direccion' => ['nullable', 'string', 'max:255'],
             'codigo_postal' => ['nullable', 'string', 'max:10'],
             'localidad' => ['nullable', 'string', 'max:255'],
-            'tipo' => ['nullable', 'unsignedInteger', 'max:1'],
+            'tipo' => ['nullable', 'boolean'],
         ]);
     }
 
