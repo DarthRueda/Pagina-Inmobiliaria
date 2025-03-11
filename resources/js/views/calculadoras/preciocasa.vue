@@ -5,7 +5,7 @@
     <form>
       <div>
         <label for="address" class="form-label">Dirección de la vivienda:</label>
-        <input type="text" id="address" v-model="address" class="form-control" />
+        <input type="text" id="address" v-model="direccion" class="form-control" />
       </div>
       <div>
         <label class="form-label">Tipo de vivienda:</label>
@@ -16,16 +16,16 @@
       </div>
       <div>
         <label for="surface" class="form-label">Superficie (m²):</label>
-        <input type="number" id="surface" v-model="surface" placeholder="117" class="form-control" />
+        <input type="number" id="surface" v-model="superficie" placeholder="117" class="form-control" />
       </div>
       <div>
         <label for="constructionYear" class="form-label">Año de última reforma:</label>
-        <input type="number" id="constructionYear" v-model="constructionYear" placeholder="1978 (año de construcción)" @input="validateYear" class="form-control" />
+        <input type="number" id="constructionYear" v-model="añoReforma" placeholder="1978 (año de construcción)" @input="validarAño" class="form-control" />
       </div>
       <div>
         <label for="conservationStatus" class="form-label">Estado de conservación:</label>
         <div class="select-container">
-          <select id="conservationStatus" v-model="conservationStatus" class="form-control">
+          <select id="conservationStatus" v-model="estadoConservacion" class="form-control">
             <option value="unknown">Desconocido</option>
             <option value="bad">A reformar</option>
             <option value="normal">Normal</option>
@@ -38,35 +38,55 @@
       <div>
         <label class="form-label">Habitaciones:</label>
         <div class="button-group centered-buttons">
-          <button type="button" @click="setRooms(1)" class="button small-button">1</button>
-          <button type="button" @click="setRooms(2)" class="button small-button">2</button>
-          <button type="button" @click="setRooms(3)" class="button small-button">3</button>
-          <button type="button" @click="setRooms(4)" class="button small-button">4</button>
-          <button type="button" @click="setRooms(5)" class="button small-button">+5</button>
+          <button type="button" @click="establecerHabitaciones(1)" :class="{'button small-button': true, 'selected': habitaciones === 1}">1</button>
+          <button type="button" @click="establecerHabitaciones(2)" :class="{'button small-button': true, 'selected': habitaciones === 2}">2</button>
+          <button type="button" @click="establecerHabitaciones(3)" :class="{'button small-button': true, 'selected': habitaciones === 3}">3</button>
+          <button type="button" @click="establecerHabitaciones(4)" :class="{'button small-button': true, 'selected': habitaciones === 4}">4</button>
+          <button type="button" @click="establecerHabitaciones(5)" :class="{'button small-button': true, 'selected': habitaciones === 5}">+5</button>
         </div>
       </div>
       <div>
         <label class="form-label">Baños:</label>
         <div class="button-group centered-buttons">
-          <button type="button" @click="setBathrooms(1)" class="button small-button">1</button>
-          <button type="button" @click="setBathrooms(2)" class="button small-button">2</button>
-          <button type="button" @click="setBathrooms(3)" class="button small-button">3</button>
-          <button type="button" @click="setBathrooms(4)" class="button small-button">4</button>
-          <button type="button" @click="setBathrooms(5)" class="button small-button">+5</button>
+          <button type="button" @click="establecerBaños(1)" :class="{'button small-button': true, 'selected': baños === 1}">1</button>
+          <button type="button" @click="establecerBaños(2)" :class="{'button small-button': true, 'selected': baños === 2}">2</button>
+          <button type="button" @click="establecerBaños(3)" :class="{'button small-button': true, 'selected': baños === 3}">3</button>
+          <button type="button" @click="establecerBaños(4)" :class="{'button small-button': true, 'selected': baños === 4}">4</button>
+          <button type="button" @click="establecerBaños(5)" :class="{'button small-button': true, 'selected': baños === 5}">+5</button>
         </div>
       </div>
       <div>
         <label class="form-label">Extras:</label>
         <div class="button-group centered-buttons">
-          <button type="button" @click="toggleExtra('ascensor')" class="button extra-button">Ascensor</button>
-          <button type="button" @click="toggleExtra('garaje')" class="button extra-button">Garaje</button>
-          <button type="button" @click="toggleExtra('piscina')" class="button extra-button">Piscina</button>
-          <button type="button" @click="toggleExtra('zonasAjardinadas')" class="button extra-button">Zonas ajardinadas</button>
-          <button type="button" @click="toggleExtra('zonasDeportivas')" class="button extra-button">Zonas deportivas</button>
-          <button type="button" @click="toggleExtra('trastero')" class="button extra-button">Trastero</button>
+          <button type="button" @click="alternarExtra('ascensor')" :class="{'button extra-button': true, 'selected': extras.includes('ascensor')}">Ascensor</button>
+          <button type="button" @click="alternarExtra('garaje')" :class="{'button extra-button': true, 'selected': extras.includes('garaje')}">Garaje</button>
+          <button type="button" @click="alternarExtra('piscina')" :class="{'button extra-button': true, 'selected': extras.includes('piscina')}">Piscina</button>
+          <button type="button" @click="alternarExtra('zonasAjardinadas')" :class="{'button extra-button': true, 'selected': extras.includes('zonasAjardinadas')}">Zonas ajardinadas</button>
+          <button type="button" @click="alternarExtra('zonasDeportivas')" :class="{'button extra-button': true, 'selected': extras.includes('zonasDeportivas')}">Zonas deportivas</button>
+          <button type="button" @click="alternarExtra('trastero')" :class="{'button extra-button': true, 'selected': extras.includes('trastero')}">Trastero</button>
         </div>
       </div>
+      <div>
+        <button type="button" @click="calcular" class="button">Calcular</button>
+      </div>
     </form>
+    <div v-if="mostrarOverlay" class="overlay">
+      <div class="overlay-content">
+        <div class="price-box-container">
+          <div class="price-box">
+            <h2>Precio venta</h2>
+            <p>{{ precioVenta }} €</p>
+          </div>
+          <div class="price-box">
+            <h2>Precio alquiler</h2>
+            <p>{{ precioAlquiler }} €</p>
+          </div>
+        </div>
+        <div class="button-container">
+          <button @click="cerrarOverlay" class="button">Cerrar</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -184,7 +204,8 @@
 }
 
 .extra-button {
-  width: 50%;
+  width: auto; /* Adjusted width to fit the whole text */
+  min-width: 150px; /* Ensure a minimum width */
   height: 48px;
   background-color: #835EAE;
   color: white;
@@ -299,43 +320,151 @@
     font-size: 20px;
   }
 }
+
+.selected {
+  background-color: #64428C;
+  border: 2px solid #835EAE;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-content {
+  background: white;
+  padding: 40px; /* Increased padding to make the box bigger */
+  text-align: center;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%; /* Adjusted width */
+}
+
+.price-box-container {
+  display: flex;
+  justify-content: space-between; /* Align boxes side by side */
+  width: 100%;
+}
+
+.overlay-content .price-box {
+  padding: 20px;
+  margin: 10px;
+  border: 1px solid #000; /* Added border */
+  width: 45%; /* Adjusted width to fit side by side */
+  box-sizing: border-box;
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.overlay-content h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.overlay-content p {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
 </style>
 
 <script>
 export default {
   data() {
     return {
-      address: '',
+      direccion: '',
       tipoVivienda: '',
-      surface: '',
-      constructionYear: '',
-      conservationStatus: 'unknown',
-      rooms: 0,
-      bathrooms: 0,
-      extras: []
+      superficie: '',
+      añoReforma: '',
+      estadoConservacion: 'unknown',
+      habitaciones: 0,
+      baños: 0,
+      extras: [],
+      mostrarOverlay: false,
+      precioVenta: 0,
+      precioAlquiler: 0
     };
   },
   methods: {
-    setRooms(number) {
-      this.rooms = number;
+    establecerHabitaciones(numero) {
+      this.habitaciones = numero;
     },
-    setBathrooms(number) {
-      this.bathrooms = number;
+    establecerBaños(numero) {
+      this.baños = numero;
     },
-    toggleExtra(extra) {
-      const index = this.extras.indexOf(extra);
-      if (index > -1) {
-        this.extras.splice(index, 1);
+    alternarExtra(extra) {
+      const indice = this.extras.indexOf(extra);
+      if (indice > -1) {
+        this.extras.splice(indice, 1);
       } else {
         this.extras.push(extra);
       }
     },
-    validateYear() {
-      if (this.constructionYear < 1978) {
-        this.constructionYear = 1978;
-      } else if (this.constructionYear > 2024) {
-        this.constructionYear = 2024;
+    validarAño() {
+      if (this.añoReforma < 1978) {
+        this.añoReforma = 1978;
+      } else if (this.añoReforma > 2024) {
+        this.añoReforma = 2024;
       }
+    },
+    calcular() {
+      let precioBasePorM2;
+      if (this.tipoVivienda === 'casa') {
+        precioBasePorM2 = this.obtenerEnteroAleatorio(2000, 5000);
+      } else if (this.tipoVivienda === 'piso') {
+        precioBasePorM2 = this.obtenerEnteroAleatorio(1000, 3000);
+      }
+
+      let precio = precioBasePorM2 * this.superficie;
+      precio += this.habitaciones * 500;
+      precio += this.baños * 650;
+      precio += this.extras.length * 400;
+
+      const porcentajeAño = this.obtenerPorcentajeAño(this.añoReforma);
+      const porcentajeConservacion = this.obtenerPorcentajeConservacion(this.estadoConservacion);
+
+      precio += precio * (porcentajeAño / 100);
+      precio += precio * (porcentajeConservacion / 100);
+
+      this.precioVenta = precio.toFixed(2);
+      this.precioAlquiler = (precio * 0.005).toFixed(2);
+
+      this.mostrarOverlay = true;
+    },
+    cerrarOverlay() {
+      this.mostrarOverlay = false;
+    },
+    obtenerEnteroAleatorio(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    obtenerPorcentajeAño(año) {
+      if (año >= 1978 && año <= 1989) return 0;
+      if (año >= 1990 && año <= 1999) return 5;
+      if (año >= 2000 && año <= 2009) return 10;
+      if (año >= 2010 && año <= 2019) return 15;
+      if (año >= 2020 && año <= 2024) return 20;
+      return 0;
+    },
+    obtenerPorcentajeConservacion(estado) {
+      if (estado === 'bad') return -15;
+      if (estado === 'normal') return 0;
+      if (estado === 'good') return 10;
+      if (estado === 'excellent') return 20;
+      return 0;
     }
   }
 };

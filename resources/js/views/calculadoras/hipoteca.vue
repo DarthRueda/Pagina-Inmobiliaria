@@ -19,11 +19,26 @@
       </div>
       <button type="submit" class="form-control button">Calcular</button>
     </form>
-    <div v-if="resultados" class="resultados">
-      <h2>Resultados</h2>
-      <p>Impuestos y despensas: {{ formatNumber(impuestosYDespensas) }}€</p>
-      <p>Importe del prestamo: {{ formatNumber(importePrestamo) }}€</p>
-      <p>Quota mensual: {{ formatNumber(cuotaMensual) }}€</p>
+    <div v-if="mostrarOverlay" class="overlay">
+      <div class="overlay-content">
+        <div class="price-box-container">
+          <div class="price-box">
+            <h2>Impuestos y despensas</h2>
+            <p>{{ formatNumber(impuestosYDespensas) }} €</p>
+          </div>
+          <div class="price-box">
+            <h2>Importe del préstamo</h2>
+            <p>{{ formatNumber(importePrestamo) }} €</p>
+          </div>
+          <div class="price-box">
+            <h2>Cuota mensual</h2>
+            <p>{{ formatNumber(cuotaMensual) }} €</p>
+          </div>
+        </div>
+        <div class="button-container">
+          <button @click="cerrarOverlay" class="button">Cerrar</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -38,7 +53,7 @@ export default {
         terminioAnos: 5,
         tipoInteres: 5
       },
-      resultados: false,
+      mostrarOverlay: false,
       impuestosYDespensas: 0,
       importePrestamo: 0,
       cuotaMensual: 0
@@ -55,7 +70,10 @@ export default {
       this.importePrestamo = this.form.precioVivienda - this.form.ahorroAportado;
       this.cuotaMensual = this.importePrestamo / (this.form.terminioAnos * 12);
 
-      this.resultados = true;
+      this.mostrarOverlay = true;
+    },
+    cerrarOverlay() {
+      this.mostrarOverlay = false;
     },
     formatNumber(value) {
       return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.').replace('.', ',');
@@ -189,5 +207,60 @@ export default {
 .resultados p {
   font-size: 24px;
   margin: 10px 0;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.overlay-content {
+  background: white;
+  padding: 40px; /* Increased padding to make the box bigger */
+  text-align: center;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%; /* Adjusted width */
+}
+
+.price-box-container {
+  display: flex;
+  justify-content: space-between; /* Align boxes side by side */
+  width: 100%;
+}
+
+.overlay-content .price-box {
+  padding: 20px;
+  margin: 10px;
+  border: 1px solid #000; /* Added border */
+  width: 30%; /* Adjusted width to fit side by side */
+  box-sizing: border-box;
+}
+
+.button-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.overlay-content h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.overlay-content p {
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 </style>
