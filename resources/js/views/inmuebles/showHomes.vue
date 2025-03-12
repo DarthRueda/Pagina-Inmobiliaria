@@ -30,7 +30,7 @@
                         <option value="300">300 m²</option>
                         <option value="350">350 m²</option>
                         <option value="400">400 m²</option>
-                        <option value="450">450 m²</option>>
+                        <option value="450">450 m²</option>
                         <option value="500">500 m²</option>
                     </select>
                 </div>
