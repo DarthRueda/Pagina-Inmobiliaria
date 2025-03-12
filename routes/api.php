@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\NoteController;
+use App\Http\Controllers\ViviendaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -69,3 +70,6 @@ Route::put('author/{id}', [AuthorController::class, 'update'])->name('author.upd
 
 //Users
 Route::get('/user/{id}', [UserController::class, 'show']);
+
+//Viviendas
+Route::get('vivienda/{id}', [ViviendaController::class, 'show']);

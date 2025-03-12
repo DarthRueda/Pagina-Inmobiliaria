@@ -146,14 +146,15 @@ export default [
                 component: () => import('../views/inmuebles/showHomes.vue'),   
             },
             {
-                path: 'propiedades',
-                name: 'list-propiedades',
-                component: () => import('../views/inmuebles/propiedades.vue'),
-            },
-            {
                 path: 'inmobiliaria',
                 name: 'inmobiliaria',
                 component: () => import('../views/inmuebles/inmobiliaria.vue'),
+            },
+            {
+                path: 'vivienda/:id',
+                name: 'vivienda.details',
+                component: () => import('../components/DetallesVivienda.vue'),
+                meta: { breadCrumb: 'Detalles Vivienda' }
             },
         ]
     },
