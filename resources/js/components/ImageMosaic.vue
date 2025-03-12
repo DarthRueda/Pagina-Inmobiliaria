@@ -31,6 +31,7 @@ export default {
 .col-6 {
     padding-right: 0;
     padding-left: 0;
+    padding: 0;
 }
 
 .main-image {

@@ -65,7 +65,7 @@
                     </div>
                     <span class="text-bold">Quanto vale mi casa?</span>
                     <span class="text-regular">Calcula su precio según las características y otros pisos de la zona. Acompañarte es darte todas las herramientas gratuitas.</span>
-                    <button class="section-button">¡Valora tu vivienda ahora!</button>
+                    <button class="section-button" @click="redirectToPrecioCasa">¡Valora tu vivienda ahora!</button>
                 </div>
             </div>
         </div>
@@ -327,6 +327,9 @@ export default {
         },
         redirectToHipoteca() {
             this.$router.push('/hipoteca');
+        },
+        redirectToPrecioCasa() {
+            this.$router.push('/preciocasa');
         }
     }
 };

@@ -2,7 +2,7 @@
     <div style="background-color: #f8f9fa;">
         <h1>Inmuebles</h1>
         <div class="container">
-            <div class="filters col-md-3" style="background-color: white; border: 1px solid #ccc;">
+            <div class="filters col-md-3" style="background-color: white;">
                 <div class="filter-block">
                 </div>
                 <div class="form-group">
@@ -128,7 +128,13 @@ export default {
     margin-right: 20px;
     margin-left: 20px;
     background-color: white;
-    border: 1px solid #000000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    border: none; 
+    height: 80%;
+}
+
+.filters * {
+    margin-left: 10px;
 }
 
 .filter-block {
