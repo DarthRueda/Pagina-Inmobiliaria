@@ -1,11 +1,20 @@
-import { ref, inject } from 'vue'
+import { ref, inject, computed, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
+import { authStore } from "../store/auth";
+import axios from 'axios'
 
 export default function useProfile() {
+    const auth = authStore();//Agafem el store d'autenticacio
     const profile = ref({
         name: '',
         email: '',
     })
+    //  Sincronitzem el perfil quan `auth.user` canvia
+    watchEffect(() => {
+        if (auth.user) {
+            profile.value = { ...auth.user };
+        }
+    });
 
     const router = useRouter()
     const validationErrors = ref({})
@@ -13,7 +22,7 @@ export default function useProfile() {
     const swal = inject('$swal')
 
     const getProfile = async () => {
-        profile.value = auth.user.value;
+        profile.value = auth.user;
     }
 
     const updateProfile = async (profile) => {
@@ -39,6 +48,7 @@ export default function useProfile() {
             })
             .finally(() => isLoading.value = false)
     }
+
 
     return {
         profile,

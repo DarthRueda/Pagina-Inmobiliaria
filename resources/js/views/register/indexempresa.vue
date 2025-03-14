@@ -112,6 +112,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <!-- Tipo de Empresa (Hidden) -->
+                                <input v-model="registerEmpresaForm.tipo" type="hidden">
 
                                 <!-- Buttons -->
                                 <div class="flex items-center justify-end mt-4">
@@ -129,10 +132,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import useAuth from '@/composables/auth';
+
+import useAuth from '@/composables/auth'
 
 const { registerEmpresaForm, validationErrors, processing, submitRegisterEmpresa } = useAuth();
+
 </script>
 
 <style>

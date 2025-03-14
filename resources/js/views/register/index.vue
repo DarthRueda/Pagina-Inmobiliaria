@@ -69,6 +69,8 @@
                                     </div>
                                 </div>
 
+                                
+
                                 <!-- Buttons -->
                                 <div class="flex items-center justify-end mt-4">
                                     <button class="btn btn-primary button" :class="{ 'opacity-25': processing }" :disabled="processing">
@@ -140,4 +142,8 @@ const { registerForm, validationErrors, processing, submitRegister } = useAuth()
 .h2-subtitle {
     font-size: 24px;
 }
+<<<<<<< HEAD
 </style>
+=======
+</style>
+>>>>>>> usuarios

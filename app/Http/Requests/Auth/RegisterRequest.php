@@ -27,6 +27,12 @@ class RegisterRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'telefono' => ['nullable', 'string', 'max:20'],
+            'nombre_comercial' => ['nullable', 'string', 'max:255'],
+            'direccion' => ['nullable', 'string', 'max:255'],
+            'codigo_postal' => ['nullable', 'string', 'max:10'],
+            'localidad' => ['nullable', 'string', 'max:255'],
+            'tipo' => ['nullable', 'max:1'],
         ];
     }
 }

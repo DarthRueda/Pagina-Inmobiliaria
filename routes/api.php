@@ -68,8 +68,11 @@ Route::get('author/{id}', [AuthorController::class, 'show'])->name('author.show'
 Route::delete('author/{id}', [AuthorController::class, 'destroy'])->name('author.destroy');
 Route::put('author/{id}', [AuthorController::class, 'update'])->name('author.update');
 
+<<<<<<< HEAD
 //Users
 Route::get('/user/{id}', [UserController::class, 'show']);
 
 //Viviendas
 Route::get('vivienda/{id}', [ViviendaController::class, 'show']);
+=======
+>>>>>>> usuarios
