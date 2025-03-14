@@ -18,8 +18,6 @@
                             <router-link class="nav-link" to="/register">{{ $t('register') }}</router-link>
                         </li>
                     </template>
-<<<<<<< HEAD
-=======
                     <li v-if="authStore().user?.name" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {{ authStore().user?.name }}
@@ -32,7 +30,6 @@
                             <li><a class="dropdown-item" href="javascript:void(0)" @click="logout">Logout</a></li>
                         </ul>
                     </li>
->>>>>>> usuarios
                 </ul>
             </div>
         </div>

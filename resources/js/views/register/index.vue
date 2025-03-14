@@ -142,8 +142,4 @@ const { registerForm, validationErrors, processing, submitRegister } = useAuth()
 .h2-subtitle {
     font-size: 24px;
 }
-<<<<<<< HEAD
 </style>
-=======
-</style>
->>>>>>> usuarios
