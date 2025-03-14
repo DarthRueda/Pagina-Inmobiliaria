@@ -1,5 +1,5 @@
 <template>
-  <div class="features-container">
+  <div v-if="caracteristicas" class="features-container">
     <div class="feature">
       <div class="feature-icon">
         <span class="icon-large icon-current">
@@ -19,8 +19,8 @@
         </span>
       </div>
       <div class="feature-content">
-        <p class="feature-label">Tipo de inmueble</p>
-        <div class="feature-value">Ático</div>
+        <p class="feature-label">Tipo</p>
+        <div class="feature-value">{{ caracteristicas.tipo }}</div>
       </div>
     </div>
     <div class="feature">
@@ -49,7 +49,7 @@
       </div>
       <div class="feature-content">
         <p class="feature-label">Orientación</p>
-        <div class="feature-value">Sureste</div>
+        <div class="feature-value">{{ caracteristicas.orientacion }}</div>
       </div>
     </div>
     <div class="feature">
@@ -71,8 +71,8 @@
         </span>
       </div>
       <div class="feature-content">
-        <p class="feature-label">Agua caliente</p>
-        <div class="feature-value">Gas Natural</div>
+        <p class="feature-label">Agua Caliente</p>
+        <div class="feature-value">{{ caracteristicas.agua_caliente }}</div>
       </div>
     </div>
     <div class="feature">
@@ -92,7 +92,7 @@
       </div>
       <div class="feature-content">
         <p class="feature-label">Calefacción</p>
-        <div class="feature-value">Electricidad</div>
+        <div class="feature-value">{{ caracteristicas.calefaccion }}</div>
       </div>
     </div>
     <div class="feature">
@@ -112,7 +112,7 @@
       </div>
       <div class="feature-content">
         <p class="feature-label">Estado</p>
-        <div class="feature-value">Reformado</div>
+        <div class="feature-value">{{ caracteristicas.estado }}</div>
       </div>
     </div>
     <div class="feature">
@@ -129,11 +129,13 @@
               <path
                 d="M12 16.397c2.96 0 5.704 2.7 7.242 6.466a.75.75 0 0 1-1.388.568c-1.334-3.264-3.64-5.534-5.854-5.534s-4.52 2.27-5.854 5.534a.75.75 0 0 1-1.388-.568C6.296 19.098 9.04 16.397 12 16.397z">
               </path>
-            </svg></span></span>
+            </svg>
+          </span>
+        </span>
       </div>
       <div class="feature-content">
         <p class="feature-label">Antigüedad</p>
-        <div class="feature-value">20 a 30 años</div>
+        <div class="feature-value">{{ caracteristicas.antiguedad }}</div>
       </div>
     </div>
     <div class="feature">
@@ -239,10 +241,13 @@
               <path
                 d="M16.875 15a.75.75 0 0 1 .75.75c0 .621-.504 1.125-1.125 1.125a.75.75 0 0 1-.379-1.398l.07-.036.036-.07a.75.75 0 0 1 .546-.364l.102-.007z">
               </path>
-            </svg></span></span></div>
+            </svg>
+          </span>
+        </span>
+      </div>
       <div class="feature-content">
         <p class="feature-label">Planta</p>
-        <div class="feature-value">5ª planta</div>
+        <div class="feature-value">{{ caracteristicas.planta }}</div>
       </div>
     </div>
     <div class="feature">
@@ -259,10 +264,13 @@
               <path
                 d="M17.25 3a2.25 2.25 0 0 1 .154 4.495l-.154.005h-.75v2.25a.75.75 0 0 1-.648.743l-.102.007a.75.75 0 0 1-.743-.648L15 9.75v-6a.75.75 0 0 1 .648-.743L15.75 3h1.5zm-.75 3h.75a.75.75 0 0 0 .102-1.493L17.25 4.5h-.75V6z">
               </path>
-            </svg></span></span></div>
+            </svg>
+          </span>
+        </span>
+      </div>
       <div class="feature-content">
         <p class="feature-label">Parking</p>
-        <div class="feature-value">Privado</div>
+        <div class="feature-value">{{ caracteristicas.parking }}</div>
       </div>
     </div>
     <div class="feature">
@@ -279,14 +287,28 @@
               <path
                 d="M12 9a.75.75 0 0 1 .743.648l.007.102v13.5a.75.75 0 0 1-1.493.102l-.007-.102V9.75A.75.75 0 0 1 12 9zM6.9 3.3a.75.75 0 0 1 1.126-.085L8.1 3.3l2.25 3a.75.75 0 0 1-1.127.984L9.15 7.2 7.5 5 5.85 7.2a.75.75 0 0 1-.956.21L4.8 7.35a.75.75 0 0 1-.21-.956l.06-.094 2.25-3zm6.15-.15a.75.75 0 0 1 .977.066l.073.084 1.65 2.2 1.65-2.2a.75.75 0 0 1 .956-.21l.094.06a.75.75 0 0 1 .21.956l-.06.094-2.25 3a.75.75 0 0 1-1.126.085L15.15 7.2l-2.25-3a.75.75 0 0 1 .15-1.05z">
               </path>
-            </svg></span></span></div>
+            </svg>
+          </span>
+        </span>
+      </div>
       <div class="feature-content">
         <p class="feature-label">Ascensor</p>
-        <div class="feature-value">Sí</div>
+        <div class="feature-value">{{ caracteristicas.ascensor }}</div>
       </div>
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    caracteristicas: {
+      type: Object,
+      required: true
+    }
+  }
+}
+</script>
 
 <style>
 .features-container {
@@ -300,10 +322,10 @@
   display: flex;
   align-items: center;
 }
-.feature-value{
+.feature-value {
   font-weight: bold;
 }
-.feature-label{
+.feature-label {
   margin-bottom: 1px;
 }
 .feature-icon {

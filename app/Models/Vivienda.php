@@ -16,5 +16,10 @@ class Vivienda extends Model
         'habitaciones', 'banyos', 'dimensiones', 'planta', 'tipo', 'orientacion', 
         'agua_caliente', 'calefaccion', 'estado', 'antiguedad', 'parking', 'ascensor'
     ];
+
+    public function getPrecioAttribute($value)
+    {
+        return number_format($value, 0, '', '.') . '€';
+    }
 }
 

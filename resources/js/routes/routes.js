@@ -118,11 +118,6 @@ export default [
                 component: () => import('../views/inmuebles/showHomes.vue'),   
             },
             {
-                path: 'propiedades',
-                name: 'list-propiedades',
-                component: () => import('../views/inmuebles/propiedades.vue'),
-            },
-            {
                 path: 'panelusuario',
                 name: 'user.panel',
                 component: () => import('../views/user/panelusuario.vue'),
