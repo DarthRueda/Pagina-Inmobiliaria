@@ -117,8 +117,25 @@ export default [
                 name: 'user.panel',
                 component: () => import('../views/user/panelusuario.vue'),
                 beforeEnter: requireLogin,
-                meta: { breadCrumb: 'Panel Usuario' }
+                meta: { breadCrumb: 'Panel Usuario' },
             },
+              
+
+            {
+                path: 'misPropiedades',
+                name: 'user.misPropiedades',
+                component: () => import('../views/user/misPropiedades.vue'),
+                beforeEnter: requireLogin,
+                meta: { breadCrumb: 'Mis Propiedades' }
+            },
+
+            {
+                path: 'favoritos',
+                name: 'user.favoritos',
+                component: () => import('../views/user/favoritos.vue'),
+                beforeEnter: requireLogin,
+                meta: { breadCrumb: 'Mis Propiedades' }
+            }
         ]
     },
 
