@@ -92,6 +92,13 @@ class UserController extends Controller
 
         $user->name = $request->name;
         $user->email = $request->email;
+        $user->telefono = $request->telefono;
+        $user->nombre_comercial = $request->nombre_comercial;
+        $user->direccion = $request->direccion;
+        $user->codigo_postal = $request->codigo_postal;
+        $user->localidad = $request->localidad;
+        $user->tipo = $request->tipo;
+        
         
 
         if(!empty($request->password)) {

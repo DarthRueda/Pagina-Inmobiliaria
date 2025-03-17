@@ -1,5 +1,4 @@
 <template>
-
     <div class="grid">
         <div class="col-12 md:col-4 lg:col-4 xl:col-4">
             <div class="card mb-0">
@@ -7,9 +6,6 @@
                     <div class="account-settings">
                         <div class="user-profile">
                             <div class="user-avatar">
-                                <!--                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin">-->
-
-                                <!-- :fileLimit=1  -->
                                 <FileUpload
                                     name="picture"
                                     url="/api/users/updateimg"
@@ -22,8 +18,7 @@
                                     pt:buttonbar:class="fu-header"
                                     pt:root:class="fu"
                                     class="fu"
-                                    >
-
+                                >
                                     <template #header="{ chooseCallback, uploadCallback, clearCallback, files, uploadedFiles }">
                                         <div class="flex flex-wrap justify-content-between align-items-center flex-1 gap-2">
                                             <div class="flex gap-2">
@@ -36,7 +31,7 @@
                                     </template>
 
                                     <template #content="{ files, uploadedFiles, removeUploadedFileCallback, removeFileCallback }">
-                                        <img v-if=" files.length > 0" v-for="(file, index) of files" :key="file.name + file.type + file.size" role="presentation" :alt="file.name" :src="file.objectURL" class="object-fit-cover w-100 h-100 img-profile" />
+                                        <img v-if="files.length > 0" v-for="(file, index) of files" :key="file.name + file.type + file.size" role="presentation" :alt="file.name" :src="file.objectURL" class="object-fit-cover w-100 h-100 img-profile" />
                                         <div v-else>
                                             <img v-if="uploadedFiles.length > 0" :key="uploadedFiles[uploadedFiles.length-1].name + uploadedFiles[uploadedFiles.length-1].type + uploadedFiles[uploadedFiles.length-1].size" role="presentation" :alt="uploadedFiles[uploadedFiles.length-1].name" :src="uploadedFiles[uploadedFiles.length-1].objectURL" class="object-fit-cover w-100 h-100 img-profile" />
                                         </div>
@@ -47,8 +42,6 @@
                                         <img v-if="!user.avatar" src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Avatar Default" class="object-fit-cover w-100 h-100 img-profile">
                                     </template>
                                 </FileUpload>
-
-
                             </div>
 
                             <h5 class="user-name">{{ user.name }}</h5>
@@ -56,13 +49,10 @@
                         </div>
 
                         <div class="about">
-
                             <div class="form-group">
                                 <label for="roles">Roles</label>
-                                <MultiSelect id="roles" v-model="user.role_id" display="chip" :options="roleList" optionLabel="name" dataKey="id" placeholder="Seleciona los roles" appendTo="self"
-                                    class="w-100" />
+                                <MultiSelect id="roles" v-model="user.role_id" display="chip" :options="roleList" optionLabel="name" dataKey="id" placeholder="Seleciona los roles" appendTo="self" class="w-100" />
                             </div>
-
 
                             <div class="text-right">
                                 <button :disabled="isLoading" class="btn btn-primary w-100" @click="submitForm">
@@ -71,7 +61,6 @@
                                     <span v-else>Guardar</span>
                                 </button>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -96,22 +85,22 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="surname1">Apellido 1</label>
-                        <input v-model="user.surname1" type="text" class="form-control" id="surname1">
-                        <div class="text-danger mt-1">{{ errors.surname1 }}</div>
+                        <label for="telefono">Telefono</label>
+                        <input v-model="user.telefono" type="text" class="form-control" id="telefono">
+                        <div class="text-danger mt-1">{{ errors.telefono }}</div>
                         <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.surname1">
+                            <div v-for="message in validationErrors?.telefono">
                                 {{ message }}
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="surname2">Apellido 2</label>
-                        <input v-model="user.surname2" type="text" class="form-control" id="surname2">
-                        <div class="text-danger mt-1">{{ errors.surname2 }}</div>
+                        <label for="nombre_comercial">Nombre Comercial</label>
+                        <input v-model="user.nombre_comercial" type="text" class="form-control" id="nombre_comercial">
+                        <div class="text-danger mt-1">{{ errors.nombre_comercial }}</div>
                         <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.surname2">
+                            <div v-for="message in validationErrors?.nombre_comercial">
                                 {{ message }}
                             </div>
                         </div>
@@ -129,6 +118,53 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="direccion">Dirección</label>
+                        <input v-model="user.direccion" type="text" class="form-control" id="direccion">
+                        <div class="text-danger mt-1">{{ errors.direccion }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.direccion">
+                                {{ message }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="codigo_postal">Código Postal</label>
+                        <input v-model="user.codigo_postal" type="text" class="form-control" id="codigo_postal">
+                        <div class="text-danger mt-1">{{ errors.codigo_postal }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.codigo_postal">
+                                {{ message }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="localidad">Localidad</label>
+                        <input v-model="user.localidad" type="text" class="form-control" id="localidad">
+                        <div class="text-danger mt-1">{{ errors.localidad }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.localidad">
+                                {{ message }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipo">Tipo</label>
+                        <select v-model="user.tipo" class="form-control" id="tipo">
+                            <option :value="0">Usuario</option>
+                            <option :value="1">Inmobiliaria</option>
+                        </select>
+                        <div class="text-danger mt-1">{{ errors.tipo }}</div>
+                        <div class="text-danger mt-1">
+                            <div v-for="message in validationErrors?.tipo">
+                                {{ message }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="password">Password</label>
                         <input v-model="user.password" type="password" class="form-control" id="password">
                         <div class="text-danger mt-1">{{ errors.password }}</div>
@@ -138,10 +174,9 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
-
-
         </div>
     </div>
 
@@ -178,18 +213,26 @@ const { validate, errors, resetForm } = useForm({ validationSchema: schema })
 // Define actual fields for validation
 const { value: name } = useField('name', null, { initialValue: '' });
 const { value: email } = useField('email', null, { initialValue: '' });
-const { value: surname1 } = useField('surname1', null, { initialValue: '' });
-const { value: surname2 } = useField('surname2', null, { initialValue: '' });
+const { value: telefono } = useField('telefono', null, { initialValue: '' });
+const { value: nombre_comercial } = useField('nombre_comercial', null, { initialValue: '' });
 const { value: password } = useField('password', null, { initialValue: '' });
 const { value: role_id } = useField('role_id', null, { initialValue: '', label: 'role' });
+const { value: direccion } = useField('direccion', null, { initialValue: '' });
+const { value: codigo_postal } = useField('codigo_postal', null, { initialValue: '' });
+const { value: localidad } = useField('localidad', null, { initialValue: '' });
+const { value: tipo } = useField('tipo', null, { initialValue: '' });
 
 const user = reactive({
     name,
     email,
-    surname1,
-    surname2,
+    telefono,
+    nombre_comercial,
     password,
-    role_id
+    role_id,
+    direccion,
+    codigo_postal,
+    localidad,
+    tipo
 })
 
 const route = useRoute()
@@ -200,17 +243,20 @@ function submitForm() {
 onMounted(() => {
     getRoleList()
     getUser(route.params.id)
-
 })
 // https://vuejs.org/api/reactivity-core.html#watcheffect
 watchEffect(() => {
     user.id = postData.value.id
     user.name = postData.value.name
     user.email = postData.value.email
-    user.surname1 = postData.value.surname1
-    user.surname2 = postData.value.surname2
+    user.telefono = postData.value.telefono
+    user.nombre_comercial = postData.value.nombre_comercial
     user.role_id = postData.value.role_id
     user.avatar = postData.value.avatar
+    user.direccion = postData.value.direccion
+    user.codigo_postal = postData.value.codigo_postal
+    user.localidad = postData.value.localidad
+    user.tipo = postData.value.tipo
 })
 
 const totalSize = ref(0);
@@ -218,7 +264,6 @@ const totalSizePercent = ref(0);
 const files = ref([]);
 
 const onBeforeUpload = (event) => {
-    // console.log('onBeforeUpload')
     event.formData.append('id', user.id)
 };
 const onRemoveTemplatingFile = (file, removeFileCallback, index) => {
@@ -234,7 +279,6 @@ const onClearTemplatingUpload = (clear) => {
 };
 
 const onSelectedFiles = (event) => {
-    console.log('onSelectedFiles');
     files.value = event.files;
 
     if (event.files.length > 1) {
@@ -247,12 +291,8 @@ const onSelectedFiles = (event) => {
 };
 
 const uploadEvent = async (callback, uploadedFiles) => {
-    console.log('uploadEvent');
     totalSizePercent.value = totalSize.value / 10;
     await callback();
-    // if (uploadedFiles.length > 1) {
-    //     uploadedFiles = uploadedFiles.splice(0, uploadedFiles.length - 1);
-    // }
 };
 
 const createUserDBView = async (id) => {
@@ -294,10 +334,7 @@ const deleteUserDBView = async (id) => {
         })
 }
 
-
 const onTemplatedUpload = (event) => {
-    // console.log('onTemplatedUpload');
-    // console.log(event);
 };
 
 const formatSize = (bytes) => {
@@ -314,7 +351,6 @@ const formatSize = (bytes) => {
 
     return `${formattedSize} ${sizes[i]}`;
 };
-
 </script>
 
 <style>
@@ -335,7 +371,6 @@ const formatSize = (bytes) => {
     border-radius: 6px;
     border: 1px solid #e2e8f0;
 }
-
 
 .img-profile {
     border-top-right-radius: 6px;

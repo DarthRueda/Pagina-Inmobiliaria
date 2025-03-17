@@ -148,6 +148,45 @@ export default function useUsers() {
             })
     }
 
+
+    const deleteAccount = async (id) => {
+        swal({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete my account!',
+            confirmButtonColor: '#ef4444',
+            timer: 20000,
+            timerProgressBar: true,
+            reverseButtons: true
+        }).then(result => {
+            if (result.isConfirmed) {
+                axios.delete('/api/users/' + id)
+                    .then(response => {
+                        swal({
+                            icon: 'success',
+                            title: 'Account deleted successfully'
+                        }).then(() => {
+                            router.push({ name: 'login' }); // Redirigir después del éxito
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error al eliminar la cuenta:", error.response?.data || error.message);
+    
+                        // Evitar la redirección automática
+                        swal({
+                            icon: 'error',
+                            title: 'Something went wrong',
+                            text: error.response?.data?.message || 'An unexpected error occurred.'
+                        });
+                    });
+            }
+        });
+    };
+    
+    
+
     return {
         users,
         user,
@@ -161,6 +200,7 @@ export default function useUsers() {
         storeUser,
         updateUser,
         deleteUser,
+        deleteAccount,
         validationErrors,
         isLoading
     }
