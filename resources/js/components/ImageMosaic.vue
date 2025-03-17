@@ -1,16 +1,15 @@
 <template>
     <div class="row no-gutters">
         <div class="col-6">
-            <div class="main-image"></div>
+            <div class="main-image" v-if="mainImage">
+                <img :src="mainImage" alt="Main Image" />
+            </div>
         </div>
         <div class="col-6">
             <div class="row no-gutters">
-                <div class="col-6 secondary-image"></div>
-                <div class="col-6 secondary-image"></div>
-            </div>
-            <div class="row no-gutters">
-                <div class="col-6 secondary-image"></div>
-                <div class="col-6 secondary-image"></div>
+                <div class="col-6 secondary-image" v-for="(image, index) in secondaryImages" :key="index">
+                    <img :src="image" alt="Secondary Image" />
+                </div>
             </div>
         </div>
     </div>
@@ -18,7 +17,21 @@
 
 <script>
 export default {
-    name: 'ImageMosaic'
+    name: 'ImageMosaic',
+    props: {
+        images: {
+            type: Array,
+            required: true
+        }
+    },
+    computed: {
+        mainImage() {
+            return this.images.length > 0 ? this.images[0] : null;
+        },
+        secondaryImages() {
+            return this.images.slice(1);
+        }
+    }
 }
 </script>
 
@@ -34,15 +47,10 @@ export default {
     padding: 0;
 }
 
-.main-image {
-    border: 1px solid #000;
-    height: 357px;
+.main-image img,
+.secondary-image img {
     width: 100%;
-}
-
-.secondary-image {
-    border: 1px solid #000;
-    height: 178.5px;
-    width: 50%;
+    height: 100%;
+    object-fit: cover;
 }
 </style>

@@ -1,48 +1,53 @@
 <template>
-    <div class="card">
-        <div class="card-img-container">
-            <img class="card-img" src="" alt="Card image cap">
-            <div class="circle-container">
-                <svg class="card-circle" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="40" />
-                    <image href="images/inmuebles/corazon.svg" x="22" y="22" height="56px" width="56px"/>
-                </svg>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="card-top">
-                <div class="card-content">
-                    <div class="card-text-content">
-                        <h4 class="card-title">Casa en Molins de Rei</h4>
-                        <h5 class="card-subtitle">55m2 - 2 habitaciones - 2 baños - 7.182€/m2</h5>
-                        <p class="card-text">Estupendisima casa con cocina, salón, comedor, habitaciones, suelo nuevo, paredes e incluso techo y puertas,
-                            no te lo pierdas, es tupendisima casa con cocina, salón, comedor, habitaciones, suelo nuevo, paredes e incluso techo y puertas,
-                            no te lo pierdas, es una oportunidad únicaEstupendisima casa con cocina, salón, comedor, habitaciones, suelo nuevo, paredes e incluso techo y puertas,
-                            no te lo pierdas, es una oportunidad única</p>  
-                    </div>
+    <router-link :to="'/vivienda/' + vivienda.id" class="card-link">
+        <div class="card">
+            <div class="card-img-container">
+                <img class="card-img" :src="vivienda.image" alt="Card image cap">
+                <div class="circle-container">
+                    <svg class="card-circle" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" />
+                        <image href="images/inmuebles/corazon.svg" x="22" y="22" height="56px" width="56px"/>
+                    </svg>
                 </div>
-                <h5 class="card-price">340.000€</h5>
             </div>
-            <h6>Actualizado hace 6 dias</h6>
-            <div class="card-logo">
-                <img src="images/inmuebles/logo.svg" alt="Inmobiliaria Logo" class="logo-img">
+            <div class="card-body">
+                <div class="card-top">
+                    <div class="card-content">
+                        <div class="card-text-content">
+                            <h4 class="card-title">{{ vivienda.tipo }} en {{ vivienda.localizacion }}</h4>
+                            <h5 class="card-subtitle">{{ vivienda.dimensiones }}m2 - {{ vivienda.habitaciones }} habitaciones - {{ vivienda.banyos }} baños</h5>
+                            <p class="card-text">{{ vivienda.descripcion }}</p>  
+                        </div>
+                    </div>
+                    <h5 class="card-price">{{ vivienda.precio }}</h5>
+                </div>
+                <h6>Actualizado hace 6 dias</h6>
+                <div class="card-logo">
+                    <img src="images/inmuebles/logo.svg" alt="Inmobiliaria Logo" class="logo-img">
+                </div>
             </div>
         </div>
-    </div>
+    </router-link>
 </template>
 
 <script>
 export default {
     name: 'CardInmueble',
-    methods: {
-        handleButtonClick() {
-            alert('¡Botón clickeado!');
+    props: {
+        vivienda: {
+            type: Object,
+            required: true
         }
     }
-}
+};
 </script>
 
 <style scoped>
+.card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
 .card {
     display: flex;
     flex-direction: row; 
@@ -54,6 +59,7 @@ export default {
     margin: 0;
     padding: 0;
     position: relative;
+    margin-bottom: 15px; /* Add this line */
 }
 
 .card-img-container {

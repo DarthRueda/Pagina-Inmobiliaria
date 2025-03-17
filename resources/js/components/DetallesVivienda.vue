@@ -1,7 +1,7 @@
 <template>
   <div v-if="vivienda">
     <div class="row no-gutters">
-      <ImageMosaic />
+      <ImageMosaic :images="viviendaImages" />
       <div class="col-9">
         <div class="price">{{ vivienda.precio }}</div>
         <div class="mortgage" @click="redirectToHipoteca" @mouseover="hoverMortgage" @mouseleave="leaveMortgage">
@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       vivienda: null,
+      viviendaImages: []
     };
   },
   mounted() {
@@ -56,6 +57,7 @@ export default {
       try {
         const response = await axios.get(`/api/vivienda/${id}`);
         this.vivienda = response.data;
+        this.viviendaImages = response.data.media.map(media => media.original_url);
       } catch (error) {
         console.error("Error al obtener los detalles de la vivienda", error);
       }
@@ -110,5 +112,54 @@ export default {
   height: 288px;
   background-color: #f0f0f0;
   margin-bottom: 20px;
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+  height: 20%;
+}
+.form-input {
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 26px;
+  margin-left: 26px;
+}
+.contact-button {
+  padding: 10px;
+  font-size: 16px;
+  background-color: #835EAE;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 26px;
+  margin-left: 26px;
+}
+.contact-button:hover {
+  background-color: #64428C;
+}
+.row.no-gutters {
+  margin-right: 0;
+}
+.row.no-gutters > [class*='col-'] {
+  padding-right: 0;
+  padding-left: 0;
+}
+.col-border {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+h3 {
+  text-align: center;
+}
+h4 {
+  margin-right: 26px;
+  margin-left: 26px;
 }
 </style>

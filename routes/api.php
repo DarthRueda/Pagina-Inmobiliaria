@@ -72,4 +72,6 @@ Route::put('author/{id}', [AuthorController::class, 'update'])->name('author.upd
 Route::get('/user/{id}', [UserController::class, 'show']);
 
 //Viviendas
-Route::get('vivienda/{id}', [ViviendaController::class, 'show']);
+Route::get('/viviendas', [ViviendaController::class, 'index'])->name('vivienda.index');
+Route::get('/vivienda/{id}', [ViviendaController::class, 'show'])->name('vivienda.show');
+Route::post('/vivienda', [ViviendaController::class, 'store']);

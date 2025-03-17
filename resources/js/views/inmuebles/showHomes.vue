@@ -87,11 +87,7 @@
                     <button>Comprar</button>
                     <button>Alquilar</button>
                 </div>
-                <CardInmuebles class="card-inmueble" />
-                <CardInmuebles class="card-inmueble" />
-                <CardInmuebles class="card-inmueble" />
-                <CardInmuebles class="card-inmueble" />
-                <CardInmuebles class="card-inmueble" />
+                <CardInmueble v-for="vivienda in viviendas" :key="vivienda.id" :vivienda="vivienda" class="card-inmueble" />
             </div>
         </div>
         <div class="col-12 d-flex justify-content-center">
@@ -108,12 +104,31 @@
 </template>
 
 <script>
-import CardInmuebles from '../../components/CardInmueble.vue';
+import CardInmueble from '../../components/CardInmueble.vue';
+import axios from 'axios';
 
 export default {
     name: 'ShowHomes',
     components: {
-        CardInmuebles
+        CardInmueble
+    },
+    data() {
+        return {
+            viviendas: []
+        };
+    },
+    mounted() {
+        this.fetchViviendas();
+    },
+    methods: {
+        async fetchViviendas() {
+            try {
+                const response = await axios.get('/api/viviendas');
+                this.viviendas = response.data;
+            } catch (error) {
+                console.error('Error fetching viviendas:', error);
+            }
+        }
     }
 };
 </script>
@@ -195,7 +210,7 @@ input[type="checkbox"] {
 }
 
 .card-inmueble {
-    margin-bottom: 19px;
+    margin-bottom: 15px; /* Add this line */
 }
 
 .checkbox-group.grid label {
