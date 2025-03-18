@@ -144,6 +144,53 @@
                 </div>
               </div>
               <div class="form-group">
+                <label for="caracteristicas">Características</label>
+                <div class="checkbox-group grid">
+                  <label>
+                    <input type="checkbox" v-model="vivienda.aire_acondicionado" true-value="1" false-value="0" /> Aire acondicionado
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.terraza" true-value="1" false-value="0" /> Terraza
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.trastero" true-value="1" false-value="0" /> Trastero
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.electrodomesticos" true-value="1" false-value="0" /> Electrodomésticos
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.balcon" true-value="1" false-value="0" /> Balcón
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.puerta_blindada" true-value="1" false-value="0" /> Puerta Blindada
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.calefaccion" true-value="1" false-value="0" /> Calefacción
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.jardin" true-value="1" false-value="0" /> Jardín
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.patio" true-value="1" false-value="0" /> Patio
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.piscina" true-value="1" false-value="0" /> Piscina
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.suite_con_bano" true-value="1" false-value="0" /> Suite - con baño
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.serv_porteria" true-value="1" false-value="0" /> Serv. portería
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.internet" true-value="1" false-value="0" /> Internet
+                  </label>
+                  <label>
+                    <input type="checkbox" v-model="vivienda.lavadero" true-value="1" false-value="0" /> Lavadero
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
                 <label for="images">Imágenes</label>
                 <input type="file" class="form-control" id="images" multiple @change="handleFileUpload">
               </div>
@@ -185,7 +232,20 @@ export default {
         estado: '',
         antiguedad: '',
         parking: '',
-        ascensor: ''
+        ascensor: '',
+        aire_acondicionado: 0,
+        terraza: 0,
+        trastero: 0,
+        electrodomesticos: 0,
+        balcon: 0,
+        puerta_blindada: 0,
+        jardin: 0,
+        patio: 0,
+        piscina: 0,
+        suite_con_bano: 0,
+        serv_porteria: 0,
+        internet: 0,
+        lavadero: 0
       },
       images: [],
       showForm: false
@@ -234,15 +294,14 @@ export default {
         });
 
         console.log('Vivienda creada:', response.data);
-        this.toggleForm(); // Close the form after submission
-        this.fetchViviendas(); // Refresh the list of viviendas
+        this.toggleForm();
+        this.fetchViviendas();
       } catch (error) {
         console.error('Error al crear la vivienda:', error);
       }
     },
     getUserId() {
-      // Replace this with the actual logic to get the user ID from the session
-      return 1; // Example user ID
+      return 1;
     }
   }
 };
@@ -283,12 +342,14 @@ export default {
   width: 50%;
   height: 80%;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .form-container {
   width: 100%;
   max-height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .form-group {
@@ -301,5 +362,26 @@ export default {
 
 .card-inmueble {
   margin-bottom: 15px;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.checkbox-group.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-left: 0px;
+}
+
+.checkbox-group.grid label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: bold;
+  margin-top: 10px;
 }
 </style>

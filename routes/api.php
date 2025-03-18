@@ -75,3 +75,6 @@ Route::get('/user/{id}', [UserController::class, 'show']);
 Route::get('/viviendas', [ViviendaController::class, 'index'])->name('vivienda.index');
 Route::get('/vivienda/{id}', [ViviendaController::class, 'show'])->name('vivienda.show');
 Route::post('/vivienda', [ViviendaController::class, 'store']);
+
+//Filtros
+Route::get('/viviendas/filter', [ViviendaController::class, 'filter']);
