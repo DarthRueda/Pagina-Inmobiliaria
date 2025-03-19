@@ -205,86 +205,86 @@
 </template>
 
 <script>
+import { ref, reactive, onMounted } from 'vue';
 import PanelUsuarioOpciones from "@/components/PanelUsuarioOpciones.vue";
 import CardInmueble from "@/components/CardInmueble.vue";
 import axios from 'axios';
 
 export default {
+  name: 'MisPropiedades',
   components: {
     PanelUsuarioOpciones,
     CardInmueble
   },
-  data() {
-    return {
-      viviendas: [],
-      vivienda: {
-        localizacion: '',
-        precio: '',
-        descripcion: '',
-        habitaciones: '',
-        banyos: '',
-        dimensiones: '',
-        planta: '',
-        tipo: '',
-        orientacion: '',
-        agua_caliente: '',
-        calefaccion: '',
-        estado: '',
-        antiguedad: '',
-        parking: '',
-        ascensor: '',
-        aire_acondicionado: 0,
-        terraza: 0,
-        trastero: 0,
-        electrodomesticos: 0,
-        balcon: 0,
-        puerta_blindada: 0,
-        jardin: 0,
-        patio: 0,
-        piscina: 0,
-        suite_con_bano: 0,
-        serv_porteria: 0,
-        internet: 0,
-        lavadero: 0
-      },
-      images: [],
-      showForm: false
-    };
-  },
-  mounted() {
-    this.fetchViviendas();
-  },
-  methods: {
-    async fetchViviendas() {
+  setup() {
+    const viviendas = ref([]);
+    const vivienda = reactive({
+      localizacion: '',
+      precio: '',
+      descripcion: '',
+      habitaciones: '',
+      banyos: '',
+      dimensiones: '',
+      planta: '',
+      tipo: '',
+      orientacion: '',
+      agua_caliente: '',
+      calefaccion: '',
+      estado: '',
+      antiguedad: '',
+      parking: '',
+      ascensor: '',
+      aire_acondicionado: 0,
+      terraza: 0,
+      trastero: 0,
+      electrodomesticos: 0,
+      balcon: 0,
+      puerta_blindada: 0,
+      jardin: 0,
+      patio: 0,
+      piscina: 0,
+      suite_con_bano: 0,
+      serv_porteria: 0,
+      internet: 0,
+      lavadero: 0
+    });
+    const images = ref([]);
+    const showForm = ref(false);
+
+    const fetchViviendas = async () => {
       try {
-        const userId = this.getUserId();
+        const userId = getUserId();
         const response = await axios.get(`/api/viviendas?user_id=${userId}`);
-        this.viviendas = response.data;
+        viviendas.value = response.data;
       } catch (error) {
         console.error('Error fetching viviendas:', error);
       }
-    },
-    enableEditing() {
+    };
+
+    const enableEditing = () => {
       console.log("Habilitar edición");
-    },
-    handleFileUpload(event) {
-      this.images = event.target.files;
-    },
-    toggleForm() {
-      this.showForm = !this.showForm;
-    },
-    async submitForm() {
+    };
+
+    const handleFileUpload = (event) => {
+      images.value = event.target.files;
+    };
+
+    const toggleForm = () => {
+      showForm.value = !showForm.value;
+    };
+
+    const submitForm = async () => {
       try {
         const formData = new FormData();
-        Object.keys(this.vivienda).forEach(key => {
-          formData.append(key, this.vivienda[key]);
+        Object.keys(vivienda).forEach(key => {
+          formData.append(key, vivienda[key]);
         });
 
         // Add the user ID to the form data
-        formData.append('id_usuario', this.getUserId());
+        formData.append('id_usuario', getUserId());
 
-        for (let i = 0; i < this.images.length; i++) {
-          formData.append('images[]', this.images[i]);
+        for (let i = 0; i < images.value.length; i++) {
+          formData.append('images[]', images.value[i]);
         }
 
         const response = await axios.post('/api/vivienda', formData, {
@@ -294,15 +294,33 @@ export default {
         });
 
         console.log('Vivienda creada:', response.data);
-        this.toggleForm();
-        this.fetchViviendas();
+        toggleForm();
+        fetchViviendas();
       } catch (error) {
         console.error('Error al crear la vivienda:', error);
       }
-    },
-    getUserId() {
+    };
+
+    const getUserId = () => {
       return 1;
-    }
+    };
+
+    onMounted(() => {
+      fetchViviendas();
+    });
+
+    return {
+      viviendas,
+      vivienda,
+      images,
+      showForm,
+      fetchViviendas,
+      enableEditing,
+      handleFileUpload,
+      toggleForm,
+      submitForm,
+      getUserId
+    };
   }
 };
 </script>

@@ -31,15 +31,23 @@
 </template>
 
 <script>
-export default {
-    name: 'CardInmueble',
-    props: {
-        vivienda: {
-            type: Object,
-            required: true
-        }
+import { ref, defineComponent } from 'vue';
+
+export default defineComponent({
+  name: 'CardInmueble',
+  props: {
+    vivienda: {
+      type: Object,
+      required: true
     }
-};
+  },
+  setup(props) {
+    const vivienda = ref(props.vivienda);
+    return {
+      vivienda
+    };
+  }
+});
 </script>
 
 <style scoped>

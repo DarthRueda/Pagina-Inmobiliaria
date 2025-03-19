@@ -59,14 +59,22 @@
 </template>
 
 <script>
-export default {
+import { ref, defineComponent } from 'vue';
+
+export default defineComponent({
   props: {
     info: {
       type: Object,
       required: true
     }
+  },
+  setup(props) {
+    const info = ref(props.info);
+    return {
+      info
+    };
   }
-}
+});
 </script>
 
 <style scoped>

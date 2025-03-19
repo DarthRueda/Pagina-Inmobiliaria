@@ -31,49 +31,62 @@
 </template>
 
 <script>
+import { ref, onMounted, defineComponent } from 'vue';
+import { useRoute } from 'vue-router';
 import axios from 'axios';
 import ImageMosaic from '@/components/ImageMosaic.vue';
 import InfoPiso from '@/components/InfoPiso.vue';
 import CaracteristicasPiso from '@/components/CaracteristicasPiso.vue';
 
-export default {
+export default defineComponent({
   components: {
     ImageMosaic,
     InfoPiso,
     CaracteristicasPiso,
   },
-  data() {
-    return {
-      vivienda: null,
-      viviendaImages: []
-    };
-  },
-  mounted() {
-    const viviendaId = this.$route.params.id;
-    this.fetchVivienda(viviendaId);
-  },
-  methods: {
-    async fetchVivienda(id) {
+  setup() {
+    const route = useRoute();
+    const vivienda = ref(null);
+    const viviendaImages = ref([]);
+
+    const fetchVivienda = async (id) => {
       try {
         const response = await axios.get(`/api/vivienda/${id}`);
-        this.vivienda = response.data;
-        this.viviendaImages = response.data.media.map(media => media.original_url);
+        vivienda.value = response.data;
+        viviendaImages.value = response.data.media.map(media => media.original_url);
       } catch (error) {
         console.error("Error al obtener los detalles de la vivienda", error);
       }
-    },
-    redirectToHipoteca() {
+    };
+
+    const redirectToHipoteca = () => {
       this.$router.push('/hipoteca');
-    },
-    hoverMortgage(event) {
+    };
+
+    const hoverMortgage = (event) => {
       event.target.style.cursor = 'pointer';
       event.target.style.textDecoration = 'underline';
-    },
-    leaveMortgage(event) {
+    };
+
+    const leaveMortgage = (event) => {
       event.target.style.textDecoration = 'none';
-    }
-  },
-};
+    };
+
+    onMounted(() => {
+      const viviendaId = route.params.id;
+      fetchVivienda(viviendaId);
+    });
+
+    return {
+      vivienda,
+      viviendaImages,
+      fetchVivienda,
+      redirectToHipoteca,
+      hoverMortgage,
+      leaveMortgage
+    };
+  }
+});
 </script>
 
 <style scoped>

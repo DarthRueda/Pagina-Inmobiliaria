@@ -109,15 +109,81 @@
 </template>
 
 <script>
+import { ref, reactive, onMounted } from 'vue';
 import ImageInmobiliaria from '@/components/ImageInmobiliaria.vue';
 import InfoInmobiliaria from '@/components/InfoInmobiliaria.vue';
 import CardInmuebles from '@/components/CardInmueble.vue';
 
 export default {
+    name: 'Inmobiliaria',
     components: {
         ImageInmobiliaria,
         InfoInmobiliaria,
         CardInmuebles
+    },
+    setup() {
+        const viviendas = ref([]);
+        const filters = reactive({
+            location: '',
+            priceMin: null,
+            priceMax: null,
+            surface: '',
+            tipo: {
+                piso: false,
+                casa: false
+            },
+            habitaciones: {
+                '1': false,
+                '2': false,
+                '3': false,
+                '4': false
+            },
+            banos: {
+                '1': false,
+                '2': false,
+                '3': false,
+                '4': false
+            },
+            caracteristicas: {
+                aire_acondicionado: false,
+                terraza: false,
+                trastero: false,
+                electrodomesticos: false,
+                balcon: false,
+                puerta_blindada: false,
+                calefaccion: false,
+                jardin: false,
+                patio: false,
+                piscina: false,
+                suite_con_bano: false,
+                serv_porteria: false,
+                internet: false,
+                lavadero: false
+            }
+        });
+
+        const fetchViviendas = async () => {
+            try {
+                const response = await axios.get('/api/viviendas', { params: filters });
+                viviendas.value = response.data;
+            } catch (error) {
+                console.error('Error fetching viviendas:', error);
+            }
+        };
+
+        const applyFilters = () => {
+            fetchViviendas();
+        };
+
+        onMounted(() => {
+            fetchViviendas();
+        });
+
+        return {
+            viviendas,
+            filters,
+            applyFilters
+        };
     }
 };
 </script>

@@ -300,14 +300,22 @@
 </template>
 
 <script>
-export default {
+import { ref, defineComponent } from 'vue';
+
+export default defineComponent({
   props: {
     caracteristicas: {
       type: Object,
       required: true
     }
+  },
+  setup(props) {
+    const caracteristicas = ref(props.caracteristicas);
+    return {
+      caracteristicas
+    };
   }
-}
+});
 </script>
 
 <style>

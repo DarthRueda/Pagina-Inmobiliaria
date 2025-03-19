@@ -315,22 +315,33 @@
 }
 </style>
 <script>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
 export default {
-    data() {
-        return {
-            selectedOption: 'comprar'
+    name: 'HomeIndex',
+    setup() {
+        const selectedOption = ref('comprar');
+        const router = useRouter();
+
+        const selectOption = (option) => {
+            selectedOption.value = option;
         };
-    },
-    methods: {
-        selectOption(option) {
-            this.selectedOption = option;
-        },
-        redirectToHipoteca() {
-            this.$router.push('/hipoteca');
-        },
-        redirectToPrecioCasa() {
-            this.$router.push('/preciocasa');
-        }
+
+        const redirectToHipoteca = () => {
+            router.push('/hipoteca');
+        };
+
+        const redirectToPrecioCasa = () => {
+            router.push('/preciocasa');
+        };
+
+        return {
+            selectedOption,
+            selectOption,
+            redirectToHipoteca,
+            redirectToPrecioCasa
+        };
     }
 };
 </script>

@@ -16,23 +16,33 @@
 </template>
 
 <script>
-export default {
-    name: 'ImageMosaic',
-    props: {
-        images: {
-            type: Array,
-            required: true
-        }
-    },
-    computed: {
-        mainImage() {
-            return this.images.length > 0 ? this.images[0] : null;
-        },
-        secondaryImages() {
-            return this.images.slice(1);
-        }
+import { ref, defineComponent, computed } from 'vue';
+
+export default defineComponent({
+  name: 'ImageMosaic',
+  props: {
+    images: {
+      type: Array,
+      required: true
     }
-}
+  },
+  setup(props) {
+    const images = ref(props.images);
+
+    const mainImage = computed(() => {
+      return images.value.length > 0 ? images.value[0] : null;
+    });
+
+    const secondaryImages = computed(() => {
+      return images.value.slice(1);
+    });
+
+    return {
+      mainImage,
+      secondaryImages
+    };
+  }
+});
 </script>
 
 <style scoped>

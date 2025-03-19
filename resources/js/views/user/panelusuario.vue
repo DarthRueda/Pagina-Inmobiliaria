@@ -88,48 +88,48 @@ import { required, min } from "@/validation/rules";
 import useProfile from "@/composables/profile";
 import PanelUsuarioOpciones from "@/components/PanelUsuarioOpciones.vue";
 
-// Define validation rules
+
 defineRule("required", required);
 defineRule("min", min);
 
-// Define validation schema
+
 const schema = {
     name: "required|min:3",
     email: "required",
 };
 
-// Initialize form validation
+
 const { validate, errors } = useForm({ validationSchema: schema });
 const { value: name } = useField("name", null, { initialValue: "" });
 const { value: email } = useField("email", null, { initialValue: "" });
 const { value: telefono } = useField("telefono", null, { initialValue: "" });
 
-// Use profile composable
+
 const { profile: profileData, getProfile, updateProfile, validationErrors, isLoading } = useProfile();
 
-// Reactive profile data
+
 const profile = reactive({
     name,
     email,
     telefono,
 });
 
-// Store original profile data for canceling edits
+
 const originalProfile = reactive({
     name: "",
     email: "",
     telefono: "",
 });
 
-// Editing state
+
 const isEditing = ref(false);
 
-// Fetch profile data on component mount
+
 onMounted(() => {
     getProfile();
 });
 
-// Watch for changes in profile data
+
 watchEffect(() => {
     profile.name = profileData.value.name;
     profile.email = profileData.value.email;
@@ -140,19 +140,18 @@ watchEffect(() => {
     originalProfile.telefono = profileData.value.telefono;
 });
 
-// Submit form handler
+
 function submitForm() {
     validate().then((form) => {
         if (form.valid) updateProfile(profile);
     });
 }
 
-// Enable editing mode
+
 function enableEditing() {
     isEditing.value = true;
 }
 
-// Cancel editing and revert changes
 function cancelEditing() {
     profile.name = originalProfile.name;
     profile.email = originalProfile.email;
