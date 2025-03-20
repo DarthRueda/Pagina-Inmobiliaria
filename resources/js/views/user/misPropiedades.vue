@@ -147,46 +147,46 @@
                 <label for="caracteristicas">Características</label>
                 <div class="checkbox-group grid">
                   <label>
-                    <input type="checkbox" v-model="vivienda.aire_acondicionado" true-value="1" false-value="0" /> Aire acondicionado
+                    <input type="checkbox" /> Aire acondicionado
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.terraza" true-value="1" false-value="0" /> Terraza
+                    <input type="checkbox" /> Terraza
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.trastero" true-value="1" false-value="0" /> Trastero
+                    <input type="checkbox" /> Trastero
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.electrodomesticos" true-value="1" false-value="0" /> Electrodomésticos
+                    <input type="checkbox" /> Electrodomésticos
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.balcon" true-value="1" false-value="0" /> Balcón
+                    <input type="checkbox" /> Balcón
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.puerta_blindada" true-value="1" false-value="0" /> Puerta Blindada
+                    <input type="checkbox" /> Puerta Blindada
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.calefaccion" true-value="1" false-value="0" /> Calefacción
+                    <input type="checkbox" /> Calefacción
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.jardin" true-value="1" false-value="0" /> Jardín
+                    <input type="checkbox" /> Jardín
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.patio" true-value="1" false-value="0" /> Patio
+                    <input type="checkbox" /> Patio
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.piscina" true-value="1" false-value="0" /> Piscina
+                    <input type="checkbox" /> Piscina
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.suite_con_bano" true-value="1" false-value="0" /> Suite - con baño
+                    <input type="checkbox" /> Suite - con baño
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.serv_porteria" true-value="1" false-value="0" /> Serv. portería
+                    <input type="checkbox" /> Serv. portería
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.internet" true-value="1" false-value="0" /> Internet
+                    <input type="checkbox" /> Internet
                   </label>
                   <label>
-                    <input type="checkbox" v-model="vivienda.lavadero" true-value="1" false-value="0" /> Lavadero
+                    <input type="checkbox" /> Lavadero
                   </label>
                 </div>
               </div>
@@ -234,19 +234,6 @@ export default {
       antiguedad: '',
       parking: '',
       ascensor: '',
-      aire_acondicionado: 0,
-      terraza: 0,
-      trastero: 0,
-      electrodomesticos: 0,
-      balcon: 0,
-      puerta_blindada: 0,
-      jardin: 0,
-      patio: 0,
-      piscina: 0,
-      suite_con_bano: 0,
-      serv_porteria: 0,
-      internet: 0,
-      lavadero: 0
     });
     const images = ref([]);
     const showForm = ref(false);
@@ -280,7 +267,6 @@ export default {
           formData.append(key, vivienda[key]);
         });
 
-        // Add the user ID to the form data
         formData.append('id_usuario', getUserId());
 
         for (let i = 0; i < images.value.length; i++) {

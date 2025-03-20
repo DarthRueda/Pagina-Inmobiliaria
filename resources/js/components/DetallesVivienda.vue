@@ -10,6 +10,11 @@
         </div>
         <InfoPiso :info="vivienda" />
         <CaracteristicasPiso :caracteristicas="vivienda" />
+        
+        <div v-for="filtro in vivienda.filtros"> 
+          <Chip>{{filtro.nombre}}</Chip>
+        </div>
+
         <h2>Ubicacion vivienda</h2>
         <div class="ubicacion-block">{{ vivienda.localizacion }}</div>
       </div>

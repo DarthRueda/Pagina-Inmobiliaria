@@ -27,6 +27,11 @@ class Vivienda extends Model implements HasMedia
         return number_format($value, 0, '', '.') . '€';
     }
 
+    public function filtros()
+    {
+        return $this->belongsToMany(Filtro::class,'vivienda_filtros','id_vivienda','id_filtro');
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('images')
