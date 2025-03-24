@@ -11,12 +11,12 @@
                 </div>
                 <div class="form-group">
                     <label for="price">Precio</label>
-                    <input type="number" id="price-min" placeholder="Mínimo" style="width: 131px; margin-right: 10px;" />
-                    <input type="number" id="price-max" placeholder="Máximo" style="width: 131px;" />
+                    <input type="number" id="price-min" v-model="priceMin" placeholder="Mínimo" style="width: 131px; margin-right: 10px;" @change="applyFilters" />
+                    <input type="number" id="price-max" v-model="priceMax" placeholder="Máximo" style="width: 131px;" @change="applyFilters" />
                 </div>
                 <div class="form-group">
                     <label for="surface">Superficie</label>
-                    <select id="surface">
+                    <select id="surface" v-model="selectedSurface" @change="applyFilters">
                         <option value="">Cualquier</option>
                         <option value="50">50 m²</option>
                         <option value="60">60 m²</option>
@@ -38,49 +38,49 @@
                 <div class="form-group">
                     <label for="tipo-habitatge">Tipo de habitatge</label>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="tipo-habitatge-piso" /> Piso
-                        <input type="checkbox" id="tipo-habitatge-casa" /> Casa
+                        <input type="checkbox" id="tipo-habitatge-piso" value="Piso" v-model="selectedTipo" @change="applyFilters" /> Piso
+                        <input type="checkbox" id="tipo-habitatge-casa" value="Casa" v-model="selectedTipo" @change="applyFilters" /> Casa
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="habitaciones">Habitaciones</label>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="habitaciones-1" /> 1
-                        <input type="checkbox" id="habitaciones-2" /> 2
+                        <input type="checkbox" id="habitaciones-1" value="1" v-model="selectedHabitaciones" @change="applyFilters" /> 1
+                        <input type="checkbox" id="habitaciones-2" value="2" v-model="selectedHabitaciones" @change="applyFilters" /> 2
                     </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="habitaciones-3" /> 3
-                        <input type="checkbox" id="habitaciones-4" /> 4
+                        <input type="checkbox" id="habitaciones-3" value="3" v-model="selectedHabitaciones" @change="applyFilters" /> 3
+                        <input type="checkbox" id="habitaciones-4" value="4" v-model="selectedHabitaciones" @change="applyFilters" /> 4
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="banos">Baños</label>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="banos-1" /> 1
-                        <input type="checkbox" id="banos-2" /> 2
+                        <input type="checkbox" id="banos-1" value="1" v-model="selectedBanyos" @change="applyFilters" /> 1
+                        <input type="checkbox" id="banos-2" value="2" v-model="selectedBanyos" @change="applyFilters" /> 2
                     </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="banos-3" /> 3
-                        <input type="checkbox" id="banos-4" /> 4
+                        <input type="checkbox" id="banos-3" value="3" v-model="selectedBanyos" @change="applyFilters" /> 3
+                        <input type="checkbox" id="banos-4" value="4" v-model="selectedBanyos" @change="applyFilters" /> 4
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="caracteristicas">Características</label>
                     <div class="checkbox-group grid">
-                        <label><input type="checkbox" id="caracteristicas-aire-acondicionado" /> Aire acondicionado</label>
-                        <label><input type="checkbox" id="caracteristicas-terraza" /> Terraza</label>
-                        <label><input type="checkbox" id="caracteristicas-trastero" /> Trastero</label>
-                        <label><input type="checkbox" id="caracteristicas-electrodomesticos" /> Electrodomésticos</label>
-                        <label><input type="checkbox" id="caracteristicas-balcon" /> Balcón</label>
-                        <label><input type="checkbox" id="caracteristicas-puerta-blindada" /> Puerta Blindada</label>
-                        <label><input type="checkbox" id="caracteristicas-calefaccion" /> Calefacción</label>
-                        <label><input type="checkbox" id="caracteristicas-jardin" /> Jardín</label>
-                        <label><input type="checkbox" id="caracteristicas-patio" /> Patio</label>
-                        <label><input type="checkbox" id="caracteristicas-piscina" /> Piscina</label>
-                        <label><input type="checkbox" id="caracteristicas-suite-con-bano" /> Suite - con baño</label>
-                        <label><input type="checkbox" id="caracteristicas-serv-porteria" /> Serv. portería</label>
-                        <label><input type="checkbox" id="caracteristicas-internet" /> Internet</label>
-                        <label><input type="checkbox" id="caracteristicas-lavadero" /> Lavadero</label>
+                        <label><input type="checkbox" value="Aire acondicionado" v-model="selectedFilters" @change="applyFilters" /> Aire acondicionado</label>
+                        <label><input type="checkbox" value="Terraza" v-model="selectedFilters" @change="applyFilters" /> Terraza</label>
+                        <label><input type="checkbox" value="Trastero" v-model="selectedFilters" @change="applyFilters" /> Trastero</label>
+                        <label><input type="checkbox" value="Electrodomésticos" v-model="selectedFilters" @change="applyFilters" /> Electrodomésticos</label>
+                        <label><input type="checkbox" value="Balcón" v-model="selectedFilters" @change="applyFilters" /> Balcón</label>
+                        <label><input type="checkbox" value="Puerta Blindada" v-model="selectedFilters" @change="applyFilters" /> Puerta Blindada</label>
+                        <label><input type="checkbox" value="Calefacción" v-model="selectedFilters" @change="applyFilters" /> Calefacción</label>
+                        <label><input type="checkbox" value="Jardín" v-model="selectedFilters" @change="applyFilters" /> Jardín</label>
+                        <label><input type="checkbox" value="Patio" v-model="selectedFilters" @change="applyFilters" /> Patio</label>
+                        <label><input type="checkbox" value="Piscina" v-model="selectedFilters" @change="applyFilters" /> Piscina</label>
+                        <label><input type="checkbox" value="Suite - con baño" v-model="selectedFilters" @change="applyFilters" /> Suite - con baño</label>
+                        <label><input type="checkbox" value="Serv. portería" v-model="selectedFilters" @change="applyFilters" /> Serv. portería</label>
+                        <label><input type="checkbox" value="Internet" v-model="selectedFilters" @change="applyFilters" /> Internet</label>
+                        <label><input type="checkbox" value="Lavadero" v-model="selectedFilters" @change="applyFilters" /> Lavadero</label>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import CardInmueble from '../../components/CardInmueble.vue';
 import axios from 'axios';
 
@@ -118,6 +118,14 @@ export default {
     },
     setup() {
         const viviendas = ref([]);
+        const selectedFilters = ref([]);
+        const selectedHabitaciones = ref([]);
+        const selectedBanyos = ref([]);
+        const selectedTipo = ref([]);
+        const priceMin = ref(null);
+        const priceMax = ref(null);
+        const selectedSurface = ref(null);
+
         const fetchViviendas = async () => {
             try {
                 const response = await axios.get('/api/viviendas');
@@ -127,12 +135,41 @@ export default {
             }
         };
 
+        const applyFilters = async () => {
+            try {
+                const response = await axios.get('/api/viviendas/filterByCaracteristicas', {
+                    params: {
+                        filters: selectedFilters.value,
+                        habitaciones: selectedHabitaciones.value,
+                        banyos: selectedBanyos.value,
+                        tipo: selectedTipo.value,
+                        price_min: priceMin.value,
+                        price_max: priceMax.value,
+                        surface: selectedSurface.value
+                    }
+                });
+                viviendas.value = response.data;
+            } catch (error) {
+                console.error('Error applying filters:', error);
+            }
+        };
+
         onMounted(() => {
             fetchViviendas();
         });
 
+        watch([selectedFilters, selectedHabitaciones, selectedBanyos, selectedTipo, priceMin, priceMax, selectedSurface], applyFilters);
+
         return {
             viviendas,
+            selectedFilters,
+            selectedHabitaciones,
+            selectedBanyos,
+            selectedTipo,
+            priceMin,
+            priceMax,
+            selectedSurface,
+            applyFilters
         };
     }
 };

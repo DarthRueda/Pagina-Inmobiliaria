@@ -29,7 +29,7 @@ class Vivienda extends Model implements HasMedia
 
     public function filtros()
     {
-        return $this->belongsToMany(Filtro::class,'vivienda_filtros','id_vivienda','id_filtro');
+        return $this->belongsToMany(Filtro::class, 'vivienda_filtros', 'id_vivienda', 'id_filtro');
     }
 
     public function registerMediaCollections(): void

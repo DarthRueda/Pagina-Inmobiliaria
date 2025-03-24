@@ -147,46 +147,46 @@
                 <label for="caracteristicas">Características</label>
                 <div class="checkbox-group grid">
                   <label>
-                    <input type="checkbox" /> Aire acondicionado
+                    <input type="checkbox" value="Aire acondicionado" v-model="selectedFilters" /> Aire acondicionado
                   </label>
                   <label>
-                    <input type="checkbox" /> Terraza
+                    <input type="checkbox" value="Terraza" v-model="selectedFilters" /> Terraza
                   </label>
                   <label>
-                    <input type="checkbox" /> Trastero
+                    <input type="checkbox" value="Trastero" v-model="selectedFilters" /> Trastero
                   </label>
                   <label>
-                    <input type="checkbox" /> Electrodomésticos
+                    <input type="checkbox" value="Electrodomésticos" v-model="selectedFilters" /> Electrodomésticos
                   </label>
                   <label>
-                    <input type="checkbox" /> Balcón
+                    <input type="checkbox" value="Balcón" v-model="selectedFilters" /> Balcón
                   </label>
                   <label>
-                    <input type="checkbox" /> Puerta Blindada
+                    <input type="checkbox" value="Puerta Blindada" v-model="selectedFilters" /> Puerta Blindada
                   </label>
                   <label>
-                    <input type="checkbox" /> Calefacción
+                    <input type="checkbox" value="Calefacción" v-model="selectedFilters" /> Calefacción
                   </label>
                   <label>
-                    <input type="checkbox" /> Jardín
+                    <input type="checkbox" value="Jardín" v-model="selectedFilters" /> Jardín
                   </label>
                   <label>
-                    <input type="checkbox" /> Patio
+                    <input type="checkbox" value="Patio" v-model="selectedFilters" /> Patio
                   </label>
                   <label>
-                    <input type="checkbox" /> Piscina
+                    <input type="checkbox" value="Piscina" v-model="selectedFilters" /> Piscina
                   </label>
                   <label>
-                    <input type="checkbox" /> Suite - con baño
+                    <input type="checkbox" value="Suite - con baño" v-model="selectedFilters" /> Suite - con baño
                   </label>
                   <label>
-                    <input type="checkbox" /> Serv. portería
+                    <input type="checkbox" value="Serv. portería" v-model="selectedFilters" /> Serv. portería
                   </label>
                   <label>
-                    <input type="checkbox" /> Internet
+                    <input type="checkbox" value="Internet" v-model="selectedFilters" /> Internet
                   </label>
                   <label>
-                    <input type="checkbox" /> Lavadero
+                    <input type="checkbox" value="Lavadero" v-model="selectedFilters" /> Lavadero
                   </label>
                 </div>
               </div>
@@ -237,6 +237,7 @@ export default {
     });
     const images = ref([]);
     const showForm = ref(false);
+    const selectedFilters = ref([]);
 
     const fetchViviendas = async () => {
       try {
@@ -268,6 +269,7 @@ export default {
         });
 
         formData.append('id_usuario', getUserId());
+        formData.append('filters', JSON.stringify(selectedFilters.value));
 
         for (let i = 0; i < images.value.length; i++) {
           formData.append('images[]', images.value[i]);
@@ -305,7 +307,8 @@ export default {
       handleFileUpload,
       toggleForm,
       submitForm,
-      getUserId
+      getUserId,
+      selectedFilters
     };
   }
 };
