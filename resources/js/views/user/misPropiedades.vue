@@ -15,10 +15,16 @@
           <div class="overlay-content">
             <form @submit.prevent="submitForm" class="form-container">
               <h3>Crea una propiedad para que la vea todo el mundo</h3>
-              <div class="form-group">
+              <div class="form-group position-relative">
                 <label for="localizacion">Localización</label>
-                <input v-model="vivienda.localizacion" type="text" class="form-control" id="localizacion" required>
+                <input type="text" v-model="searchQuery" @input="filterMunicipios" class="form-control" placeholder="Buscar municipio..." />
+                <ul v-if="filteredMunicipios.length" class="dropdown-menu show">
+                  <li v-for="municipio in filteredMunicipios" :key="municipio.idMunicipio" @click="selectMunicipio(municipio.Municipio)" class="dropdown-item">
+                    {{ municipio.Municipio }}
+                  </li>
+                </ul>
               </div>
+              <!-- Other form fields... -->
               <div class="form-group">
                 <label for="precio">Precio</label>
                 <input v-model="vivienda.precio" type="number" class="form-control" id="precio" required>
@@ -205,7 +211,7 @@
 </template>
 
 <script>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue';
 import PanelUsuarioOpciones from "@/components/PanelUsuarioOpciones.vue";
 import CardInmueble from "@/components/CardInmueble.vue";
 import axios from 'axios';
@@ -238,6 +244,8 @@ export default {
     const images = ref([]);
     const showForm = ref(false);
     const selectedFilters = ref([]);
+    const municipios = ref([]);
+    const searchQuery = ref('');
 
     const fetchViviendas = async () => {
       try {
@@ -246,6 +254,15 @@ export default {
         viviendas.value = response.data;
       } catch (error) {
         console.error('Error fetching viviendas:', error);
+      }
+    };
+
+    const fetchMunicipios = async () => {
+      try {
+        const response = await axios.get('/api/municipios');
+        municipios.value = response.data;
+      } catch (error) {
+        console.error('Error fetching municipios:', error);
       }
     };
 
@@ -293,8 +310,35 @@ export default {
       return 1;
     };
 
+    const filterMunicipios = () => {
+      filteredMunicipios.value = municipios.value.filter(municipio => 
+        municipio.Municipio.toLowerCase().includes(searchQuery.value.toLowerCase())
+      );
+    };
+
+    const selectMunicipio = (municipio) => {
+      vivienda.localizacion = municipio;
+      searchQuery.value = municipio;
+      filteredMunicipios.value = [];
+    };
+
+    const handleClickOutside = (event) => {
+      const dropdown = document.querySelector('.dropdown-menu.show');
+      if (dropdown && !dropdown.contains(event.target)) {
+        filteredMunicipios.value = [];
+      }
+    };
+
+    const filteredMunicipios = ref([]);
+
     onMounted(() => {
       fetchViviendas();
+      fetchMunicipios();
+      document.addEventListener('click', handleClickOutside);
+    });
+
+    onUnmounted(() => {
+      document.removeEventListener('click', handleClickOutside);
     });
 
     return {
@@ -308,7 +352,12 @@ export default {
       toggleForm,
       submitForm,
       getUserId,
-      selectedFilters
+      selectedFilters,
+      municipios,
+      searchQuery,
+      filteredMunicipios,
+      filterMunicipios,
+      selectMunicipio
     };
   }
 };
@@ -390,5 +439,47 @@ export default {
   gap: 5px;
   font-weight: bold;
   margin-top: 10px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  font-size: 1rem;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.25rem 1.5rem;
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
 }
 </style>

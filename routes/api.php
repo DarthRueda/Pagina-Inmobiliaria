@@ -11,6 +11,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\ViviendaController;
+use App\Http\Controllers\MunicipioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -77,3 +78,6 @@ Route::get('/vivienda/{id}', [ViviendaController::class, 'show'])->name('viviend
 Route::post('/vivienda', [ViviendaController::class, 'store']);
 Route::get('/viviendas/filter', [ViviendaController::class, 'filter']);
 Route::get('/viviendas/filterByCaracteristicas', [ViviendaController::class, 'filterByCaracteristicas']);
+
+//Municipios
+Route::get('/municipios', [MunicipioController::class, 'index']);

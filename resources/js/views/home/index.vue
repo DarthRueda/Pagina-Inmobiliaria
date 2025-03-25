@@ -29,9 +29,25 @@
                         </svg>
                     </button>
                 </div>
-                <div class="search-bar">
-                    <input type="text" placeholder="Ubicación" class="search-input">
-                    <button class="search-button"><b>Buscar</b></button>
+                <div class="search-bar position-relative">
+                    <input 
+                        type="text" 
+                        placeholder="Ubicación" 
+                        class="search-input" 
+                        v-model="searchQuery" 
+                        @input="filterMunicipios"
+                    >
+                    <ul v-if="filteredMunicipios.length" class="dropdown-menu municipios-dropdown show">
+                        <li
+                            v-for="municipio in filteredMunicipios"
+                            :key="municipio.idMunicipio"
+                            @click="selectMunicipio(municipio.Municipio)"
+                            class="dropdown-item"
+                        >
+                            {{ municipio.Municipio }}
+                        </li>
+                    </ul>
+                    <button class="search-button" @click="redirectToShowHomes"><b>Buscar</b></button>
                 </div>
             </div>
         </div>
@@ -140,6 +156,7 @@
     width: 10px;
     height: 5px;
     fill: #D3AC70;
+    z-index: 1010;
 }
 
 .search-bar {
@@ -148,6 +165,7 @@
     align-items: center;
     width: 100%;
     max-width: 800px;
+    position: relative;
 }
 
 .search-input {
@@ -313,16 +331,87 @@
         height: auto;
     }
 }
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% - 21px);
+    left: 35px;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 620px; 
+    padding: 0.5rem 0;
+    margin: 0; 
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 0.25rem 0.25rem;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.municipios-dropdown {
+    position: absolute;
+    top: calc(100% - 21px);
+    left: 35px;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 620px; 
+    padding: 0.5rem 0;
+    margin: 0; 
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 0.25rem 0.25rem;
+}
+
+.municipios-dropdown.show {
+    display: block;
+}
 </style>
 <script>
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
+import axios from 'axios';
 
 export default {
     name: 'HomeIndex',
     setup() {
         const selectedOption = ref('comprar');
         const router = useRouter();
+        const searchQuery = ref('');
+        const filteredMunicipios = ref([]);
+        const municipios = ref([]);
+        const selectedMunicipio = ref('');
 
         const selectOption = (option) => {
             selectedOption.value = option;
@@ -336,11 +425,60 @@ export default {
             router.push('/preciocasa');
         };
 
+        const redirectToShowHomes = () => {
+            if (selectedMunicipio.value) {
+                router.push({ name: 'list-inmubles', query: { municipio: selectedMunicipio.value } });
+            }
+        };
+
+        const fetchMunicipios = async () => {
+            try {
+                const response = await axios.get('/api/municipios');
+                municipios.value = response.data;
+            } catch (error) {
+                console.error('Error fetching municipios:', error);
+            }
+        };
+
+        const filterMunicipios = () => {
+            filteredMunicipios.value = municipios.value.filter(municipio => 
+                municipio.Municipio.toLowerCase().includes(searchQuery.value.toLowerCase())
+            );
+        };
+
+        const selectMunicipio = (municipio) => {
+            searchQuery.value = municipio;
+            selectedMunicipio.value = municipio;
+            filteredMunicipios.value = [];
+        };
+
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.search-bar') && !event.target.closest('.municipios-dropdown')) {
+                filteredMunicipios.value = [];
+            }
+        };
+
+        onMounted(() => {
+            fetchMunicipios();
+            document.addEventListener('click', handleClickOutside);
+        });
+
+        onBeforeUnmount(() => {
+            document.removeEventListener('click', handleClickOutside);
+        });
+
         return {
             selectedOption,
             selectOption,
             redirectToHipoteca,
-            redirectToPrecioCasa
+            redirectToPrecioCasa,
+            redirectToShowHomes,
+            searchQuery,
+            filteredMunicipios,
+            filterMunicipios,
+            selectMunicipio,
+            selectedMunicipio,
+            handleClickOutside
         };
     }
 };

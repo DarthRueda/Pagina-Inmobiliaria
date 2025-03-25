@@ -5,9 +5,32 @@
             <div class="filters col-md-3" style="background-color: white;">
                 <div class="filter-block">
                 </div>
-                <div class="form-group">
-                    <label for="location">Poblacion</label>
-                    <input type="text" id="location" />
+                <div class="form-group position-relative">
+                    <label for="poblacion">Población</label>
+                    <div class="input-group">
+                        <input
+                          type="text"
+                          v-model="searchQuery"
+                          @input="filterMunicipios"
+                          @focus="inputFocused = true"
+                          @blur="handleBlur"
+                          class="form-control"
+                          placeholder="Buscar municipio"
+                        />
+                        <div class="input-group-append">
+                            <button v-if="searchQuery" @click="clearMunicipioFilter" class="btn btn-secondary btn-sm">X</button>
+                        </div>
+                    </div>
+                    <ul v-if="filteredMunicipios.length && inputFocused" class="dropdown-menu show">
+                      <li
+                        v-for="municipio in filteredMunicipios"
+                        :key="municipio.idMunicipio"
+                        @mousedown.prevent="selectMunicipio(municipio.Municipio)"
+                        class="dropdown-item"
+                      >
+                        {{ municipio.Municipio }}
+                      </li>
+                    </ul>
                 </div>
                 <div class="form-group">
                     <label for="price">Precio</label>
@@ -108,6 +131,7 @@
 
 <script>
 import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
 import CardInmueble from '../../components/CardInmueble.vue';
 import axios from 'axios';
 
@@ -117,6 +141,7 @@ export default {
         CardInmueble
     },
     setup() {
+        const route = useRoute();
         const viviendas = ref([]);
         const selectedFilters = ref([]);
         const selectedHabitaciones = ref([]);
@@ -125,6 +150,11 @@ export default {
         const priceMin = ref(null);
         const priceMax = ref(null);
         const selectedSurface = ref(null);
+        const searchQuery = ref(route.query.municipio || '');
+        const filteredMunicipios = ref([]);
+        const municipios = ref([]);
+        const selectedMunicipio = ref(route.query.municipio || '');
+        const inputFocused = ref(false);
 
         const fetchViviendas = async () => {
             try {
@@ -132,6 +162,15 @@ export default {
                 viviendas.value = response.data;
             } catch (error) {
                 console.error('Error fetching viviendas:', error);
+            }
+        };
+
+        const fetchMunicipios = async () => {
+            try {
+                const response = await axios.get('/api/municipios');
+                municipios.value = response.data;
+            } catch (error) {
+                console.error('Error fetching municipios:', error);
             }
         };
 
@@ -145,17 +184,47 @@ export default {
                         tipo: selectedTipo.value,
                         price_min: priceMin.value,
                         price_max: priceMax.value,
-                        surface: selectedSurface.value
+                        surface: selectedSurface.value,
+                        municipio: selectedMunicipio.value
                     }
                 });
-                viviendas.value = response.data;
+                viviendas.value = response.data.filter(vivienda => !selectedMunicipio.value || vivienda.localizacion === selectedMunicipio.value);
             } catch (error) {
                 console.error('Error applying filters:', error);
             }
         };
 
+        const filterMunicipios = () => {
+            filteredMunicipios.value = municipios.value.filter(municipio => 
+                municipio.Municipio.toLowerCase().includes(searchQuery.value.toLowerCase())
+            );
+        };
+
+        const selectMunicipio = (municipio) => {
+            searchQuery.value = municipio;
+            selectedMunicipio.value = municipio;
+            filteredMunicipios.value = [];
+            applyFilters();
+        };
+
+        const clearMunicipioFilter = () => {
+            searchQuery.value = '';
+            selectedMunicipio.value = '';
+            applyFilters();
+        };
+
+        const handleBlur = () => {
+            setTimeout(() => {
+                inputFocused.value = false;
+            }, 100);
+        };
+
         onMounted(() => {
             fetchViviendas();
+            fetchMunicipios();
+            if (selectedMunicipio.value) {
+                applyFilters();
+            }
         });
 
         watch([selectedFilters, selectedHabitaciones, selectedBanyos, selectedTipo, priceMin, priceMax, selectedSurface], applyFilters);
@@ -169,7 +238,15 @@ export default {
             priceMin,
             priceMax,
             selectedSurface,
-            applyFilters
+            applyFilters,
+            searchQuery,
+            filteredMunicipios,
+            filterMunicipios,
+            selectMunicipio,
+            clearMunicipioFilter,
+            selectedMunicipio,
+            inputFocused,
+            handleBlur
         };
     }
 };
@@ -251,6 +328,16 @@ input[type="checkbox"] {
     height: 16px;
 }
 
+.input-group{
+    margin: 0px;
+    width: 80%;
+}
+
+.input-group-append {
+    margin-left: -1px;
+    margin-top: 2px; /* Add this line */
+}
+
 .card-inmueble {
     margin-bottom: 15px; /* Add this line */
 }
@@ -283,6 +370,53 @@ input[type="checkbox"] {
     align-items: center;
     width: 100%;
     height: 100%;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 10rem;
+    padding: 0.5rem 0;
+    margin: 0.125rem 0 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #f8f9fa;
+}
+
+.btn-secondary {
+    background-color: red; 
+    border-color: red; 
 }
 
 @media (max-width: 768px) {
