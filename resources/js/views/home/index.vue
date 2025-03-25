@@ -1,212 +1,485 @@
 <template>
-</template>
-<!--
-<template>
-    <div class="demo" id="edit-demo">
-        <div class="viewport" @click="select(null)" @mousedown.capture="blockEvents" @wheel.capture="blockEvents">
-            <screen ref="screen">
-                <g v-for="edge in graph.edges" @click.stop="select(edge)" :key="edge.id">
-                    <edge :class="selection && selection.id === edge.id && 'selected'"
-                          :data="edge"
-                          :nodes="graph.nodes">
-                    </edge>
-                </g>
-                <g v-for="node in graph.nodes" :key="node.id">
-                    <node :data="node" ref="node" :class="isSelected(node) && 'selected'" :textSelect="node.textSelect" :useDrag="node.useDrag">
-                        <div v-html="node.html" @click.stop="select(node)">
-                        </div>
-                    </node>
-                </g>
-            </screen>
+    <div class="Banner">
+        <div class="container">
+            <div class="row">
+                <h1><b>ENCUENTRA CASA EN UNOS CLICKS</b></h1>
+            </div>
+            <div>
+            </div>
+            <div class="search-container">
+                <div class="search-options">
+                    <button 
+                        class="option-button" 
+                        :class="{ selected: selectedOption === 'comprar' }" 
+                        @click="selectOption('comprar')"
+                    >
+                        Comprar
+                        <svg v-if="selectedOption === 'comprar'" class="triangle" viewBox="0 0 10 5">
+                            <path d="M0 0 L5 5 L10 0 Z" />
+                        </svg>
+                    </button>
+                    <button 
+                        class="option-button" 
+                        :class="{ selected: selectedOption === 'alquilar' }" 
+                        @click="selectOption('alquilar')"
+                    >
+                        Alquilar
+                        <svg v-if="selectedOption === 'alquilar'" class="triangle" viewBox="0 0 10 5">
+                            <path d="M0 0 L5 5 L10 0 Z" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="search-bar position-relative">
+                    <input 
+                        type="text" 
+                        placeholder="Ubicación" 
+                        class="search-input" 
+                        v-model="searchQuery" 
+                        @input="filterMunicipios"
+                    >
+                    <ul v-if="filteredMunicipios.length" class="dropdown-menu municipios-dropdown show">
+                        <li
+                            v-for="municipio in filteredMunicipios"
+                            :key="municipio.idMunicipio"
+                            @click="selectMunicipio(municipio.Municipio)"
+                            class="dropdown-item"
+                        >
+                            {{ municipio.Municipio }}
+                        </li>
+                    </ul>
+                    <button class="search-button" @click="redirectToShowHomes"><b>Buscar</b></button>
+                </div>
+            </div>
         </div>
-        <div class="sidebar">
-            <codemirror v-model="editText" :options="{
-          mode: 'text/javascript',
-          theme: 'default',
-          lineWrapping: true,
-          scrollbarStyle: null,
-          styleActiveLine: true,
-          line: true,
-        }"
-                        style="font-size: 13.3333px; font-family: monospace; -webkit-text-size-adjust: 100%; height: 100%"
-            ></codemirror>
+    </div>
+    <div class="Seccion1">
+        <div class="bloque-hipoteca">
+            <div class="row">
+                <div class="col-6">
+                    <img src="/images/Home/hipoteca.png" class="bloque-image" style="float: center;">
+                </div>
+                <div class="col-6 text-section">
+                    <div class="icon-text">
+                        <img src="/images/Home/calculadora.png" class="icon-image">
+                        <span class="text-content">Calculadora de hipoteca</span>
+                    </div>
+                    <span class="text-bold">Simula tu hipoteca</span>
+                    <span class="text-regular">Descubre cuánto puedes pagar por tu próxima vivienda con nuestra calculadora de hipotecas fácil y rápida.</span>
+                    <button class="section-button" @click="redirectToHipoteca">¡Haz tu simulación ahora!</button>
+                </div>
+            </div>
+        </div>
+        <div class="bloque-casa">
+            <div class="row">
+                <div class="col-6">
+                    <img src="/images/Home/casa.png" class="bloque-image">
+                </div>
+                <div class="col-6 text-section">
+                    <div class="icon-text">
+                        <img src="/images/Home/etiqueta.png" class="icon-image">
+                        <span class="text-content">Calcula cuanto vale tu casa</span>
+                    </div>
+                    <span class="text-bold">Quanto vale mi casa?</span>
+                    <span class="text-regular">Calcula su precio según las características y otros pisos de la zona. Acompañarte es darte todas las herramientas gratuitas.</span>
+                    <button class="section-button" @click="redirectToPrecioCasa">¡Valora tu vivienda ahora!</button>
+                </div>
+            </div>
+        </div>
+        <div class="bloque-inmobiliaria">
+            <div class="row">
+                <div class="col-6">
+                    <img src="/images/Home/inmobiliaria.png" class="bloque-image">
+                </div>
+                <div class="col-6 text-section">
+                    <div class="icon-text">
+                        <img src="/images/Home/trato.png" class="icon-image">
+                        <span class="text-content">Descubre nuestros socios de confianza</span>
+                    </div>
+                    <span class="text-bold">Inmobiliarias Profesionales</span>
+                    <span class="text-regular">Encuentra las mejores propiedades con el respaldo de inmobiliarias certificadas y expertas. ¡Tu hogar ideal está aquí!</span>
+                    <button class="section-button">¡Descubre las agencias!</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
-<script>
-import Screen from '../components/Screen.vue'
-import Node from '../components/Node.vue'
-import Edge from '../components/Edge.vue'
-import graph from '../graph'
-import pretty from 'pretty'
-import stringify from 'javascript-stringify'
-import { Codemirror } from 'vue-codemirror'
-// import 'codemirror/mode/javascript/javascript.js'
-// import 'codemirror/lib/codemirror.css'
-
-export default {
-    components: {
-        Screen,
-        Node,
-        Edge,
-        Codemirror
-    },
-    data() {
-        return {
-            graph: new graph(),
-            selection: null,
-            editText: '/* click on a node or edge to start editing */',
-        }
-    },
-    methods: {
-        select (obj) {
-            this.selection = obj
-            if (!this.selection) {
-                this.editText = '/* click on a node or edge to start editing */'
-                return
-            }
-            const editText = { ...obj }
-            delete editText.pathd
-            if (editText.html) {
-                editText.html = "\n" + pretty(editText.html) + "\n"
-            }
-            this.editText = stringify(editText, null, 2)
-                .replace(/\\n/g, "\n")
-                .replace(/html: '([^]*)\s'/g, 'html: `$1\n`')
-        },
-        applyChanges () {
-            if (!this.selection) {
-                return
-            }
-            try {
-                const edit = eval('('+this.editText+')')
-                Object.assign(this.selection, edit)
-                this.$nextTick(() => {
-                    this.$refs.node.forEach(node => {
-                        node.fitContent()
-                    })
-                })
-            } catch (_) {
-                console.log('TODO invalid code')
-            }
-        },
-        isSelected (node) {
-            return this.selection
-                && this.selection.id === node.id
-        },
-        /**
-         * HACKS
-         * support shortcut .no-drag and .no-wheel classes
-         * to disable dragging and mouse-wheel behavior from editable html
-         */
-        blockEvents (e) {
-            const path = e.path || e.composedPath?.();
-            if (path?.find(el => el.classList?.contains('no-drag'))) { // @mousedown
-                const pz = this.$refs.screen.panzoom
-                pz.options.preventMouseEventsDefault = false // enable default events (text select, input click)
-                document.addEventListener('mouseup', () => {
-                    pz.options.preventMouseEventsDefault = true
-                }, { once: true })
-                e.stopPropagation() // disable node drag
-            }
-            if (path?.find(el => el.classList?.contains('no-wheel'))) { // @wheel
-                e.stopPropagation() // disable wheel zoom
-            }
-        },
-    },
-    mounted () {
-        this.graph.createNode({
-            id: 'a',
-            html: '<h5>A</h5>'
-        })
-        this.graph.createNode({
-            id: 'b',
-            x: 200,
-            y: 200,
-            textSelect: false,
-            useDrag: true,
-            html:
-                `<div><h4>B</h4><p>Subtitle</p><button>Yo</button></div>`
-        })
-        this.graph.createNode({
-            id: 'c',
-            x: -100,
-            y: 150,
-            textSelect: false,
-            useDrag: true,
-            html: `<div> <h4>okay</h4> <textarea type="text" class="no-drag">Some text here</textarea><br/><select class="no-drag" name="cars" id="cars"><option value="volvo">Volvo</option><option value="saab">Saab</option><option value="mercedes">Mercedes</option><option value="audi">Audi</option></select></div>`
-        })
-        this.graph.createNode({
-            id: 'd',
-            x: 340,
-            textSelect: false,
-            useDrag: true,
-            html: `<div>Okay</div>`
-        })
-        this.graph.createEdge({
-            id: 'a:b',
-            from: 'a',
-            to: 'b',
-            toAnchor: { x: '50%', y: '50%', snap: 'rect' },
-            type: 'smooth'
-        })
-        this.graph.createEdge({ id: 'c:d', from: 'c', to: 'd', type: 'smooth' })
-        this.$nextTick(() => {
-            this.$refs.screen.zoomNodes(this.graph.nodes, {scale: 1})
-        })
-    },
-    watch: {
-        editText: 'applyChanges',
-    },
-}
-</script>
-
 <style>
-#edit-demo .CodeMirror {
+/*CSS HOME */
+.Banner {
+    background-image: url("/images/Home/imagen_incio.png");
+    text-align: center;
+    background-size: cover;
+    height: 440px;
+}
+
+.Banner h1 {
+    margin-top: 120px;
+    color: rgb(255, 255, 255);
+}
+
+.search-container {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-options {
+    display: flex;
+    justify-content: flex-start;
     width: 100%;
-    height: 500px;
-    margin: 0;
-    overflow: hidden;
+    max-width: 800px;
+}
+
+.option-button {
+    background-color: white;
+    padding: 10px 20px;
+    width: 130px;
+    height: 39px;
+    cursor: pointer;
+    border: none;
     position: relative;
-    background-color: #f1f1f1;
-    border: 1px solid #f1f1f1;
-}
-#edit-demo .node .background {
-    /* background-color: #ccc; */
 }
 
-#edit-demo .node .content > div {
-    padding: 25px;
+.option-button.selected {
+    background-color: #D3AC70;
+    color: white;
+    position: relative;
 }
 
-#edit-demo .node .content h4,h5,p {
-    margin: 0
+.option-button .triangle {
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 5px;
+    fill: #D3AC70;
+    z-index: 1010;
 }
 
-#edit-demo .node:hover .background {
-    background-color: rgb(90 200 90);
+.search-bar {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    position: relative;
 }
 
-#edit-demo .node.selected .content {
-    background-color: rgba(100, 200, 100, 1);
-    box-shadow: 0px 0px 0px 2px #333;
+.search-input {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 35px;
+    margin-right: 13px;
+    width: 646px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: white;
+    color: gray;
+    box-shadow: 0 4px 2px -2px gray, 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
-#edit-demo .node .content {
+.search-button {
+    padding: 10px 20px;
+    background-color: #835EAE;
+    color: white;
+    cursor: pointer;
+    margin-right: 31px;
+    margin-left: auto;
+    border: none;
+    box-shadow: 0 4px 2px -2px gray;
+}
+
+.search-button:hover {
+    background-color: #64428C;
+}
+
+.Seccion1 {
+    background-color: #F4F4FB;
+}
+
+.row {
+    margin-left: 0;
+    margin-right: 0;
+    display: flex;
+    align-items: center;
+}
+
+.bloque-hipoteca .row,
+.bloque-casa .row,
+.bloque-inmobiliaria .row {
+    display: flex;
+    align-items: center;
+    margin-left: 80px;
+    margin-right: 80px;
+}
+
+.bloque-casa .row {
+    flex-direction: row-reverse;
+}
+
+.bloque-hipoteca .col-6 img,
+.bloque-casa .col-6 img,
+.bloque-inmobiliaria .col-6 img {
+    width: 402px;
+    height: 308px;
+    margin-left: 0;
+}
+
+.bloque-hipoteca,
+.bloque-casa,
+.bloque-inmobiliaria {
+    padding-top: 52px;
+}
+
+.text-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.icon-text {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.icon-image {
+    width: 48px !important;
+    height: 51px !important;
+    margin-right: 10px;
+}
+
+.text-content {
+    font-size: 20px;
+}
+
+.text-bold {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.text-regular {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.section-button {
+    width: 281px;
+    height: 48px;
+    background-color: #835EAE;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.section-button:hover {
+    background-color: #64428C;
+}
+
+@media (max-width: 1000px) {
+    .bloque-hipoteca .row,
+    .bloque-casa .row,
+    .bloque-inmobiliaria .row {
+        flex-direction: column;
+    }
+    .bloque-hipoteca .col-6,
+    .bloque-casa .col-6,
+    .bloque-inmobiliaria .col-6 {
+        width: 100%;
+    }
+    .bloque-hipoteca .col-6 img,
+    .bloque-casa .col-6 img,
+    .bloque-inmobiliaria .col-6 img {
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        max-width: 402px;
+        height: auto;
+    }
+}
+
+@media (max-width: 425px) {
+    .bloque-hipoteca .row,
+    .bloque-casa .row,
+    .bloque-inmobiliaria .row {
+        flex-direction: column;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .bloque-hipoteca .col-6,
+    .bloque-casa .col-6,
+    .bloque-inmobiliaria .col-6 {
+        width: 100%;
+        text-align: center;
+    }
+    .bloque-hipoteca .col-6 img,
+    .bloque-casa .col-6 img,
+    .bloque-inmobiliaria .col-6 img {
+        margin-bottom: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+        max-width: 402px;
+        height: auto;
+    }
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% - 21px);
+    left: 35px;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 620px; 
+    padding: 0.5rem 0;
+    margin: 0; 
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 0.25rem 0.25rem;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
     cursor: pointer;
 }
 
-#edit-demo .edge {
-    cursor: pointer;
+.dropdown-item:hover {
+    background-color: #f8f9fa;
 }
-#edit-demo .edge:hover {
-    /* stroke-width: 4 */
-    stroke: rgb(90 200 90)
+
+.municipios-dropdown {
+    position: absolute;
+    top: calc(100% - 21px);
+    left: 35px;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 620px; 
+    padding: 0.5rem 0;
+    margin: 0; 
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0 0 0.25rem 0.25rem;
 }
-#edit-demo .edge.selected {
-    /* stroke-width: 4 */
-    stroke: #333
+
+.municipios-dropdown.show {
+    display: block;
 }
 </style>
--->
+<script>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+
+export default {
+    name: 'HomeIndex',
+    setup() {
+        const selectedOption = ref('comprar');
+        const router = useRouter();
+        const searchQuery = ref('');
+        const filteredMunicipios = ref([]);
+        const municipios = ref([]);
+        const selectedMunicipio = ref('');
+
+        const selectOption = (option) => {
+            selectedOption.value = option;
+        };
+
+        const redirectToHipoteca = () => {
+            router.push('/hipoteca');
+        };
+
+        const redirectToPrecioCasa = () => {
+            router.push('/preciocasa');
+        };
+
+        const redirectToShowHomes = () => {
+            if (selectedMunicipio.value) {
+                router.push({ name: 'list-inmubles', query: { municipio: selectedMunicipio.value } });
+            }
+        };
+
+        const fetchMunicipios = async () => {
+            try {
+                const response = await axios.get('/api/municipios');
+                municipios.value = response.data;
+            } catch (error) {
+                console.error('Error fetching municipios:', error);
+            }
+        };
+
+        const filterMunicipios = () => {
+            filteredMunicipios.value = municipios.value.filter(municipio => 
+                municipio.Municipio.toLowerCase().includes(searchQuery.value.toLowerCase())
+            );
+        };
+
+        const selectMunicipio = (municipio) => {
+            searchQuery.value = municipio;
+            selectedMunicipio.value = municipio;
+            filteredMunicipios.value = [];
+        };
+
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.search-bar') && !event.target.closest('.municipios-dropdown')) {
+                filteredMunicipios.value = [];
+            }
+        };
+
+        onMounted(() => {
+            fetchMunicipios();
+            document.addEventListener('click', handleClickOutside);
+        });
+
+        onBeforeUnmount(() => {
+            document.removeEventListener('click', handleClickOutside);
+        });
+
+        return {
+            selectedOption,
+            selectOption,
+            redirectToHipoteca,
+            redirectToPrecioCasa,
+            redirectToShowHomes,
+            searchQuery,
+            filteredMunicipios,
+            filterMunicipios,
+            selectMunicipio,
+            selectedMunicipio,
+            handleClickOutside
+        };
+    }
+};
+</script>

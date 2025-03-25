@@ -48,7 +48,7 @@ async function requireAdmin(to, from, next) {
         if( hasAdmin(user.roles)){
             next()
         }else{
-            next('/app')
+            next('/panelusuario')
         }
     } else {
         next('/login')
@@ -95,6 +95,12 @@ export default [
                 beforeEnter: guest,
             },
             {
+                path: 'register/empresa',
+                name: 'auth.register.empresa',
+                component: () => import('../views/register/indexempresa.vue'),
+                beforeEnter: guest,
+            },
+            {
                 path: 'forgot-password',
                 name: 'auth.forgot-password',
                 component: () => import('../views/auth/passwords/Email.vue'),
@@ -106,6 +112,62 @@ export default [
                 component: () => import('../views/auth/passwords/Reset.vue'),
                 beforeEnter: guest,
             },
+          {
+                path: 'inmuebles',
+                name: 'list-inmubles',
+                component: () => import('../views/inmuebles/showHomes.vue'),   
+            },
+            {
+                path: 'panelusuario',
+                name: 'user.panel',
+                component: () => import('../views/user/panelusuario.vue'),
+                beforeEnter: requireLogin,
+                meta: { breadCrumb: 'Panel Usuario' },
+            },
+            {
+                path: 'preciocasa',
+                name: 'preciocasa',
+                component: () => import('../views/calculadoras/preciocasa.vue'),
+            },
+            {
+                path: 'hipoteca',
+                name: 'hipoteca',
+                component: () => import('../views/calculadoras/hipoteca.vue'),
+            },
+            {
+                path: 'inmuebles',
+                path: 'inmuebles',
+                name: 'list-inmubles',
+                component: () => import('../views/inmuebles/showHomes.vue'),   
+            },
+            {
+                path: 'inmobiliaria',
+                name: 'inmobiliaria',
+                component: () => import('../views/inmuebles/inmobiliaria.vue'),
+            },
+            {
+                path: 'vivienda/:id',
+                name: 'vivienda.details',
+                component: () => import('../components/DetallesVivienda.vue'),
+                meta: { breadCrumb: 'Detalles Vivienda' }
+            },
+              
+
+            {
+                path: 'misPropiedades',
+                name: 'user.misPropiedades',
+                component: () => import('../views/user/misPropiedades.vue'),
+                beforeEnter: requireLogin,
+                meta: { breadCrumb: 'Mis Propiedades' }
+            },
+
+            {
+                path: 'favoritos',
+                name: 'user.favoritos',
+                component: () => import('../views/user/favoritos.vue'),
+                beforeEnter: requireLogin,
+                meta: { breadCrumb: 'Mis Propiedades' }
+            }
         ]
     },
 

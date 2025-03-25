@@ -10,6 +10,8 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoryTableSeeder::class);
         $this->call(PermissionTableSeeder::class);
         $this->call(CreateAdminUserSeeder::class);
+        $this->call(FiltrosTableSeeder::class);
+        $this->call(MunicipiosTableSeeder::class);
 
         // $this->call(RoleSeeder::class);
         // \App\Models\User::factory(10)->create();

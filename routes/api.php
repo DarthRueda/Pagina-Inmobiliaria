@@ -10,6 +10,8 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Api\NoteController;
+use App\Http\Controllers\ViviendaController;
+use App\Http\Controllers\MunicipioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -66,3 +68,16 @@ Route::post('/author', [AuthorController::class, 'store'])->name('author.store')
 Route::get('author/{id}', [AuthorController::class, 'show'])->name('author.show');
 Route::delete('author/{id}', [AuthorController::class, 'destroy'])->name('author.destroy');
 Route::put('author/{id}', [AuthorController::class, 'update'])->name('author.update');
+
+//Users
+Route::get('/user/{id}', [UserController::class, 'show']);
+
+//Viviendas
+Route::get('/viviendas', [ViviendaController::class, 'index'])->name('vivienda.index');
+Route::get('/vivienda/{id}', [ViviendaController::class, 'show'])->name('vivienda.show');
+Route::post('/vivienda', [ViviendaController::class, 'store']);
+Route::get('/viviendas/filter', [ViviendaController::class, 'filter']);
+Route::get('/viviendas/filterByCaracteristicas', [ViviendaController::class, 'filterByCaracteristicas']);
+
+//Municipios
+Route::get('/municipios', [MunicipioController::class, 'index']);

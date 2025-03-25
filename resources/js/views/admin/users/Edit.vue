@@ -7,9 +7,6 @@
                     <div class="account-settings">
                         <div class="user-profile">
                             <div class="user-avatar">
-                                <!--                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Maxwell Admin">-->
-
-                                <!-- :fileLimit=1  -->
                                 <FileUpload
                                     name="picture"
                                     url="/api/users/updateimg"

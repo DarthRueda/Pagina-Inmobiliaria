@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\InmobiliariaController;
 
 // classe2 pas4
 
@@ -20,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthenticatedSessionController::class, 'login']);
 Route::post('register', [AuthenticatedSessionController::class, 'register']);
 Route::post('logout', [AuthenticatedSessionController::class, 'logout']);
+
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

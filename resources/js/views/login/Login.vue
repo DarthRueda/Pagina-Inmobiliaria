@@ -2,6 +2,10 @@
     <div class="container">
         <div class="row justify-content-center my-5">
             <div class="col-md-6">
+                <div class="text-center mb-4">
+                    <h1 class="h1-title">{{ $t('Inicia Session') }}</h1>
+                    <h2 class="h2-subtitle">{{ $t('Inicia Session y disfruta de todas las ventajas ') }}</h2>
+                </div>
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
 
@@ -21,7 +25,7 @@
                                 <!-- Password -->
                                 <div class="mb-4">
                                     <label for="password" class="form-label">
-                                        {{ $t('password') }}
+                                        {{ $t('Contraseña') }}
                                     </label>
                                     <input v-model="loginForm.password" id="password" type="password" class="form-control" required autocomplete="current-password">
                                     <!-- Validation Errors -->
@@ -35,18 +39,18 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" name="remember" v-model="loginForm.remember" id="flexCheckIndeterminate">
                                     <label class="form-check-label" for="flexCheckIndeterminate">
-                                        {{ $t('remember_me') }}
+                                        {{ $t('Recuerdame') }}
                                     </label>
                                 </div>
 
                                 <!-- Buttons -->
                                 <div class="flex items-center justify-end mt-4">
-                                    <button class="btn btn-primary" :class="{ 'opacity-25': processing }" :disabled="processing">
-                                        {{ $t('login') }}
+                                    <button class="btn btn-primary button" :class="{ 'opacity-25': processing }" :disabled="processing">
+                                        {{ $t('Inicia Session') }}
                                     </button>
                                 </div>
                             </div>
-                            <router-link :to="{name: 'auth.forgot-password'}">{{ $t('forgot_password')}}</router-link>
+                            <router-link :to="{name: 'auth.forgot-password'}">{{ $t('¿Has olvidado tu contraseña?')}}</router-link>
                         </form>
                     </div>
                 </div>
@@ -54,6 +58,51 @@
         </div>
     </div>
 </template>
+
+<style>
+.button {
+    width: 100%;
+    height: 48px;
+    background-color: #835EAE;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.button:hover {
+    background-color: #64428C;
+}
+
+.form-control {
+    border-radius: 0;
+    height: 48px;
+    font-size: 20px;
+}
+
+.form-label {
+    font-size: 24px;
+}
+
+.form-check-label {
+    font-size: 16px;
+}
+
+.card {
+    border-radius: 0;
+}
+
+.h1-title {
+    font-size: 36px;
+}
+
+.h2-subtitle {
+    font-size: 24px;
+}
+</style>
 
 <script setup>
 
