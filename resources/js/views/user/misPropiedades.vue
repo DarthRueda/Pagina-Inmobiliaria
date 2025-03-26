@@ -9,26 +9,32 @@
       <div class="col-md-9">
         <div v-for="vivienda in viviendas" :key="vivienda.id" class="card-inmueble">
           <CardInmueble :vivienda="vivienda" />
+          <button @click="editVivienda(vivienda)" class="btn btn-secondary mb-3">Editar Propiedad</button>
         </div>
         <button @click="toggleForm" class="btn btn-primary mb-3">Añadir Propiedad</button>
         <div v-if="showForm" class="overlay">
           <div class="overlay-content">
             <form @submit.prevent="submitForm" class="form-container">
-              <h3>Crea una propiedad para que la vea todo el mundo</h3>
-              <div class="form-group position-relative">
-                <label for="localizacion">Localización</label>
-                <input type="text" v-model="searchQuery" @input="filterMunicipios" class="form-control" placeholder="Buscar municipio..." />
-                <ul v-if="filteredMunicipios.length" class="dropdown-menu show">
-                  <li v-for="municipio in filteredMunicipios" :key="municipio.idMunicipio" @click="selectMunicipio(municipio.Municipio)" class="dropdown-item">
-                    {{ municipio.Municipio }}
-                  </li>
-                </ul>
+              <h3>{{ isEditing ? 'Editar Propiedad' : 'Crea una propiedad para que la vea todo el mundo' }}</h3>
+              <div v-if="isEditing" class="form-group">
+                <label>Precio Actual: {{ vivienda.precio }}</label>
+              </div>
+              <div class="form-group">
+                <label>
+                  <input type="checkbox" v-model="changePrice" /> Cambiar Precio
+                </label>
+              </div>
+              <div class="form-group">
+                <label for="precio">Nuevo Precio</label>
+                <input
+                  v-model="vivienda.precio"
+                  type="number"
+                  class="form-control"
+                  id="precio"
+                  :disabled="!changePrice"
+                />
               </div>
               <!-- Other form fields... -->
-              <div class="form-group">
-                <label for="precio">Precio</label>
-                <input v-model="vivienda.precio" type="number" class="form-control" id="precio" required>
-              </div>
               <div class="form-group">
                 <label for="descripcion">Descripción</label>
                 <textarea v-model="vivienda.descripcion" class="form-control" id="descripcion" required></textarea>
@@ -200,7 +206,7 @@
                 <label for="images">Imágenes</label>
                 <input type="file" class="form-control" id="images" multiple @change="handleFileUpload">
               </div>
-              <button type="submit" class="btn btn-primary">Crear Vivienda</button>
+              <button type="submit" class="btn btn-primary">{{ isEditing ? 'Guardar Cambios' : 'Crear Vivienda' }}</button>
               <button type="button" @click="toggleForm" class="btn btn-secondary ml-2">Cancelar</button>
             </form>
           </div>
@@ -211,7 +217,7 @@
 </template>
 
 <script>
-import { ref, reactive, computed, onMounted, onUnmounted } from 'vue';
+import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import PanelUsuarioOpciones from "@/components/PanelUsuarioOpciones.vue";
 import CardInmueble from "@/components/CardInmueble.vue";
 import axios from 'axios';
@@ -225,7 +231,6 @@ export default {
   setup() {
     const viviendas = ref([]);
     const vivienda = reactive({
-      localizacion: '',
       precio: '',
       descripcion: '',
       habitaciones: '',
@@ -243,9 +248,13 @@ export default {
     });
     const images = ref([]);
     const showForm = ref(false);
+    const isEditing = ref(false);
+    const changePrice = ref(false);
     const selectedFilters = ref([]);
     const municipios = ref([]);
     const searchQuery = ref('');
+    const editingViviendaId = ref(null);
+    const originalPrice = ref(null);
 
     const fetchViviendas = async () => {
       try {
@@ -276,13 +285,51 @@ export default {
 
     const toggleForm = () => {
       showForm.value = !showForm.value;
+      if (!showForm.value) {
+        resetForm();
+      }
+    };
+
+    const resetForm = () => {
+      Object.keys(vivienda).forEach(key => (vivienda[key] = ''));
+      selectedFilters.value = [];
+      images.value = [];
+      isEditing.value = false;
+      editingViviendaId.value = null;
+      originalPrice.value = null;
+      changePrice.value = false;
+    };
+
+    const editVivienda = (viviendaData) => {
+      Object.keys(vivienda).forEach(key => {
+        if (key !== 'localizacion') vivienda[key] = viviendaData[key];
+      });
+
+      // Parse y elimina el símbolo de la moneda
+      originalPrice.value = viviendaData.precio
+        ? parseInt(viviendaData.precio.replace(/[.,€]/g, ''), 10)
+        : 0;
+      vivienda.precio = originalPrice.value;
+
+      // Selección de los filtros
+      selectedFilters.value = viviendaData.filtros
+        ? viviendaData.filtros.map(filtro => filtro.nombre)
+        : [];
+
+      editingViviendaId.value = viviendaData.id;
+      isEditing.value = true;
+      toggleForm();
     };
 
     const submitForm = async () => {
       try {
         const formData = new FormData();
         Object.keys(vivienda).forEach(key => {
-          formData.append(key, vivienda[key]);
+          if (key === 'precio') {
+            formData.append(key, changePrice.value ? vivienda[key] : originalPrice.value); // Usar el precio original si no se cambia
+          } else {
+            formData.append(key, vivienda[key]);
+          }
         });
 
         formData.append('id_usuario', getUserId());
@@ -292,17 +339,30 @@ export default {
           formData.append('images[]', images.value[i]);
         }
 
-        const response = await axios.post('/api/vivienda', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
+        if (isEditing.value) {
+          const response = await axios.post(`/api/vivienda/${editingViviendaId.value}`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          // Actualiza la vivienda editada en la lista
+          const index = viviendas.value.findIndex(v => v.id === editingViviendaId.value);
+          if (index !== -1) {
+            viviendas.value[index] = response.data;
           }
-        });
+        } else {
+          const response = await axios.post('/api/vivienda', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          // Añade la nueva vivienda a la lista
+          viviendas.value.push(response.data);
+        }
 
-        console.log('Vivienda creada:', response.data);
         toggleForm();
-        fetchViviendas();
       } catch (error) {
-        console.error('Error al crear la vivienda:', error);
+        console.error('Error al guardar la vivienda:', error);
       }
     };
 
@@ -346,7 +406,10 @@ export default {
       vivienda,
       images,
       showForm,
+      isEditing,
+      changePrice,
       fetchViviendas,
+      editVivienda,
       enableEditing,
       handleFileUpload,
       toggleForm,
@@ -355,6 +418,7 @@ export default {
       selectedFilters,
       municipios,
       searchQuery,
+      originalPrice,
       filteredMunicipios,
       filterMunicipios,
       selectMunicipio

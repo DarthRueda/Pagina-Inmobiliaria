@@ -117,4 +117,28 @@ class ViviendaController extends Controller
 
         return response()->json($viviendas);
     }
+
+    public function update(Request $request, $id)
+    {
+        $vivienda = Vivienda::findOrFail($id);
+        $vivienda->update($request->all());
+
+        if ($request->hasFile('images')) {
+            $vivienda->clearMediaCollection('images');
+            foreach ($request->file('images') as $image) {
+                $vivienda->addMedia($image)->toMediaCollection('images');
+            }
+        }
+
+        if ($request->has('filters')) {
+            $filters = json_decode($request->filters, true);
+            $vivienda->filtros()->detach();
+            foreach ($filters as $filter) {
+                $filtro = Filtro::firstOrCreate(['nombre' => $filter]);
+                $vivienda->filtros()->attach($filtro->id);
+            }
+        }
+
+        return response()->json($vivienda);
+    }
 }
