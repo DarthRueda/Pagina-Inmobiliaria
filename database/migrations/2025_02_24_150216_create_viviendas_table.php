@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('viviendas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_usuario')->nullable();
-            $table->unsignedBigInteger('id_inmobiliaria')->nullable();
             $table->integer('precio')->notNullable();
             $table->string('localizacion', 255)->notNullable();
             $table->text('descripcion')->notNullable();

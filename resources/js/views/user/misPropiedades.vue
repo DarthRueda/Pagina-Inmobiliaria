@@ -3,7 +3,7 @@
     <div class="row">
       <!-- Columna para las opciones -->
       <div class="col-md-3">
-        <PanelUsuarioOpciones @enable-editing="enableEditing" />
+        <PanelUsuarioOpciones />
       </div>
       <!-- Columna para el contenido -->
       <div class="col-md-9">
@@ -203,9 +203,6 @@ export default {
       } catch (error) {
         console.error('Error fetching viviendas:', error);
       }
-    },
-    enableEditing() {
-      console.log("Habilitar edición");
     },
     handleFileUpload(event) {
       this.images = event.target.files;

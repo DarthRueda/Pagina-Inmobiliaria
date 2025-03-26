@@ -13,6 +13,8 @@ use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\ViviendaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\LikesController;
+
 
 Route::post('forget-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forget.password.post');
 Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.reset');
@@ -75,3 +77,9 @@ Route::get('/user/{id}', [UserController::class, 'show']);
 Route::get('/viviendas', [ViviendaController::class, 'index'])->name('vivienda.index');
 Route::get('/vivienda/{id}', [ViviendaController::class, 'show'])->name('vivienda.show');
 Route::post('/vivienda', [ViviendaController::class, 'store']);
+
+
+//Likes
+Route::get('/likes/{user}', [LikesController::class, 'getLikes']);
+Route::get('/likes/check/{user}/{vivienda}', [LikesController::class, 'checkLike']);
+Route::post('/likes/toggle', [LikesController::class, 'toggleLike']);
