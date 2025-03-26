@@ -1,14 +1,17 @@
 <template>
+    <div class="like-container">
+        <button @click.stop="darLike" class="like-button">
+            <svg class="card-circle" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" />
+                <image :href="isLiked ? 'images/inmuebles/corazon-lleno.svg' : 'images/inmuebles/corazon.svg'" 
+                       x="22" y="22" height="56px" width="56px"/>
+            </svg>
+        </button>
+    </div>
     <router-link :to="'/vivienda/' + vivienda.id" class="card-link">
         <div class="card">
             <div class="card-img-container">
                 <img class="card-img" :src="vivienda.image" alt="Card image cap">
-                <div class="circle-container">
-                    <svg class="card-circle" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="40" />
-                        <image href="images/inmuebles/corazon.svg" x="22" y="22" height="56px" width="56px"/>
-                    </svg>
-                </div>
             </div>
             <div class="card-body">
                 <div class="card-top">
@@ -31,24 +34,53 @@
 </template>
 
 <script>
-import { ref, defineComponent } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import useProfile from "@/composables/profile";
+import useLikes from "@/composables/likes";
 
-export default defineComponent({
-  name: 'CardInmueble',
-  props: {
-    vivienda: {
-      type: Object,
-      required: true
+export default {
+    name: 'CardInmueble',
+    props: {
+        vivienda: {
+            type: Object,
+            required: true
+        }
+    },
+    setup(props, { emit }) {
+        const { profile } = useProfile();
+        const { toggleLike, checkLike } = useLikes();
+        
+        const userId = computed(() => profile.value?.id);
+        const viviendaId = computed(() => props.vivienda.id);
+        const isLiked = ref(false);
+        const vivienda = ref(props.vivienda);
+
+        onMounted(async () => {
+            if (userId.value) {
+                isLiked.value = await checkLike(userId.value, viviendaId.value);
+            }
+        });
+
+        const darLike = async () => {
+            if (!userId.value) {
+                alert("Debes estar logueado para dar like.");
+                return;
+            }
+
+            isLiked.value = await toggleLike(userId.value, viviendaId.value);
+
+            // Emitir evento de eliminación de like
+            if (!isLiked.value) {
+                emit('removeLike', props.vivienda.id); // Emitir el ID de la vivienda
+            }
+        };
+
+        return { isLiked, darLike, vivienda };
     }
-  },
-  setup(props) {
-    const vivienda = ref(props.vivienda);
-    return {
-      vivienda
-    };
-  }
-});
+};
 </script>
+
+
 
 <style scoped>
 .card-link {
@@ -84,20 +116,28 @@ export default defineComponent({
     border-radius: 0px !important;
 }
 
-.circle-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: -20px; /* Adjust this value to position the circle next to the image */
+
+
+.like-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 
 .card-circle {
-    width: 40px;
-    height: 40px;
-    fill: white;
-    stroke: black;
-    stroke-width: 1px;
-    margin-top: -160px; /* Move the circle a bit to the top */
+  width: 40px;
+  height: 40px;
+  fill: white;
+  stroke: black;
+  stroke-width: 1px;
+}
+
+.like-button:hover {
+  transform: scale(1.1);
+
 }
 
 .card-body {

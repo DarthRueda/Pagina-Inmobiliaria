@@ -3,7 +3,7 @@
     <div class="row">
       <!-- Columna para las opciones -->
       <div class="col-md-3">
-        <PanelUsuarioOpciones @enable-editing="enableEditing" />
+        <PanelUsuarioOpciones />
       </div>
       <!-- Columna para el contenido -->
       <div class="col-md-9">

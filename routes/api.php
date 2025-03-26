@@ -14,6 +14,8 @@ use App\Http\Controllers\ViviendaController;
 use App\Http\Controllers\MunicipioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\LikesController;
+
 
 Route::post('forget-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forget.password.post');
 Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.reset');
@@ -81,3 +83,9 @@ Route::get('/viviendas/filterByCaracteristicas', [ViviendaController::class, 'fi
 
 //Municipios
 Route::get('/municipios', [MunicipioController::class, 'index']);
+
+
+//Likes
+Route::get('/likes/{user}', [LikesController::class, 'getLikes']);
+Route::get('/likes/check/{user}/{vivienda}', [LikesController::class, 'checkLike']);
+Route::post('/likes/toggle', [LikesController::class, 'toggleLike']);
