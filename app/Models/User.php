@@ -75,4 +75,12 @@ class User extends Authenticatable implements HasMedia
                 ->height(env('IMAGE_HEIGHT', 300));
         }
     }
+
+     // Relación con notificaciones (N:M)
+     public function notificaciones()
+     {
+         return $this->belongsToMany(Notificacion::class, 'notificaciones_usuarios', 'id_usuario', 'id_notificacion')
+                     ->withPivot('leida')
+                     ->withTimestamps();
+     }
 }

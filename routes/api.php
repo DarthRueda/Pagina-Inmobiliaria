@@ -15,6 +15,7 @@ use App\Http\Controllers\MunicipioController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\LikesController;
+use App\Http\Controllers\NotificacionController;
 
 
 Route::post('forget-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forget.password.post');
@@ -90,3 +91,6 @@ Route::get('/municipios', [MunicipioController::class, 'index']);
 Route::get('/likes/{user}', [LikesController::class, 'getLikes']);
 Route::get('/likes/check/{user}/{vivienda}', [LikesController::class, 'checkLike']);
 Route::post('/likes/toggle', [LikesController::class, 'toggleLike']);
+
+//Notificaciones
+Route::get('/notificaciones/{userId}', [NotificacionController::class, 'getUserNotifications']);

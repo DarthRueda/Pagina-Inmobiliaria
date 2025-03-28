@@ -1,36 +1,37 @@
 <template>
-    <div class="like-container">
-        <button @click.stop="darLike" class="like-button">
-            <svg class="card-circle" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="40" />
-                <image :href="isLiked ? 'images/inmuebles/corazon-lleno.svg' : 'images/inmuebles/corazon.svg'" 
-                       x="22" y="22" height="56px" width="56px"/>
-            </svg>
-        </button>
-    </div>
-    <router-link :to="'/vivienda/' + vivienda.id" class="card-link">
         <div class="card">
-            <div class="card-img-container">
-                <img class="card-img" :src="vivienda.image" alt="Card image cap">
+            <div class="like-container">
+                <button @click.stop="darLike" class="like-button">
+                    <svg class="card-circle" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="40" />
+                        <image :href="isLiked ? 'images/inmuebles/corazon-lleno.png' : 'images/inmuebles/corazon.svg'" 
+                            x="22" y="22" height="56px" width="56px"/>
+                    </svg>
+                </button>
             </div>
-            <div class="card-body">
-                <div class="card-top">
-                    <div class="card-content">
-                        <div class="card-text-content">
-                            <h4 class="card-title">{{ vivienda.tipo }} en {{ vivienda.localizacion }}</h4>
-                            <h5 class="card-subtitle">{{ vivienda.dimensiones }}m2 - {{ vivienda.habitaciones }} habitaciones - {{ vivienda.banyos }} baños</h5>
-                            <p class="card-text">{{ vivienda.descripcion }}</p>  
+            <router-link :to="'/vivienda/' + vivienda.id" class="card-link">
+                <div class="card-img-container">
+                    <img class="card-img" :src="vivienda.image" alt="Card image cap">
+                </div>
+                <div class="card-body">
+                    <div class="card-top">
+                        <div class="card-content">
+                            <div class="card-text-content">
+                                <h4 class="card-title">{{ vivienda.tipo }} en {{ vivienda.localizacion }}</h4>
+                                <h5 class="card-subtitle">{{ vivienda.dimensiones }}m2 - {{ vivienda.habitaciones }} habitaciones - {{ vivienda.banyos }} baños</h5>
+                                <p class="card-text">{{ vivienda.descripcion }}</p>  
+                            </div>
                         </div>
+                        <h5 class="card-price">{{ vivienda.precio }}</h5>
                     </div>
-                    <h5 class="card-price">{{ vivienda.precio }}</h5>
+                    <h6>Actualizado hace 6 dias</h6>
+                    <div class="card-logo">
+                        <img src="images/inmuebles/logo.svg" alt="Inmobiliaria Logo" class="logo-img">
+                    </div>
                 </div>
-                <h6>Actualizado hace 6 dias</h6>
-                <div class="card-logo">
-                    <img src="images/inmuebles/logo.svg" alt="Inmobiliaria Logo" class="logo-img">
-                </div>
-            </div>
+            </router-link>
         </div>
-    </router-link>
+    
 </template>
 
 <script>
@@ -86,20 +87,22 @@ export default {
 .card-link {
     text-decoration: none;
     color: inherit;
-}
-
-.card {
     display: flex;
     flex-direction: row; 
     align-items: center; 
     width: 100%;
-    gap: 20px; /* Espacio entre la imagen y el contenido */
+    margin: 0;
+    padding: 0;
+    position: relative;
+    z-index: 1; /* Asegura que el enlace esté por debajo del botón */
+
+}
+
+.card {
     border: 1px solid #835EAE;
     border-radius: 0px !important;
     margin: 0;
     padding: 0;
-    position: relative;
-    margin-bottom: 15px; /* Add this line */
 }
 
 .card-img-container {
@@ -116,7 +119,13 @@ export default {
     border-radius: 0px !important;
 }
 
-
+.like-container {
+    position: absolute;
+    top: 25px;
+    left: 335px;
+    z-index: 10; 
+    pointer-events: auto;
+}
 
 .like-button {
   background: none;
@@ -131,7 +140,7 @@ export default {
   width: 40px;
   height: 40px;
   fill: white;
-  stroke: black;
+  stroke: #835EAE;
   stroke-width: 1px;
 }
 
