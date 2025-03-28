@@ -152,7 +152,6 @@ export default [
                 meta: { breadCrumb: 'Detalles Vivienda' }
             },
               
-
             {
                 path: 'misPropiedades',
                 name: 'user.misPropiedades',
@@ -167,7 +166,15 @@ export default [
                 component: () => import('../views/user/favoritos.vue'),
                 beforeEnter: requireLogin,
                 meta: { breadCrumb: 'Mis Propiedades' }
-            }
+            },
+
+            {
+                path: 'notificaciones',
+                name: 'user.notificaciones',
+                component: () => import('../views/user/notificaciones.vue'),
+                beforeEnter: requireLogin,
+                meta: { breadCrumb: 'Notificaciones' }
+            },
         ]
     },
 

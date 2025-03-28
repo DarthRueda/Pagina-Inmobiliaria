@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('mensaje')->notNullable();
             $table->timestamp('fecha')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
+            $table->foreign('id_vivienda')->references('id')->on('viviendas')->onDelete('cascade');
         });
     }
 

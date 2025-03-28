@@ -32,6 +32,12 @@ class Vivienda extends Model implements HasMedia
         return $this->belongsToMany(Filtro::class, 'vivienda_filtros', 'id_vivienda', 'id_filtro');
     }
 
+    // Relación con notificaciones (1:N)
+    public function notificaciones()
+    {
+        return $this->hasMany(Notificacion::class, 'id_vivienda');
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('images')

@@ -11,30 +11,40 @@
           <CardInmueble :vivienda="vivienda" />
           <button @click="editVivienda(vivienda)" class="btn btn-secondary mb-3">Editar Propiedad</button>
         </div>
-        <button @click="toggleForm" class="btn btn-primary mb-3">Añadir Propiedad</button>
-        <div v-if="showForm" class="overlay">
+        <button @click="toggleCreateForm" class="btn btn-primary mb-3">Añadir Propiedad</button>
+        
+        <!-- Formulario para crear -->
+        <div v-if="showCreateForm" class="overlay">
           <div class="overlay-content">
-            <form @submit.prevent="submitForm" class="form-container">
-              <h3>{{ isEditing ? 'Editar Propiedad' : 'Crea una propiedad para que la vea todo el mundo' }}</h3>
-              <div v-if="isEditing" class="form-group">
-                <label>Precio Actual: {{ vivienda.precio }}</label>
-              </div>
-              <div class="form-group">
-                <label>
-                  <input type="checkbox" v-model="changePrice" /> Cambiar Precio
-                </label>
-              </div>
-              <div class="form-group">
-                <label for="precio">Nuevo Precio</label>
+            <form @submit.prevent="submitCreateForm" class="form-container">
+              <h3>Crea una propiedad para que la vea todo el mundo</h3>
+              <div class="form-group position-relative">
                 <input
-                  v-model="vivienda.precio"
-                  type="number"
+                  type="text"
+                  v-model="searchQuery"
+                  @input="filterMunicipios"
+                  @focus="inputFocused = true"
+                  @blur="handleBlur"
                   class="form-control"
-                  id="precio"
-                  :disabled="!changePrice"
+                  placeholder="Buscar municipio..."
                 />
+                <ul v-if="filteredMunicipios.length && inputFocused" class="dropdown-menu show">
+                  <li
+                    v-for="municipio in filteredMunicipios"
+                    :key="municipio.idMunicipio"
+                    @mousedown.prevent="selectMunicipio(municipio.Municipio)"
+                    class="dropdown-item"
+                  >
+                    {{ municipio.Municipio }}
+                  </li>
+                </ul>
               </div>
-              <!-- Other form fields... -->
+              <!-- Form fields... -->
+              <div class="form-group">
+                <label for="precio">Precio</label>
+                <input v-model="vivienda.precio" type="number" class="form-control" id="precio" required />
+              </div>
+              <!-- Other form fields identical to the edit form -->
               <div class="form-group">
                 <label for="descripcion">Descripción</label>
                 <textarea v-model="vivienda.descripcion" class="form-control" id="descripcion" required></textarea>
@@ -206,8 +216,209 @@
                 <label for="images">Imágenes</label>
                 <input type="file" class="form-control" id="images" multiple @change="handleFileUpload">
               </div>
-              <button type="submit" class="btn btn-primary">{{ isEditing ? 'Guardar Cambios' : 'Crear Vivienda' }}</button>
-              <button type="button" @click="toggleForm" class="btn btn-secondary ml-2">Cancelar</button>
+              <button type="submit" class="btn btn-primary">Crear Vivienda</button>
+              <button type="button" @click="toggleCreateForm" class="btn btn-secondary ml-2">Cancelar</button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Formulario para editar -->
+        <div v-if="showEditForm" class="overlay">
+          <div class="overlay-content">
+            <form @submit.prevent="submitEditForm" class="form-container">
+              <h3>Editar Propiedad</h3>
+              <div class="form-group">
+                <label>Precio Actual: {{ originalPrice }}</label>
+              </div>
+              <div class="form-group">
+                <label>
+                  <input type="checkbox" v-model="changePrice" /> Cambiar Precio
+                </label>
+              </div>
+              <div class="form-group">
+                <label for="precio">Nuevo Precio</label>
+                <input
+                  v-model="vivienda.precio"
+                  type="number"
+                  class="form-control"
+                  id="precio"
+                  :disabled="!changePrice"
+                />
+              </div>
+              <!-- Other form fields identical to the create form -->
+              <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea v-model="vivienda.descripcion" class="form-control" id="descripcion" required></textarea>
+              </div>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="habitaciones">Habitaciones</label>
+                    <input v-model="vivienda.habitaciones" type="number" class="form-control" id="habitaciones" required>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="banyos">Baños</label>
+                    <input v-model="vivienda.banyos" type="number" class="form-control" id="banyos" required>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="dimensiones">Dimensiones (m²)</label>
+                    <input v-model="vivienda.dimensiones" type="number" class="form-control" id="dimensiones" required>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="planta">Planta</label>
+                    <input v-model="vivienda.planta" type="number" class="form-control" id="planta" required>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="tipo">Tipo</label>
+                    <select v-model="vivienda.tipo" class="form-control" id="tipo" required>
+                      <option value="Piso">Piso</option>
+                      <option value="Casa">Casa</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="orientacion">Orientación</label>
+                    <select v-model="vivienda.orientacion" class="form-control" id="orientacion" required>
+                      <option value="Norte">Norte</option>
+                      <option value="Sur">Sur</option>
+                      <option value="Este">Este</option>
+                      <option value="Oeste">Oeste</option>
+                      <option value="Noreste">Noreste</option>
+                      <option value="Sureste">Sureste</option>
+                      <option value="Noroeste">Noroeste</option>
+                      <option value="Suroeste">Suroeste</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="agua_caliente">Agua Caliente</label>
+                    <select v-model="vivienda.agua_caliente" class="form-control" id="agua_caliente" required>
+                      <option value="Gas Natural">Gas Natural</option>
+                      <option value="Electricidad">Electricidad</option>
+                      <option value="No">No</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="calefaccion">Calefacción</label>
+                    <select v-model="vivienda.calefaccion" class="form-control" id="calefaccion" required>
+                      <option value="Gas Natural">Gas Natural</option>
+                      <option value="Electricidad">Electricidad</option>
+                      <option value="No">No</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="estado">Estado</label>
+                    <select v-model="vivienda.estado" class="form-control" id="estado" required>
+                      <option value="A reformar">A reformar</option>
+                      <option value="Normal">Normal</option>
+                      <option value="Bueno">Bueno</option>
+                      <option value="Excelente">Excelente</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="antiguedad">Antigüedad</label>
+                    <select v-model="vivienda.antiguedad" class="form-control" id="antiguedad" required>
+                      <option value="5 a 10 años">5 a 10 años</option>
+                      <option value="10 a 15 años">10 a 15 años</option>
+                      <option value="20 a 30 años">20 a 30 años</option>
+                      <option value="30 a 50 años">30 a 50 años</option>
+                      <option value="más de 50 años">más de 50 años</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="parking">Parking</label>
+                    <select v-model="vivienda.parking" class="form-control" id="parking" required>
+                      <option value="Privado">Privado</option>
+                      <option value="Publico">Publico</option>
+                      <option value="No">No</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-3">
+                  <div class="form-group">
+                    <label for="ascensor">Ascensor</label>
+                    <select v-model="vivienda.ascensor" class="form-control" id="ascensor" required>
+                      <option value="Si">Si</option>
+                      <option value="No">No</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="caracteristicas">Características</label>
+                <div class="checkbox-group grid">
+                  <label>
+                    <input type="checkbox" value="Aire acondicionado" v-model="selectedFilters" /> Aire acondicionado
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Terraza" v-model="selectedFilters" /> Terraza
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Trastero" v-model="selectedFilters" /> Trastero
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Electrodomésticos" v-model="selectedFilters" /> Electrodomésticos
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Balcón" v-model="selectedFilters" /> Balcón
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Puerta Blindada" v-model="selectedFilters" /> Puerta Blindada
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Calefacción" v-model="selectedFilters" /> Calefacción
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Jardín" v-model="selectedFilters" /> Jardín
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Patio" v-model="selectedFilters" /> Patio
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Piscina" v-model="selectedFilters" /> Piscina
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Suite - con baño" v-model="selectedFilters" /> Suite - con baño
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Serv. portería" v-model="selectedFilters" /> Serv. portería
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Internet" v-model="selectedFilters" /> Internet
+                  </label>
+                  <label>
+                    <input type="checkbox" value="Lavadero" v-model="selectedFilters" /> Lavadero
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="images">Imágenes</label>
+                <input type="file" class="form-control" id="images" multiple @change="handleFileUpload">
+              </div>
+              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+              <button type="button" @click="toggleEditForm" class="btn btn-secondary ml-2">Cancelar</button>
             </form>
           </div>
         </div>
@@ -245,9 +456,11 @@ export default {
       antiguedad: '',
       parking: '',
       ascensor: '',
+      localizacion: '',
     });
     const images = ref([]);
-    const showForm = ref(false);
+    const showCreateForm = ref(false);
+    const showEditForm = ref(false);
     const isEditing = ref(false);
     const changePrice = ref(false);
     const selectedFilters = ref([]);
@@ -255,6 +468,7 @@ export default {
     const searchQuery = ref('');
     const editingViviendaId = ref(null);
     const originalPrice = ref(null);
+    const inputFocused = ref(false);
 
     const fetchViviendas = async () => {
       try {
@@ -283,9 +497,16 @@ export default {
       images.value = event.target.files;
     };
 
-    const toggleForm = () => {
-      showForm.value = !showForm.value;
-      if (!showForm.value) {
+    const toggleCreateForm = () => {
+      showCreateForm.value = !showCreateForm.value;
+      if (!showCreateForm.value) {
+        resetForm();
+      }
+    };
+
+    const toggleEditForm = () => {
+      showEditForm.value = !showEditForm.value;
+      if (!showEditForm.value) {
         resetForm();
       }
     };
@@ -300,28 +521,57 @@ export default {
       changePrice.value = false;
     };
 
-    const editVivienda = (viviendaData) => {
-      Object.keys(vivienda).forEach(key => {
-        if (key !== 'localizacion') vivienda[key] = viviendaData[key];
-      });
+    const editVivienda = async (viviendaData) => {
+      try {
+        // Obtener los datos más recientes de la vivienda
+        const response = await axios.get(`/api/vivienda/${viviendaData.id}`);
+        const updatedVivienda = response.data;
 
-      // Parse y elimina el símbolo de la moneda
-      originalPrice.value = viviendaData.precio
-        ? parseInt(viviendaData.precio.replace(/[.,€]/g, ''), 10)
-        : 0;
-      vivienda.precio = originalPrice.value;
+        // Rellenar el objeto vivienda con los datos más recientes
+        Object.keys(vivienda).forEach(key => {
+          vivienda[key] = updatedVivienda[key];
+        });
 
-      // Selección de los filtros
-      selectedFilters.value = viviendaData.filtros
-        ? viviendaData.filtros.map(filtro => filtro.nombre)
-        : [];
+        // Analizar y eliminar el símbolo de moneda del precio
+        originalPrice.value = updatedVivienda.precio
+          ? parseInt(updatedVivienda.precio.replace(/[.,€]/g, ''), 10)
+          : 0;
+        vivienda.precio = originalPrice.value;
 
-      editingViviendaId.value = viviendaData.id;
-      isEditing.value = true;
-      toggleForm();
+        // Establecer los filtros seleccionados (características)
+        selectedFilters.value = updatedVivienda.filtros
+          ? updatedVivienda.filtros.map(filtro => filtro.nombre)
+          : []; // Mapear el campo 'filtros' para extraer 'nombre'
+
+        editingViviendaId.value = updatedVivienda.id;
+        isEditing.value = true;
+        toggleEditForm();
+      } catch (error) {
+        console.error('Error al obtener los datos de la vivienda:', error);
+        alert('Error al cargar los datos de la vivienda. Por favor, inténtelo de nuevo más tarde.');
+      }
     };
 
-    const submitForm = async () => {
+    const submitCreateForm = async () => {
+      try {
+        const formData = new FormData();
+        Object.keys(vivienda).forEach(key => formData.append(key, vivienda[key]));
+        formData.append('id_usuario', getUserId());
+        formData.append('filters', JSON.stringify(selectedFilters.value));
+        for (let i = 0; i < images.value.length; i++) {
+          formData.append('images[]', images.value[i]);
+        }
+        const response = await axios.post('/api/vivienda', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+        viviendas.value.push(response.data);
+        toggleCreateForm();
+      } catch (error) {
+        console.error('Error al crear la vivienda:', error);
+      }
+    };
+
+    const submitEditForm = async () => {
       try {
         const formData = new FormData();
         Object.keys(vivienda).forEach(key => {
@@ -332,6 +582,11 @@ export default {
           }
         });
 
+        // Ensure localizacion is included in the form data
+        if (!formData.has('localizacion') || !vivienda.localizacion) {
+          formData.append('localizacion', vivienda.localizacion || ''); // Use existing value or empty string
+        }
+
         formData.append('id_usuario', getUserId());
         formData.append('filters', JSON.stringify(selectedFilters.value));
 
@@ -339,30 +594,34 @@ export default {
           formData.append('images[]', images.value[i]);
         }
 
-        if (isEditing.value) {
-          const response = await axios.post(`/api/vivienda/${editingViviendaId.value}`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          // Actualiza la vivienda editada en la lista
-          const index = viviendas.value.findIndex(v => v.id === editingViviendaId.value);
-          if (index !== -1) {
-            viviendas.value[index] = response.data;
-          }
-        } else {
-          const response = await axios.post('/api/vivienda', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-          // Añade la nueva vivienda a la lista
-          viviendas.value.push(response.data);
-        }
+        // Log the form data for debugging
+        console.log('Submitting edit form with data:', Object.fromEntries(formData.entries()));
 
-        toggleForm();
+        const response = await axios.post(`/api/vivienda/${editingViviendaId.value}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        // Actualiza la vivienda editada en la lista
+        const index = viviendas.value.findIndex(v => v.id === editingViviendaId.value);
+        if (index !== -1) {
+          viviendas.value[index] = response.data;
+
+          // Refresh selectedFilters with the updated filters
+          selectedFilters.value = response.data.filtros
+            ? response.data.filtros.map(filtro => filtro.nombre)
+            : [];
+        }
+        toggleEditForm();
       } catch (error) {
         console.error('Error al guardar la vivienda:', error);
+
+        // Display a user-friendly error message
+        if (error.response && error.response.data && error.response.data.message) {
+          alert(`Error: ${error.response.data.message}`);
+        } else {
+          alert('Error al guardar la vivienda. Por favor, inténtelo de nuevo más tarde.');
+        }
       }
     };
 
@@ -389,6 +648,12 @@ export default {
       }
     };
 
+    const handleBlur = () => {
+      setTimeout(() => {
+        inputFocused.value = false;
+      }, 100);
+    };
+
     const filteredMunicipios = ref([]);
 
     onMounted(() => {
@@ -405,15 +670,18 @@ export default {
       viviendas,
       vivienda,
       images,
-      showForm,
+      showCreateForm,
+      showEditForm,
       isEditing,
       changePrice,
       fetchViviendas,
       editVivienda,
       enableEditing,
       handleFileUpload,
-      toggleForm,
-      submitForm,
+      toggleCreateForm,
+      toggleEditForm,
+      submitCreateForm,
+      submitEditForm,
       getUserId,
       selectedFilters,
       municipios,
@@ -421,7 +689,9 @@ export default {
       originalPrice,
       filteredMunicipios,
       filterMunicipios,
-      selectMunicipio
+      selectMunicipio,
+      inputFocused,
+      handleBlur
     };
   }
 };

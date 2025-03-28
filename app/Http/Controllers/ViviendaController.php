@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Vivienda;
 use Illuminate\Http\Request;
 use App\Models\Filtro;
+use App\Http\Controllers\NotificacionController;
+
+                        
+
 
 class ViviendaController extends Controller
 {
@@ -121,7 +125,14 @@ class ViviendaController extends Controller
     public function update(Request $request, $id)
     {
         $vivienda = Vivienda::findOrFail($id);
+
+        $oldPrecio = $vivienda->precio;
+
         $vivienda->update($request->all());
+
+        $notificacionController = new NotificacionController();
+        $notificacionController->sendNotification($vivienda, $oldPrecio);
+
 
         if ($request->hasFile('images')) {
             $vivienda->clearMediaCollection('images');
