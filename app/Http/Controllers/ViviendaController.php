@@ -14,10 +14,11 @@ class ViviendaController extends Controller
 {
     public function show($id)
     {
-        $vivienda = Vivienda::with('media','filtros')->findOrFail($id);
+        $vivienda = Vivienda::with('media', 'filtros')->findOrFail($id);
         $vivienda->media->each(function ($media) {
-            $media->url = $media->getUrl();
+            $media->url = str_replace('http://localhost', config('app.url'), $media->getUrl());
         });
+        $vivienda->image = $vivienda->getFirstMediaUrl('images') ?: '/images/placeholder.jpg';
         return response()->json($vivienda);
     }
 
@@ -46,10 +47,14 @@ class ViviendaController extends Controller
     {
         $userId = $request->query('user_id');
         if ($userId) {
-            $viviendas = Vivienda::with('filtros')->where('id_usuario', $userId)->get();
+            $viviendas = Vivienda::with('filtros', 'media')->where('id_usuario', $userId)->get();
         } else {
-            $viviendas = Vivienda::with('filtros')->get();
+            $viviendas = Vivienda::with('filtros', 'media')->get();
         }
+        $viviendas->each(function ($vivienda) {
+            $vivienda->image = $vivienda->getFirstMediaUrl('images') ?: '/images/placeholder.jpg';
+        });
+
         return response()->json($viviendas);
     }
 
@@ -116,8 +121,13 @@ class ViviendaController extends Controller
                 return $query->where('dimensiones', '>=', $surface);
             })
             ->orderBy($orderColumn, $orderDirection)
-            ->with('filtros')
+            ->with('filtros', 'media')
             ->get();
+
+        // Asegurarse de que la URL de la imagen sea correcta
+        $viviendas->each(function ($vivienda) {
+            $vivienda->image = $vivienda->getFirstMediaUrl('images') ?: '/images/placeholder.jpg';
+        });
 
         return response()->json($viviendas);
     }

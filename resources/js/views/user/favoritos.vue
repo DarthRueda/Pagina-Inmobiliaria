@@ -13,6 +13,7 @@
             v-for="vivienda in viviendas" 
             :key="vivienda.id" 
             :vivienda="vivienda" 
+             class="card-inmueble"
             @removeLike="handleRemoveLike" 
           />
         </div>
@@ -23,14 +24,16 @@
 
 <script>
 import PanelUsuarioOpciones from "@/components/PanelUsuarioOpciones.vue";
-import CardInmueble from "@/components/CardInmueble.vue";
+// import CardInmueble from "@/components/CardInmueble.vue";
+import CardInmueble from '../../components/CardInmueble.vue';
+
 import axios from "axios";
 import useProfile from "@/composables/profile";
 
 export default {
   components: {
     PanelUsuarioOpciones,
-    CardInmueble,
+    CardInmueble
   },
   data() {
     return {
@@ -64,7 +67,15 @@ export default {
 
         // Hacer múltiples peticiones para obtener los datos de cada vivienda
         const viviendaPromises = likedViviendaIds.map(id =>
-          axios.get(`/api/vivienda/${id}`).then(res => res.data)
+          axios.get(`/api/vivienda/${id}`).then(res => {
+            const vivienda = res.data;
+
+            // Ensure the 'image' property is correctly set
+            // if (!vivienda.image || vivienda.image.trim() === '') {
+            //   vivienda.image = '/images/default-image.jpg'; // Set a default image path
+            // }
+            return vivienda;
+          })
         );
 
         this.viviendas = await Promise.all(viviendaPromises);

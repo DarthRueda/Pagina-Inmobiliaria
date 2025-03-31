@@ -1,38 +1,39 @@
 <template>
-        <div class="card">
-            <div class="like-container">
-                <button @click.stop="darLike" class="like-button">
-                    <svg class="card-circle" viewBox="0 0 100 100">
-                        <circle cx="50" cy="50" r="40" />
-                        <image :href="isLiked ? 'images/inmuebles/corazon-lleno.png' : 'images/inmuebles/corazon.svg'" 
-                            x="22" y="22" height="56px" width="56px"/>
-                    </svg>
-                </button>
-            </div>
-            <router-link :to="'/vivienda/' + vivienda.id" class="card-link">
-                <div class="card-img-container">
-                    <img class="card-img" :src="vivienda.image" alt="Card image cap">
-                </div>
-                <div class="card-body">
-                    <div class="card-top">
-                        <div class="card-content">
-                            <div class="card-text-content">
-                                <h4 class="card-title">{{ vivienda.tipo }} en {{ vivienda.localizacion }}</h4>
-                                <h5 class="card-subtitle">{{ vivienda.dimensiones }}m2 - {{ vivienda.habitaciones }} habitaciones - {{ vivienda.banyos }} baños</h5>
-                                <p class="card-text">{{ vivienda.descripcion }}</p>  
-                            </div>
-                        </div>
-                        <h5 class="card-price">{{ vivienda.precio }}</h5>
-                    </div>
-                    <h6>Actualizado hace 6 dias</h6>
-                    <div class="card-logo">
-                        <img src="images/inmuebles/logo.svg" alt="Inmobiliaria Logo" class="logo-img">
-                    </div>
-                </div>
-            </router-link>
+    <div class="card">
+        <div class="like-container">
+            <button @click.stop="darLike" class="like-button">
+                <svg class="card-circle" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" />
+                    <image :href="isLiked ? 'images/inmuebles/corazon-lleno.png' : 'images/inmuebles/corazon.svg'" 
+                        x="22" y="22" height="56px" width="56px"/>
+                </svg>
+            </button>
         </div>
-    
-</template>
+        <router-link :to="'/vivienda/' + vivienda.id" class="card-link">
+            <div class="card-img-container">
+                <!-- <img v-if="vivienda.media[0]?.original_url" class="card-img" :src="vivienda.media[0].original_url" alt="Card image cap"> -->
+                <!-- Display the first image -->
+                <img v-if="vivienda.image" class="card-img" :src="vivienda.image" alt="Card image cap">
+            </div>
+            <div class="card-body">
+                <div class="card-top">
+                    <div class="card-content">
+                        <div class="card-text-content">
+                            <h4 class="card-title">{{ vivienda.tipo }} en {{ vivienda.localizacion }}</h4>
+                            <h5 class="card-subtitle">{{ vivienda.dimensiones }}m2 - {{ vivienda.habitaciones }} habitaciones - {{ vivienda.banyos }} baños</h5>
+                            <p class="card-text">{{ vivienda.descripcion }}</p>  
+                        </div>
+                    </div>
+                    <h5 class="card-price">{{ vivienda.precio }}</h5>
+                </div>
+                <h6>Actualizado hace 6 dias</h6>
+                <div class="card-logo">
+                    <img src="images/inmuebles/logo.svg" alt="Inmobiliaria Logo" class="logo-img">
+                </div>
+            </div>
+        </router-link>
+    </div>
+</template>>
 
 <script>
 import { ref, computed, onMounted } from 'vue';
