@@ -1,12 +1,18 @@
 <template>
-    <img src="/images/inmobiliarias/test-inmueble.jpg" alt="Inmobiliaria Image" class="inmobiliaria-image">
+    <img :src="fondo || '/images/placeholder-fondo.jpg'" alt="Inmobiliaria Image" class="inmobiliaria-image">
 </template>
 
 <script>
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-    name: 'ImageInmobiliaria'
+    name: 'ImageInmobiliaria',
+    props: {
+        fondo: {
+            type: String,
+            required: false,
+        },
+    },
 });
 </script>
 

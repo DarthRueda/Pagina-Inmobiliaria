@@ -162,4 +162,18 @@ class ViviendaController extends Controller
 
         return response()->json($vivienda);
     }
+
+    public function getByUserId($userId)
+    {
+        $viviendas = Vivienda::with('media', 'filtros')
+            ->where('id_usuario', $userId)
+            ->get();
+
+        // Asegurarse de que la URL de la imagen sea correcta
+        $viviendas->each(function ($vivienda) {
+            $vivienda->image = $vivienda->getFirstMediaUrl('images') ?: '/images/placeholder.jpg';
+        });
+
+        return response()->json($viviendas);
+    }
 }

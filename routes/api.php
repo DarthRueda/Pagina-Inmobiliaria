@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\LikesController;
 use App\Http\Controllers\NotificacionController;
+use App\Http\Controllers\Api\InmobiliariaController;
 
 
 Route::post('forget-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('forget.password.post');
@@ -74,6 +75,9 @@ Route::put('author/{id}', [AuthorController::class, 'update'])->name('author.upd
 
 //Users
 Route::get('/user/{id}', [UserController::class, 'show']);
+Route::post('/user/upload-fondo', [UserController::class, 'uploadFondo']);
+Route::post('/user/upload-logo', [UserController::class, 'uploadLogo']);
+Route::get('/user/tipo/{userId}', [UserController::class, 'getTipo'])->name('user.tipo');
 
 //Viviendas
 Route::get('/viviendas', [ViviendaController::class, 'index'])->name('vivienda.index');
@@ -82,6 +86,7 @@ Route::post('/vivienda', [ViviendaController::class, 'store']);
 Route::post('/vivienda/{id}', [ViviendaController::class, 'update']);
 Route::get('/viviendas/filter', [ViviendaController::class, 'filter']);
 Route::get('/viviendas/filterByCaracteristicas', [ViviendaController::class, 'filterByCaracteristicas']);
+Route::get('/viviendas/user/{userId}', [ViviendaController::class, 'getByUserId'])->name('viviendas.byUser');
 
 //Municipios
 Route::get('/municipios', [MunicipioController::class, 'index']);

@@ -4,15 +4,13 @@
             <button @click.stop="darLike" class="like-button">
                 <svg class="card-circle" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="40" />
-                    <image :href="isLiked ? 'images/inmuebles/corazon-lleno.png' : 'images/inmuebles/corazon.svg'" 
+                    <image :href="isLiked ? '/images/inmuebles/corazon-lleno.png' : '/images/inmuebles/corazon.svg'" 
                         x="22" y="22" height="56px" width="56px"/>
                 </svg>
             </button>
         </div>
         <router-link :to="'/vivienda/' + vivienda.id" class="card-link">
             <div class="card-img-container">
-                <!-- <img v-if="vivienda.media[0]?.original_url" class="card-img" :src="vivienda.media[0].original_url" alt="Card image cap"> -->
-                <!-- Display the first image -->
                 <img v-if="vivienda.image" class="card-img" :src="vivienda.image" alt="Card image cap">
             </div>
             <div class="card-body">
@@ -26,19 +24,27 @@
                     </div>
                     <h5 class="card-price">{{ vivienda.precio }}</h5>
                 </div>
-                <h6>Actualizado hace 6 dias</h6>
-                <div class="card-logo">
-                    <img src="images/inmuebles/logo.svg" alt="Inmobiliaria Logo" class="logo-img">
-                </div>
+                <!-- Display the time since creation -->
+                <h6>{{ timeSinceCreation }}</h6>
+            </div>
+        </router-link>
+        <router-link
+            v-if="userTipo === 1 && userLogo"
+            :to="'/inmobiliaria/' + vivienda.id_usuario"
+            class="card-logo-link"
+        >
+            <div class="card-logo">
+                <img :src="userLogo" alt="Inmobiliaria Logo" class="logo-img">
             </div>
         </router-link>
     </div>
-</template>>
+</template>
 
 <script>
 import { ref, computed, onMounted } from 'vue';
 import useProfile from "@/composables/profile";
 import useLikes from "@/composables/likes";
+import axios from 'axios';
 
 export default {
     name: 'CardInmueble',
@@ -56,12 +62,42 @@ export default {
         const viviendaId = computed(() => props.vivienda.id);
         const isLiked = ref(false);
         const vivienda = ref(props.vivienda);
+        const userTipo = ref(null);
+        const userLogo = ref(null);
+
+        // Calculate the time since creation
+        const timeSinceCreation = computed(() => {
+            const createdAt = new Date(vivienda.value.created_at); // Parse el string de fecha
+            const now = new Date();
+            const diffInMs = now - createdAt;
+            const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+            const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+            if (diffInDays > 0) {
+                return `Actualizado hace ${diffInDays} día${diffInDays > 1 ? 's' : ''}`;
+            } else {
+                return `Actualizado hace ${diffInHours} hora${diffInHours > 1 ? 's' : ''}`;
+            }
+        });
 
         onMounted(async () => {
             if (userId.value) {
                 isLiked.value = await checkLike(userId.value, viviendaId.value);
             }
+
+            // Fetch el tipo y logo del usuario
+            fetchUserTipoAndLogo(vivienda.value.id_usuario);
         });
+
+        const fetchUserTipoAndLogo = async (userId) => {
+            try {
+                const response = await axios.get(`/api/user/tipo/${userId}`);
+                userTipo.value = response.data.tipo;
+                userLogo.value = response.data.logo; // Guarda el logo del usuario
+            } catch (error) {
+                console.error('Error fetching user tipo and logo:', error);
+            }
+        };
 
         const darLike = async () => {
             if (!userId.value) {
@@ -77,12 +113,10 @@ export default {
             }
         };
 
-        return { isLiked, darLike, vivienda };
+        return { isLiked, darLike, vivienda, userTipo, userLogo, timeSinceCreation };
     }
 };
 </script>
-
-
 
 <style scoped>
 .card-link {
@@ -95,8 +129,7 @@ export default {
     margin: 0;
     padding: 0;
     position: relative;
-    z-index: 1; /* Asegura que el enlace esté por debajo del botón */
-
+    z-index: 1; 
 }
 
 .card {
@@ -147,7 +180,6 @@ export default {
 
 .like-button:hover {
   transform: scale(1.1);
-
 }
 
 .card-body {
@@ -187,11 +219,11 @@ export default {
     max-height: 150px;
     overflow: hidden;
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* Número máximo de líneas antes de cortar */
-    line-clamp: 3; /* Número máximo de líneas antes de cortar */
+    -webkit-line-clamp: 3;
+    line-clamp: 3; 
     -webkit-box-orient: vertical;
     text-overflow: ellipsis;
-    word-break: break-word; /* Asegura que las palabras largas se dividan */
+    word-break: break-word;
     font-size: 14px;
     font-weight: normal;
 }
@@ -205,6 +237,14 @@ export default {
     font-weight: bold;
 }
 
+.card-logo-link {
+    text-decoration: none;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    z-index: 5;
+}
+
 .card-logo {
     display: flex;
     justify-content: flex-end;
@@ -216,6 +256,7 @@ export default {
 .logo-img {
     width: 112px;
     height: 47px;
+    object-fit: contain;
 }
 
 .card-text, h6 {

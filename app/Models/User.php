@@ -27,6 +27,9 @@ class User extends Authenticatable implements HasMedia
         'codigo_postal',
         'localidad',
         'tipo',
+        'fondo',
+        'logo',
+        'descripcion',
     ];
 
     /**
@@ -61,9 +64,13 @@ class User extends Authenticatable implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('images/users')
-            ->useFallbackUrl('/images/placeholder.jpg')
-            ->useFallbackPath(public_path('/images/placeholder.jpg'));
+        $this->addMediaCollection('fondo')
+            ->useFallbackUrl('/images/placeholder-fondo.jpg')
+            ->useFallbackPath(public_path('/images/placeholder-fondo.jpg'));
+
+        $this->addMediaCollection('logo')
+            ->useFallbackUrl('/images/placeholder-logo.jpg')
+            ->useFallbackPath(public_path('/images/placeholder-logo.jpg'));
     }
 
     public function registerMediaConversions(Media $media = null): void

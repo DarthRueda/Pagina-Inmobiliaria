@@ -59,6 +59,29 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group mb-50">
+                        <label for="fondo">Fondo</label>
+                        <input 
+                            type="file" 
+                            id="fondo" 
+                            class="form-control" 
+                            @change="uploadFondo"
+                            :disabled="!isEditing"
+                        >
+                        <img v-if="profile.fondo" :src="profile.fondo" alt="Fondo" class="img-thumbnail mt-2" />
+                    </div>
+
+                    <div class="form-group mb-50">
+                        <label for="logo">Logo</label>
+                        <input 
+                            type="file" 
+                            id="logo" 
+                            class="form-control" 
+                            @change="uploadLogo"
+                            :disabled="!isEditing"
+                        >
+                        <img v-if="profile.logo" :src="profile.logo" alt="Logo" class="img-thumbnail mt-2" />
+                    </div>
 
                     <div class="mb-3 mt-4">
                         <button v-if="!isEditing" class="btn btn-warning" @click="enableEditing">
@@ -157,6 +180,45 @@ function cancelEditing() {
     profile.email = originalProfile.email;
     profile.telefono = originalProfile.telefono;
     isEditing.value = false;
+}
+
+// Fondo y logo
+async function uploadFondo(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const formData = new FormData();
+        formData.append('fondo', file);
+
+        try {
+            const response = await axios.post('/api/user/upload-fondo', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            profile.fondo = response.data.fondo_url;
+        } catch (error) {
+            console.error('Error uploading fondo:', error);
+        }
+    }
+}
+
+async function uploadLogo(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const formData = new FormData();
+        formData.append('logo', file);
+
+        try {
+            const response = await axios.post('/api/user/upload-logo', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            profile.logo = response.data.logo_url;
+        } catch (error) {
+            console.error('Error uploading logo:', error);
+        }
+    }
 }
 </script>
 

@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -55,7 +56,9 @@ class UserController extends Controller
         $user->codigo_postal = $request->codigo_postal;
         $user->localidad = $request->localidad;
         $user->tipo = $request->tipo;
-        
+        $user->fondo = $request->fondo;
+        $user->logo = $request->logo;
+        $user->descripcion = $request->descripcion;
 
         $user->password = Hash::make($request->password);
 
@@ -66,6 +69,58 @@ class UserController extends Controller
             return new UserResource($user);
         }
     }
+
+    // Cargrar la imagen del logo
+    public function uploadFondo(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($request->hasFile('fondo')) {
+
+            $user->clearMediaCollection('fondo');
+
+            $media = $user->addMediaFromRequest('fondo')->toMediaCollection('fondo');
+
+
+            $user->fondo = $media->getUrl();
+            $user->save();
+        }
+
+        return response()->json([
+            'message' => 'Fondo image uploaded successfully.',
+            'fondo_url' => $user->fondo,
+        ]);
+    }
+    
+    public function uploadLogo(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($request->hasFile('logo')) {
+            
+            $user->clearMediaCollection('logo');
+            
+            $media = $user->addMediaFromRequest('logo')->toMediaCollection('logo');
+
+            
+            $user->logo = $media->getUrl();
+            $user->save();
+        }
+
+        return response()->json([
+            'message' => 'Logo image uploaded successfully.',
+            'logo_url' => $user->logo,
+        ]);
+    }
+        public function getTipo($userId)
+    {
+        $user = User::findOrFail($userId);
+        return response()->json([
+            'tipo' => $user->tipo,
+            'logo' => $user->logo,
+        ]);
+    }
+    
 
     /**
      * Display the specified resource.
