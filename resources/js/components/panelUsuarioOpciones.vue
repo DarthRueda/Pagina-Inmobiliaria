@@ -31,18 +31,35 @@
         <svg width="27" height="27">
           <path fill-rule="evenodd" clip-rule="evenodd" d="M13.7556 21C13.8266 21 13.8966 21.01 13.9656 21.03C14.3626 21.147 14.5916 21.564 14.4746 21.961C14.2016 22.892 13.4826 23.611 12.5516 23.884C12.2896 23.961 12.0196 24 11.7496 24C11.2796 24 10.8106 23.88 10.3936 23.652C9.72863 23.289 9.24464 22.688 9.03163 21.961C8.91463 21.564 9.14263 21.147 9.53963 21.03C9.60863 21.01 9.67963 21 9.75063 21C10.044 21 10.3104 21.1746 10.4321 21.4361L10.4706 21.538C10.5716 21.881 10.7996 22.164 11.1126 22.336C11.3096 22.443 11.5296 22.5 11.7506 22.5C11.8776 22.5 12.0056 22.481 12.1296 22.445C12.5676 22.316 12.9066 21.977 13.0356 21.539C13.1286 21.222 13.4246 21 13.7556 21ZM11.7506 0C12.1646 0 12.5006 0.336 12.5006 0.75V2.284C16.65 2.65738 19.8696 6.06658 19.9967 10.2433L20.0058 11.1927C20.0929 16.9054 21.2471 18.1865 21.2586 18.199C21.4766 18.398 21.5556 18.731 21.4456 19.017C21.3316 19.31 21.0586 19.5 20.7506 19.5H2.75064C2.46564 19.5 2.20164 19.335 2.07664 19.079C1.96551 18.8515 1.97689 18.5911 2.10004 18.3768L2.20176 18.2204C2.42928 17.8344 3.50064 15.7397 3.50064 10.5C3.50064 6.207 6.76664 2.665 11.0006 2.284V0.75C11.0006 0.336 11.3366 0 11.7506 0ZM11.7496 3.75C8.02764 3.75 4.99964 6.778 4.99964 10.5C4.99964 14.457 4.41964 16.777 3.95364 18H19.4606L19.3611 17.7305C18.9148 16.4508 18.4996 14.2521 18.4996 10.5C18.4996 6.778 15.4716 3.75 11.7496 3.75Z" fill="black"/>
         </svg>
-        <span>Notificaciones</span>
+        <span >Notificaciones {{ unreadCount }}</span>
+
       </a>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-const router = useRouter();
+import { ref, onMounted } from 'vue';
+import useProfile from "@/composables/profile";
+import axios from 'axios';
 
+const unreadCount = ref(0);
+const { profile, getProfile } = useProfile();
+
+onMounted(async () => {
+  await getProfile();
+  const userId = profile.value.id;
+  try {
+    const { data } = await axios.get(`/api/notificaciones/no-leidas/${userId}`);
+    unreadCount.value = data.unread_count;
+    console.log("Notificaciones no leídas:", unreadCount.value); // Verifica si cambia el valor
+  } catch (error) {
+    console.error("Error obteniendo notificaciones no leídas:", error);
+  }
+});
 
 </script>
+
 
 <style scoped>
 .options-box {
