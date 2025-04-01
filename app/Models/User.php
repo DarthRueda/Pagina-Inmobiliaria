@@ -83,4 +83,10 @@ class User extends Authenticatable implements HasMedia
                      ->withPivot('leida')
                      ->withTimestamps();
      }
+
+     //Inmobiliarias
+    public function viviendas()
+    {
+        return $this->hasMany(Vivienda::class, 'id_inmobiliaria');
+    }
 }

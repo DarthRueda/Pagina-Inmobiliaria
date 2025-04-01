@@ -141,9 +141,10 @@ export default [
                 component: () => import('../views/inmuebles/showHomes.vue'),   
             },
             {
-                path: 'inmobiliaria',
+                path: 'inmobiliaria/:id',
                 name: 'inmobiliaria',
                 component: () => import('../views/inmuebles/inmobiliaria.vue'),
+                meta: { breadCrumb: 'Inmobiliaria' },
             },
             {
                 path: 'vivienda/:id',
