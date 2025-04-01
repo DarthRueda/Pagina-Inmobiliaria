@@ -44,4 +44,9 @@ class Vivienda extends Model implements HasMedia
             ->useFallbackUrl('/images/placeholder.jpg')
             ->useFallbackPath(public_path('/images/placeholder.jpg'));
     }
+
+    public function likes() {
+        return $this->hasMany(Like::class, 'id_vivienda');
+    }
+    
 }
