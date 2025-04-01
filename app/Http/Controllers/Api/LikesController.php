@@ -8,10 +8,13 @@ use App\Models\Like;
 use App\Models\Vivienda;
 
 class LikesController extends Controller {
-    public function getLikes($userId){
+    public function getLikes($userId)
+    {
         $viviendas = Vivienda::whereHas('likes', function ($query) use ($userId) {
             $query->where('id_usuario', $userId);
-        })->get();
+        })
+        ->with('media') // Include the media relationship
+        ->get();
 
         return response()->json(['likes' => $viviendas]);
     }
