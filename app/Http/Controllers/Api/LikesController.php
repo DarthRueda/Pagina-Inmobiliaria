@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Like;
+use App\Models\Vivienda;
 
 class LikesController extends Controller {
     public function getLikes($userId){
-        $likes = Like::where('id_usuario', $userId)->pluck('id_vivienda');
+        $viviendas = Vivienda::whereHas('likes', function ($query) use ($userId) {
+            $query->where('id_usuario', $userId);
+        })->get();
 
-        return response()->json(['likes' => $likes]);
+        return response()->json(['likes' => $viviendas]);
     }
-
 
     public function checkLike($userId, $viviendaId){
         $exists = Like::where('id_usuario', $userId)
@@ -42,4 +44,3 @@ class LikesController extends Controller {
         }
     }
 }
-

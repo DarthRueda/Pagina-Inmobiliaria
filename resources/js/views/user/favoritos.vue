@@ -56,29 +56,9 @@ export default {
       try {
         const userId = this.userProfile.id;
 
-        // Obtener las ID de las viviendas que el usuario ha dado like
-        const likesResponse = await axios.get(`/api/likes/${userId}`);
-        const likedViviendaIds = likesResponse.data.likes;
-
-        if (likedViviendaIds.length === 0) {
-          this.viviendas = [];
-          return;
-        }
-
-        // Hacer múltiples peticiones para obtener los datos de cada vivienda
-        const viviendaPromises = likedViviendaIds.map(id =>
-          axios.get(`/api/vivienda/${id}`).then(res => {
-            const vivienda = res.data;
-
-            // Ensure the 'image' property is correctly set
-            // if (!vivienda.image || vivienda.image.trim() === '') {
-            //   vivienda.image = '/images/default-image.jpg'; // Set a default image path
-            // }
-            return vivienda;
-          })
-        );
-
-        this.viviendas = await Promise.all(viviendaPromises);
+        // Ahora la API devuelve las viviendas completas
+        const response = await axios.get(`/api/likes/${userId}`);
+        this.viviendas = response.data.likes; // Directamente asignamos la lista de viviendas
       } catch (error) {
         console.error("Error fetching liked viviendas:", error);
       }
@@ -92,62 +72,58 @@ export default {
 };
 </script>
 
+<style scoped>
+.row {
+  margin-right: 0;
+  margin-left: 0;
+}
 
+.ml-20 {
+  margin-left: 20px;
+  width: 23%;
+}
 
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
-  
-  <style scoped>
-  .row {
-    margin-right: 0;
-    margin-left: 0;
-  }
-  
-  .ml-20 {
-    margin-left: 20px;
-    width: 23%;
-  }
-  
-  .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .overlay-content {
-    background: white;
-    padding: 20px;
-    text-align: center;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 50%;
-    height: 80%;
-    overflow-y: auto;
-  }
-  
-  .form-container {
-    width: 100%;
-    max-height: 100%;
-    overflow-y: auto;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .btn {
-    margin-top: 10px;
-  }
-  
-  .card-inmueble {
-    margin-bottom: 15px;
-  }
-  </style>
+.overlay-content {
+  background: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+  height: 80%;
+  overflow-y: auto;
+}
+
+.form-container {
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.btn {
+  margin-top: 10px;
+}
+
+.card-inmueble {
+  margin-bottom: 15px;
+}
+</style>
