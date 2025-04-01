@@ -1,25 +1,27 @@
 <template>
-    <div class="panelusuario mt-50">
+    <div class="container-fluid mt-5">
         <div class="row">
+            <!-- Panel de opciones del usuario -->
             <div class="col-md-3">
                 <PanelUsuarioOpciones />
             </div>
+            <!-- Contenido de notificaciones -->
             <div class="col-md-9">
                 <div class="row">
-                    <div v-if="notifications.length > 0" class="col-9">
+                    <div class="col-12">
                         <h3>Notificaciones</h3>
-                        <div
-                            v-for="(notification, index) in notifications"
-                            :key="index"
-                            class="notification-card"
-                            :class="{ 'no-leida': !notification.leida }"
-                            @click="markAsRead(notification)"
-                        >
-                            <p>{{ notification.mensaje }}</p>
+                        <div v-if="notifications.length > 0">
+                            <div 
+                                v-for="(notification, index) in notifications.slice().reverse()"
+                                :key="index"
+                                class="card p-3 mb-3 notification-card"
+                                :class="{ 'no-leida': !notification.leida }"
+                                @click="markAsRead(notification)"
+                            >
+                                <p class="mb-0">{{ notification.mensaje }}</p>
+                            </div>
                         </div>
-                    </div>
-                    <div v-else class="col-12">
-                        <p>No tienes notificaciones.</p>
+                        <div v-else class="alert alert-info">No tienes notificaciones.</div>
                     </div>
                 </div>
             </div>
@@ -38,13 +40,13 @@ export default {
     },
     data() {
         return {
-            userProfile: null,
-            notifications: [],
+            userProfile: null, // Información del perfil del usuario
+            notifications: [], // Lista de notificaciones
         };
     },
     async mounted() {
-        await this.getProfile();
-        await this.getNotifications();
+        await this.getProfile(); // Obtiene el perfil del usuario
+        await this.getNotifications(); // Obtiene las notificaciones del usuario
     },
     methods: {
         async getProfile() {
@@ -52,7 +54,6 @@ export default {
             await getProfile();
             this.userProfile = profile.value;
         },
-
         async getNotifications() {
             try {
                 const userId = this.userProfile.id;
@@ -62,7 +63,6 @@ export default {
                 console.error("Error al obtener las notificaciones:", error);
             }
         },
-
         async markAsRead(notification) {
             if (!notification.leida) {
                 try {
@@ -72,14 +72,13 @@ export default {
                     console.error("Error al marcar como leída:", error);
                 }
             }
-        }
+        },
     },
 };
 </script>
 
 <style scoped>
 .notification-card {
-    background-color: #f8f9fa;
     padding: 15px;
     margin-bottom: 10px;
     border-radius: 5px;
@@ -88,9 +87,8 @@ export default {
     transition: background-color 0.3s;
 }
 
-/* Notificaciones no leídas resaltadas en rojo */
 .notification-card.no-leida {
-    background-color: #ffdddd;
-    border-left: 5px solid red;
+    background-color: #ddf3ff;
+    border-left: 5px solid rgb(0, 191, 255);
 }
 </style>
