@@ -13,7 +13,6 @@
             v-for="vivienda in viviendas" 
             :key="vivienda.id" 
             :vivienda="vivienda" 
-             class="card-inmueble"
             @removeLike="handleRemoveLike" 
           />
         </div>
@@ -24,16 +23,14 @@
 
 <script>
 import PanelUsuarioOpciones from "@/components/PanelUsuarioOpciones.vue";
-// import CardInmueble from "@/components/CardInmueble.vue";
-import CardInmueble from '../../components/CardInmueble.vue';
-
+import CardInmueble from "@/components/CardInmueble.vue";
 import axios from "axios";
 import useProfile from "@/composables/profile";
 
 export default {
   components: {
     PanelUsuarioOpciones,
-    CardInmueble
+    CardInmueble,
   },
   data() {
     return {
@@ -56,9 +53,14 @@ export default {
       try {
         const userId = this.userProfile.id;
 
-        // Ahora la API devuelve las viviendas completas
         const response = await axios.get(`/api/likes/${userId}`);
-        this.viviendas = response.data.likes; // Directamente asignamos la lista de viviendas
+        this.viviendas = response.data.likes;
+
+        // Asegurarse de que la imagen de la vivienda esté disponible
+        this.viviendas.forEach(vivienda => {
+          const firstMedia = vivienda.media?.find(media => media.model_id === vivienda.id);
+          vivienda.image = firstMedia?.original_url || '/images/placeholder.jpg';
+        });
       } catch (error) {
         console.error("Error fetching liked viviendas:", error);
       }
