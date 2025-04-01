@@ -94,3 +94,6 @@ Route::post('/likes/toggle', [LikesController::class, 'toggleLike']);
 
 //Notificaciones
 Route::get('/notificaciones/{userId}', [NotificacionController::class, 'getUserNotifications']);
+Route::post('/notificaciones/{notificacionId}/leida/{userId}', [NotificacionController::class, 'markAsRead']);
+Route::get('/notificaciones/no-leidas/{userId}', [NotificacionController::class, 'getUnreadNotificationsCount']);
+

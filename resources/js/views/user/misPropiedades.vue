@@ -431,6 +431,7 @@
 import { ref, reactive, onMounted, onUnmounted } from 'vue';
 import PanelUsuarioOpciones from "@/components/PanelUsuarioOpciones.vue";
 import CardInmueble from "@/components/CardInmueble.vue";
+import useProfile  from "@/composables/profile"; 
 import axios from 'axios';
 
 export default {
@@ -625,10 +626,6 @@ export default {
       }
     };
 
-    const getUserId = () => {
-      return 1;
-    };
-
     const filterMunicipios = () => {
       filteredMunicipios.value = municipios.value.filter(municipio => 
         municipio.Municipio.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -660,12 +657,15 @@ export default {
       fetchViviendas();
       fetchMunicipios();
       document.addEventListener('click', handleClickOutside);
+      getUserId(); 
     });
 
-    onUnmounted(() => {
-      document.removeEventListener('click', handleClickOutside);
-    });
-
+    const getUserId = () => {
+      const { profile,getProfile } = useProfile();
+      getProfile(); // Obtener el perfil del usuario
+      return profile.value.id; // Log the profile for debugging
+    };
+    
     return {
       viviendas,
       vivienda,
