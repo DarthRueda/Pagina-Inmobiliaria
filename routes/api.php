@@ -87,6 +87,8 @@ Route::post('/vivienda/{id}', [ViviendaController::class, 'update']);
 Route::get('/viviendas/filter', [ViviendaController::class, 'filter']);
 Route::get('/viviendas/filterByCaracteristicas', [ViviendaController::class, 'filterByCaracteristicas']);
 Route::get('/viviendas/user/{userId}', [ViviendaController::class, 'getByUserId'])->name('viviendas.byUser');
+Route::delete('/vivienda/{viviendaId}/media/{mediaId}', [ViviendaController::class, 'deleteMedia']);
+Route::post('/vivienda/{viviendaId}/media', [ViviendaController::class, 'addMedia']);
 
 //Municipios
 Route::get('/municipios', [MunicipioController::class, 'index']);

@@ -6,6 +6,7 @@ use App\Models\Vivienda;
 use Illuminate\Http\Request;
 use App\Models\Filtro;
 use App\Http\Controllers\NotificacionController;
+use Illuminate\Support\Facades\Storage;
 
                         
 
@@ -15,9 +16,12 @@ class ViviendaController extends Controller
     public function show($id)
     {
         $vivienda = Vivienda::with('media', 'filtros')->findOrFail($id);
+
+        // Asegurarse de que la URL de la imagen sea correcta
         $vivienda->media->each(function ($media) {
-            $media->url = str_replace('http://localhost', config('app.url'), $media->getUrl());
+            $media->url = $media->getFullUrl(); // Usamos el método getFullUrl() para obtener la URL completa
         });
+
         $vivienda->image = $vivienda->getFirstMediaUrl('images') ?: '/images/placeholder.jpg';
         return response()->json($vivienda);
     }
@@ -175,5 +179,32 @@ class ViviendaController extends Controller
         });
 
         return response()->json($viviendas);
+    }
+
+    public function deleteMedia($viviendaId, $mediaId)
+    {
+        $vivienda = Vivienda::findOrFail($viviendaId);
+        $media = $vivienda->media()->findOrFail($mediaId);
+
+        // Eliminar el archivo de almacenamiento
+        Storage::delete($media->getPath());
+
+        // Eliminar de la base de datos
+        $media->delete();
+
+        return response()->json(['message' => 'Imagen eliminada correctamente.']);
+    }
+
+    public function addMedia(Request $request, $viviendaId)
+    {
+        $vivienda = Vivienda::findOrFail($viviendaId);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $vivienda->addMedia($image)->toMediaCollection('images');
+            }
+        }
+
+        return response()->json($vivienda->media);
     }
 }
