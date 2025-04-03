@@ -4,6 +4,7 @@
         <div class="container">
             <div class="filters col-md-3" style="background-color: white;">
                 <div class="filter-block">
+                    <Map />
                 </div>
                 <div class="form-group position-relative">
                     <label for="poblacion">Población</label>
@@ -134,11 +135,13 @@ import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import CardInmueble from '../../components/CardInmueble.vue';
 import axios from 'axios';
+import Map from '@/components/Map.vue';
 
 export default {
     name: 'ShowHomes',
     components: {
-        CardInmueble
+        CardInmueble,
+        Map,
     },
     setup() {
         const route = useRoute();
