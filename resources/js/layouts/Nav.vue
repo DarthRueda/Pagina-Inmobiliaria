@@ -26,6 +26,7 @@
                             <li><router-link class="dropdown-item" to="/admin">Admin</router-link></li>
                             <li><router-link to="/admin/posts" class="dropdown-item">Post</router-link></li>
                             <li><router-link to="/panelusuario" class="dropdown-item">Perfil</router-link></li>
+                            <li><router-link to="/admin/viviendas" class="dropdown-item">Viviendas</router-link></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="javascript:void(0)" @click="logout">Logout</a></li>
                         </ul>

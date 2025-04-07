@@ -207,4 +207,11 @@ class ViviendaController extends Controller
 
         return response()->json($vivienda->media);
     }
+
+    public function destroy($id){
+    $vivienda = Vivienda::findOrFail($id);
+    $vivienda->delete();
+
+    return response()->json(['message' => 'Vivienda eliminada con éxito.']);
+    }
 }

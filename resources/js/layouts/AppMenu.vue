@@ -44,9 +44,15 @@ const model = ref([
         ]
     },
     {
-        label: 'Posts',
+        label: 'Viviendas',
         items: [
-            { label: 'Posts', icon: 'pi pi-fw pi-id-card', to: '/admin/posts', permision: 'post-list' },
+            { label: 'Imuebles', icon: 'pi pi-fw pi-list', to: '/admin/viviendas', permision: 'vivienda-list' },
+        ]
+    },
+    {
+        label: 'Poooosts',
+        items: [
+            { label: 'Pooosts', icon: 'pi pi-fw pi-id-card', to: '/admin/posts', permision: 'post-list' },
             { label: 'Categorias', icon: 'pi pi-fw pi-id-card', to: '/admin/categories', permision: 'category-list' }
 
         ]
