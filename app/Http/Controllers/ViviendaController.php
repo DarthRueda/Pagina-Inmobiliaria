@@ -158,11 +158,13 @@ class ViviendaController extends Controller
 
         // Update disponibilidad
         $vivienda->disponibilidad = $request->input('disponibilidad');
+
+        // Update the updated_at column with the current timestamp
+        $vivienda->updated_at = now();
         $vivienda->save();
 
         $notificacionController = new NotificacionController();
         $notificacionController->sendNotification($vivienda, $oldPrecio);
-
 
         if ($request->hasFile('images')) {
             $vivienda->clearMediaCollection('images');
