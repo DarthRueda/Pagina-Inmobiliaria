@@ -88,8 +88,8 @@ class ViviendaController extends Controller
             $orderDirection = 'desc';
         }
 
-        $disponibilidad = $request->query('disponibilidad'); // Filter by disponibilidad
-        $municipio = $request->query('municipio'); // Filter by municipio
+        $disponibilidad = $request->query('disponibilidad');
+        $municipio = $request->query('municipio');
         $filters = $request->query('filters', []);
         $habitaciones = $request->query('habitaciones', []);
         $banyos = $request->query('banyos', []);
