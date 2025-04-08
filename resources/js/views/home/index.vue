@@ -427,7 +427,13 @@ export default {
 
         const redirectToShowHomes = () => {
             if (selectedMunicipio.value) {
-                router.push({ name: 'list-inmubles', query: { municipio: selectedMunicipio.value } });
+                router.push({ 
+                    name: 'list-inmubles', 
+                    query: { 
+                        municipio: selectedMunicipio.value, 
+                        disponibilidad: selectedOption.value === 'comprar' ? 'Comprar' : 'Alquilar' 
+                    } 
+                });
             }
         };
 

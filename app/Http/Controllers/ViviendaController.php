@@ -30,6 +30,10 @@ class ViviendaController extends Controller
     {
         $vivienda = Vivienda::create($request->all());
 
+        // Ensure disponibilidad is saved
+        $vivienda->disponibilidad = $request->input('disponibilidad');
+        $vivienda->save();
+
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
                 $vivienda->addMedia($image)->toMediaCollection('images');
@@ -84,6 +88,8 @@ class ViviendaController extends Controller
             $orderDirection = 'desc';
         }
 
+        $disponibilidad = $request->query('disponibilidad'); // Filter by disponibilidad
+        $municipio = $request->query('municipio'); // Filter by municipio
         $filters = $request->query('filters', []);
         $habitaciones = $request->query('habitaciones', []);
         $banyos = $request->query('banyos', []);
@@ -93,6 +99,12 @@ class ViviendaController extends Controller
         $surface = $request->query('surface');
 
         $viviendas = Vivienda::query()
+            ->when($disponibilidad, function ($query, $disponibilidad) {
+                return $query->where('disponibilidad', $disponibilidad);
+            })
+            ->when($municipio, function ($query, $municipio) {
+                return $query->where('localizacion', $municipio);
+            })
             ->when($filters, function ($query, $filters) {
                 return $query->whereHas('filtros', function ($query) use ($filters) {
                     $query->whereIn('nombre', $filters);
@@ -128,7 +140,7 @@ class ViviendaController extends Controller
             ->with('filtros', 'media')
             ->get();
 
-        // Asegurarse de que la URL de la imagen sea correcta
+        // Ensure the image URL is correct
         $viviendas->each(function ($vivienda) {
             $vivienda->image = $vivienda->getFirstMediaUrl('images') ?: '/images/placeholder.jpg';
         });
@@ -143,6 +155,10 @@ class ViviendaController extends Controller
         $oldPrecio = $vivienda->precio;
 
         $vivienda->update($request->all());
+
+        // Update disponibilidad
+        $vivienda->disponibilidad = $request->input('disponibilidad');
+        $vivienda->save();
 
         $notificacionController = new NotificacionController();
         $notificacionController->sendNotification($vivienda, $oldPrecio);

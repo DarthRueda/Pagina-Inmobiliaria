@@ -35,7 +35,7 @@
                 <div class="form-group">
                     <label for="price">Precio</label>
                     <input type="number" id="price-min" v-model="priceMin" placeholder="Mínimo" style="width: 131px; margin-right: 10px;" @change="applyFilters" />
-                    <input type="number" id="price-max" v-model="priceMax" placeholder="Máximo" style="width: 131px;" @change="applyFilters" />
+                    <input type="number" id="price-max" v-model="priceMax" placeholder="Máximo" style="width: 131px; margin-right: 10px;" @change="applyFilters" />
                 </div>
                 <div class="form-group">
                     <label for="surface">Superficie</label>
@@ -110,8 +110,8 @@
 
             <div class="list-inmuebles col-md-9">
                 <div class="tipo-de-inmueble">      
-                    <button>Comprar</button>
-                    <button>Alquilar</button>
+                    <button @click="filterByDisponibilidad('Comprar')">Comprar</button>
+                    <button @click="filterByDisponibilidad('Alquilar')">Alquilar</button>
                 </div>
                 <CardInmueble v-for="vivienda in viviendas" :key="vivienda.id" :vivienda="vivienda" class="card-inmueble" />
             </div>
@@ -154,30 +154,15 @@ export default {
         const filteredMunicipios = ref([]);
         const municipios = ref([]);
         const selectedMunicipio = ref(route.query.municipio || '');
+        const selectedDisponibilidad = ref(route.query.disponibilidad || null); // Get disponibilidad from query
         const inputFocused = ref(false);
 
         const fetchViviendas = async () => {
             try {
-                const response = await axios.get('/api/viviendas');
-                viviendas.value = response.data;
-            } catch (error) {
-                console.error('Error fetching viviendas:', error);
-            }
-        };
-
-        const fetchMunicipios = async () => {
-            try {
-                const response = await axios.get('/api/municipios');
-                municipios.value = response.data;
-            } catch (error) {
-                console.error('Error fetching municipios:', error);
-            }
-        };
-
-        const applyFilters = async () => {
-            try {
                 const response = await axios.get('/api/viviendas/filterByCaracteristicas', {
                     params: {
+                        disponibilidad: selectedDisponibilidad.value, // Prioritize disponibilidad
+                        municipio: selectedMunicipio.value, // Then filter by municipio
                         filters: selectedFilters.value,
                         habitaciones: selectedHabitaciones.value,
                         banyos: selectedBanyos.value,
@@ -185,13 +170,16 @@ export default {
                         price_min: priceMin.value,
                         price_max: priceMax.value,
                         surface: selectedSurface.value,
-                        municipio: selectedMunicipio.value
                     }
                 });
-                viviendas.value = response.data.filter(vivienda => !selectedMunicipio.value || vivienda.localizacion === selectedMunicipio.value);
+                viviendas.value = response.data;
             } catch (error) {
-                console.error('Error applying filters:', error);
+                console.error('Error fetching viviendas:', error);
             }
+        };
+
+        const applyFilters = async () => {
+            await fetchViviendas();
         };
 
         const filterMunicipios = () => {
@@ -219,12 +207,13 @@ export default {
             }, 100);
         };
 
+        const filterByDisponibilidad = (disponibilidad) => {
+            selectedDisponibilidad.value = disponibilidad;
+            applyFilters();
+        };
+
         onMounted(() => {
             fetchViviendas();
-            fetchMunicipios();
-            if (selectedMunicipio.value) {
-                applyFilters();
-            }
         });
 
         watch([selectedFilters, selectedHabitaciones, selectedBanyos, selectedTipo, priceMin, priceMax, selectedSurface], applyFilters);
@@ -246,7 +235,9 @@ export default {
             clearMunicipioFilter,
             selectedMunicipio,
             inputFocused,
-            handleBlur
+            handleBlur,
+            selectedDisponibilidad,
+            filterByDisponibilidad
         };
     }
 };

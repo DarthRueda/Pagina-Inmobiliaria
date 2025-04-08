@@ -22,7 +22,9 @@
                             <p class="card-text">{{ vivienda.descripcion }}</p>  
                         </div>
                     </div>
-                    <h5 class="card-price">{{ vivienda.precio }}</h5>
+                    <h5 class="card-price">
+                        {{ vivienda.precio }}<span v-if="vivienda.disponibilidad === 'Alquilar'">/mes</span>
+                    </h5>
                 </div>
                 <!-- Display the time since creation -->
                 <h6>{{ timeSinceCreation }}</h6>

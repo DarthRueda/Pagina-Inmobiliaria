@@ -18,6 +18,17 @@
           <div class="overlay-content">
             <form @submit.prevent="submitCreateForm" class="form-container">
               <h3>Crea una propiedad para que la vea todo el mundo</h3>
+              <div class="form-group text-center">
+                <label for="disponibilidad">Disponibilidad</label>
+                <div class="checkbox-group d-flex justify-content-center">
+                  <label class="mr-3">
+                    <input type="radio" value="Comprar" v-model="vivienda.disponibilidad" required /> Comprar
+                  </label>
+                  <label>
+                    <input type="radio" value="Alquilar" v-model="vivienda.disponibilidad" required /> Alquilar
+                  </label>
+                </div>
+              </div>
               <div class="form-group position-relative">
                 <input
                   type="text"
@@ -487,6 +498,7 @@ export default {
       parking: '',
       ascensor: '',
       localizacion: '',
+      disponibilidad: '', // Add disponibilidad to the reactive object
     });
     const images = ref([]);
     const showCreateForm = ref(false);
