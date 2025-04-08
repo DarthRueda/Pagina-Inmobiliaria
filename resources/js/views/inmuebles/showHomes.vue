@@ -4,6 +4,7 @@
         <div class="container">
             <div class="filters col-md-3" style="background-color: white;">
                 <div class="filter-block">
+                    <Map class="map-style" :municipio="selectedMunicipio" />
                 </div>
                 <div class="form-group position-relative">
                     <label for="poblacion">Población</label>
@@ -134,11 +135,13 @@ import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import CardInmueble from '../../components/CardInmueble.vue';
 import axios from 'axios';
+import Map from '../../components/Map.vue';
 
 export default {
     name: 'ShowHomes',
     components: {
-        CardInmueble
+        CardInmueble,
+        Map,
     },
     setup() {
         const route = useRoute();
@@ -420,5 +423,10 @@ input[type="checkbox"] {
     .list-inmuebles {
         width: 100%;
     }
+}
+
+.map-style {
+   height: 194px; 
+   width: 266px;
 }
 </style>

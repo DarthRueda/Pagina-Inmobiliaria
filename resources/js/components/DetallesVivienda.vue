@@ -16,7 +16,9 @@
         </div>
 
         <h2>Ubicacion vivienda</h2>
-        <div class="ubicacion-block">{{ vivienda.localizacion }}</div>
+        <div class="ubicacion-block">
+          <Map class="map-style" :municipio="vivienda.localizacion" />
+        </div>
       </div>
       <div class="col-3 col-border">
         <h3>Contactanos</h3>
@@ -42,12 +44,14 @@ import axios from 'axios';
 import ImageMosaic from '@/components/ImageMosaic.vue';
 import InfoPiso from '@/components/InfoPiso.vue';
 import CaracteristicasPiso from '@/components/CaracteristicasPiso.vue';
+import Map from '@/components/Map.vue';
 
 export default defineComponent({
   components: {
     ImageMosaic,
     InfoPiso,
     CaracteristicasPiso,
+    Map,
   },
   setup() {
     const route = useRoute();
@@ -179,5 +183,10 @@ h3 {
 h4 {
   margin-right: 26px;
   margin-left: 26px;
+}
+
+.map-style {
+  width: 100%;
+  height: 288px
 }
 </style>
