@@ -34,7 +34,7 @@ mounted() {
 
   // Añadir capa de mapa base
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  }).addTo(this.map);ºº
+  }).addTo(this.map);
 },
 methods: {
   async searchLocation(location) {
