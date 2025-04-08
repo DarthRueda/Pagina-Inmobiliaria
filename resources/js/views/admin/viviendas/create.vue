@@ -2,6 +2,17 @@
     <div>
         <h1>Crear Vivienda</h1>
         <form @submit.prevent="submitCreateForm" class="form-container">
+            <div class="form-group text-center">
+                <label for="disponibilidad">Disponibilidad</label>
+                <div class="checkbox-group d-flex justify-content-center">
+                  <label class="mr-3">
+                    <input type="radio" value="Comprar" v-model="vivienda.disponibilidad" required /> Comprar
+                  </label>
+                  <label>
+                    <input type="radio" value="Alquilar" v-model="vivienda.disponibilidad" required /> Alquilar
+                  </label>
+                </div>
+              </div>
             <div class="form-group position-relative">
                 <input
                     type="text"
