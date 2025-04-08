@@ -207,6 +207,31 @@ export default [
                 meta: { breadCrumb: 'Admin' }
             },
             {
+                name: 'viviendas',
+                path: 'viviendas',
+                meta: { breadCrumb: 'Viviendas' },
+                children: [
+                    {
+                        name: 'viviendas.index',
+                        path: '',
+                        component: () => import('../views/admin/viviendas/index.vue'),
+                        meta: { breadCrumb: 'Listado de Viviendas' }
+                    },
+                    {
+                        name: 'viviendas.create',
+                        path: 'create',
+                        component: () => import('../views/admin/viviendas/create.vue'),
+                        meta: { breadCrumb: 'Crear Vivienda' }
+                    },
+                    {
+                        name: 'viviendas.edit',
+                        path: 'edit/:id',
+                        component: () => import('../views/admin/viviendas/edit.vue'),
+                        meta: { breadCrumb: 'Editar Vivienda' }
+                    }
+                ]
+            },
+            {
                 name: 'profile.index',
                 path: 'profile',
                 component: () => import('../views/admin/profile/index.vue'),

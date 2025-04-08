@@ -103,6 +103,97 @@
         </div>
     </div>
 </template>
+<script>
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { useRouter } from 'vue-router';
+import axios from 'axios';
+
+export default {
+    name: 'HomeIndex',
+    setup() {
+        const selectedOption = ref('comprar');
+        const router = useRouter();
+        const searchQuery = ref('');
+        const filteredMunicipios = ref([]);
+        const municipios = ref([]);
+        const selectedMunicipio = ref('');
+
+        const selectOption = (option) => {
+            selectedOption.value = option;
+        };
+
+        const redirectToHipoteca = () => {
+            router.push('/hipoteca');
+        };
+
+        const redirectToPrecioCasa = () => {
+            router.push('/preciocasa');
+        };
+
+        const redirectToShowHomes = () => {
+            if (selectedMunicipio.value) {
+                router.push({ 
+                    name: 'list-inmubles', 
+                    query: { 
+                        municipio: selectedMunicipio.value, 
+                        disponibilidad: selectedOption.value === 'comprar' ? 'Comprar' : 'Alquilar' 
+                    } 
+                });
+            }
+        };
+
+        const fetchMunicipios = async () => {
+            try {
+                const response = await axios.get('/api/municipios');
+                municipios.value = response.data;
+            } catch (error) {
+                console.error('Error fetching municipios:', error);
+            }
+        };
+
+        const filterMunicipios = () => {
+            filteredMunicipios.value = municipios.value.filter(municipio => 
+                municipio.Municipio.toLowerCase().includes(searchQuery.value.toLowerCase())
+            );
+        };
+
+        const selectMunicipio = (municipio) => {
+            searchQuery.value = municipio;
+            selectedMunicipio.value = municipio;
+            filteredMunicipios.value = [];
+        };
+
+        const handleClickOutside = (event) => {
+            if (!event.target.closest('.search-bar') && !event.target.closest('.municipios-dropdown')) {
+                filteredMunicipios.value = [];
+            }
+        };
+
+        onMounted(() => {
+            fetchMunicipios();
+            document.addEventListener('click', handleClickOutside);
+        });
+
+        onBeforeUnmount(() => {
+            document.removeEventListener('click', handleClickOutside);
+        });
+
+        return {
+            selectedOption,
+            selectOption,
+            redirectToHipoteca,
+            redirectToPrecioCasa,
+            redirectToShowHomes,
+            searchQuery,
+            filteredMunicipios,
+            filterMunicipios,
+            selectMunicipio,
+            selectedMunicipio,
+            handleClickOutside
+        };
+    }
+};
+</script>
 
 <style>
 /*CSS HOME */
@@ -398,88 +489,3 @@
     display: block;
 }
 </style>
-<script>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { useRouter } from 'vue-router';
-import axios from 'axios';
-
-export default {
-    name: 'HomeIndex',
-    setup() {
-        const selectedOption = ref('comprar');
-        const router = useRouter();
-        const searchQuery = ref('');
-        const filteredMunicipios = ref([]);
-        const municipios = ref([]);
-        const selectedMunicipio = ref('');
-
-        const selectOption = (option) => {
-            selectedOption.value = option;
-        };
-
-        const redirectToHipoteca = () => {
-            router.push('/hipoteca');
-        };
-
-        const redirectToPrecioCasa = () => {
-            router.push('/preciocasa');
-        };
-
-        const redirectToShowHomes = () => {
-            if (selectedMunicipio.value) {
-                router.push({ name: 'list-inmubles', query: { municipio: selectedMunicipio.value } });
-            }
-        };
-
-        const fetchMunicipios = async () => {
-            try {
-                const response = await axios.get('/api/municipios');
-                municipios.value = response.data;
-            } catch (error) {
-                console.error('Error fetching municipios:', error);
-            }
-        };
-
-        const filterMunicipios = () => {
-            filteredMunicipios.value = municipios.value.filter(municipio => 
-                municipio.Municipio.toLowerCase().includes(searchQuery.value.toLowerCase())
-            );
-        };
-
-        const selectMunicipio = (municipio) => {
-            searchQuery.value = municipio;
-            selectedMunicipio.value = municipio;
-            filteredMunicipios.value = [];
-        };
-
-        const handleClickOutside = (event) => {
-            if (!event.target.closest('.search-bar') && !event.target.closest('.municipios-dropdown')) {
-                filteredMunicipios.value = [];
-            }
-        };
-
-        onMounted(() => {
-            fetchMunicipios();
-            document.addEventListener('click', handleClickOutside);
-        });
-
-        onBeforeUnmount(() => {
-            document.removeEventListener('click', handleClickOutside);
-        });
-
-        return {
-            selectedOption,
-            selectOption,
-            redirectToHipoteca,
-            redirectToPrecioCasa,
-            redirectToShowHomes,
-            searchQuery,
-            filteredMunicipios,
-            filterMunicipios,
-            selectMunicipio,
-            selectedMunicipio,
-            handleClickOutside
-        };
-    }
-};
-</script>

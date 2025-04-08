@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('dimensiones')->notNullable();
             $table->integer('planta')->notNullable();
             $table->string('tipo', 255)->notNullable();
+            $table->string('disponibilidad', 255)->notNullable()->default('Comprar'); // Default to "Comprar"
             $table->string('orientacion', 255)->notNullable();
             $table->string('agua_caliente', 255)->notNullable();
             $table->string('calefaccion', 255)->notNullable();

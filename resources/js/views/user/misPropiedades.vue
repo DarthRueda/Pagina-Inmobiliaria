@@ -18,6 +18,17 @@
           <div class="overlay-content">
             <form @submit.prevent="submitCreateForm" class="form-container">
               <h3>Crea una propiedad para que la vea todo el mundo</h3>
+              <div class="form-group text-center">
+                <label for="disponibilidad">Disponibilidad</label>
+                <div class="checkbox-group d-flex justify-content-center">
+                  <label class="mr-3">
+                    <input type="radio" value="Comprar" v-model="vivienda.disponibilidad" required /> Comprar
+                  </label>
+                  <label>
+                    <input type="radio" value="Alquilar" v-model="vivienda.disponibilidad" required /> Alquilar
+                  </label>
+                </div>
+              </div>
               <div class="form-group position-relative">
                 <input
                   type="text"
@@ -419,7 +430,36 @@
               </div>
               <button type="submit" class="btn btn-primary">Guardar Cambios</button>
               <button type="button" @click="toggleEditForm" class="btn btn-secondary ml-2">Cancelar</button>
+              <button type="button" @click="toggleImageEdit" class="btn btn-warning ml-2">Editar Imágenes</button>
             </form>
+          </div>
+        </div>
+
+        <!-- Editar una Imagen -->
+        <div v-if="showImageEdit" class="overlay">
+          <div class="overlay-content">
+            <h3>Editar Imágenes</h3>
+            <div class="thumbnail-row">
+              <img
+                v-for="image in vivienda.media"
+                :key="image.id"
+                :src="image.url"
+                class="thumbnail"
+                @click="selectImage(image)"
+              />
+            </div>
+            <div v-if="selectedImage" class="selected-image-container">
+              <img :src="selectedImage.url" class="selected-image" />
+              <button @click="deleteImage(selectedImage)" class="btn btn-danger mt-3">
+                Eliminar Imagen
+              </button>
+            </div>
+            <div class="form-group mt-3">
+              <h4 class="add-images-title">Añadir Nuevas Imágenes</h4>
+              <input type="file" id="newImages" multiple @change="handleNewImageUpload" class="file-input" />
+            </div>
+            <button @click="submitImageChanges" class="btn btn-primary mt-3">Guardar Cambios</button>
+            <button @click="toggleImageEdit" class="btn btn-secondary mt-3">Cerrar</button>
           </div>
         </div>
       </div>
@@ -458,6 +498,7 @@ export default {
       parking: '',
       ascensor: '',
       localizacion: '',
+      disponibilidad: '', // Add disponibilidad to the reactive object
     });
     const images = ref([]);
     const showCreateForm = ref(false);
@@ -470,6 +511,9 @@ export default {
     const editingViviendaId = ref(null);
     const originalPrice = ref(null);
     const inputFocused = ref(false);
+    const showImageEdit = ref(false);
+    const selectedImage = ref(null);
+    const newImages = ref([]);
 
     const fetchViviendas = async () => {
       try {
@@ -512,6 +556,14 @@ export default {
       }
     };
 
+    const toggleImageEdit = () => {
+      showImageEdit.value = !showImageEdit.value;
+      if (!showImageEdit.value) {
+        selectedImage.value = null;
+        newImages.value = [];
+      }
+    };
+
     const resetForm = () => {
       Object.keys(vivienda).forEach(key => (vivienda[key] = ''));
       selectedFilters.value = [];
@@ -524,32 +576,35 @@ export default {
 
     const editVivienda = async (viviendaData) => {
       try {
-        // Obtener los datos más recientes de la vivienda
+        // Selecciona la información de la vivienda a editar
         const response = await axios.get(`/api/vivienda/${viviendaData.id}`);
         const updatedVivienda = response.data;
 
-        // Rellenar el objeto vivienda con los datos más recientes
+        // Rellenar el objeto vivienda con los datos obtenidos
         Object.keys(vivienda).forEach(key => {
           vivienda[key] = updatedVivienda[key];
         });
 
-        // Analizar y eliminar el símbolo de moneda del precio
+        // Rellenear el array de imágenes
+        vivienda.media = updatedVivienda.media || [];
+
+        // Parse y elimina el símbolo de euro del precio
         originalPrice.value = updatedVivienda.precio
           ? parseInt(updatedVivienda.precio.replace(/[.,€]/g, ''), 10)
           : 0;
         vivienda.precio = originalPrice.value;
 
-        // Establecer los filtros seleccionados (características)
+        // Selecciona los filtros de la vivienda
         selectedFilters.value = updatedVivienda.filtros
           ? updatedVivienda.filtros.map(filtro => filtro.nombre)
-          : []; // Mapear el campo 'filtros' para extraer 'nombre'
+          : [];
 
         editingViviendaId.value = updatedVivienda.id;
         isEditing.value = true;
         toggleEditForm();
       } catch (error) {
-        console.error('Error al obtener los datos de la vivienda:', error);
-        alert('Error al cargar los datos de la vivienda. Por favor, inténtelo de nuevo más tarde.');
+        console.error('Error fetching vivienda data:', error);
+        alert('Error loading vivienda data. Please try again later.');
       }
     };
 
@@ -585,7 +640,7 @@ export default {
 
         // Ensure localizacion is included in the form data
         if (!formData.has('localizacion') || !vivienda.localizacion) {
-          formData.append('localizacion', vivienda.localizacion || ''); // Use existing value or empty string
+          formData.append('localizacion', vivienda.localizacion || ''); // Usar un valor vacío si no se proporciona
         }
 
         formData.append('id_usuario', getUserId());
@@ -595,8 +650,6 @@ export default {
           formData.append('images[]', images.value[i]);
         }
 
-        // Log the form data for debugging
-        console.log('Submitting edit form with data:', Object.fromEntries(formData.entries()));
 
         const response = await axios.post(`/api/vivienda/${editingViviendaId.value}`, formData, {
           headers: {
@@ -608,7 +661,7 @@ export default {
         if (index !== -1) {
           viviendas.value[index] = response.data;
 
-          // Refresh selectedFilters with the updated filters
+          // Refresca los filtros
           selectedFilters.value = response.data.filtros
             ? response.data.filtros.map(filtro => filtro.nombre)
             : [];
@@ -617,7 +670,7 @@ export default {
       } catch (error) {
         console.error('Error al guardar la vivienda:', error);
 
-        // Display a user-friendly error message
+        // Muestra un mensaje de error al usuario
         if (error.response && error.response.data && error.response.data.message) {
           alert(`Error: ${error.response.data.message}`);
         } else {
@@ -651,6 +704,40 @@ export default {
       }, 100);
     };
 
+    const selectImage = (image) => {
+      selectedImage.value = image;
+    };
+
+    const deleteImage = async (image) => {
+      if (confirm("¿Estás seguro de que deseas eliminar la imagen?")) {
+        try {
+          await axios.delete(`/api/vivienda/${editingViviendaId.value}/media/${image.id}`);
+          vivienda.media = vivienda.media.filter((img) => img.id !== image.id);
+          selectedImage.value = null;
+        } catch (error) {
+          console.error("Error al eliminar la imagen:", error);
+        }
+      }
+    };
+
+    const handleNewImageUpload = (event) => {
+      newImages.value = Array.from(event.target.files);
+    };
+
+    const submitImageChanges = async () => {
+      try {
+        const formData = new FormData();
+        newImages.value.forEach((image) => formData.append("images[]", image));
+        const response = await axios.post(`/api/vivienda/${editingViviendaId.value}/media`, formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        vivienda.media.push(...response.data);
+        toggleImageEdit();
+      } catch (error) {
+        console.error("Error al guardar las imágenes:", error);
+      }
+    };
+
     const filteredMunicipios = ref([]);
 
     onMounted(() => {
@@ -663,7 +750,7 @@ export default {
     const getUserId = () => {
       const { profile,getProfile } = useProfile();
       getProfile(); // Obtener el perfil del usuario
-      return profile.value.id; // Log the profile for debugging
+      return profile.value.id;
     };
     
     return {
@@ -691,7 +778,15 @@ export default {
       filterMunicipios,
       selectMunicipio,
       inputFocused,
-      handleBlur
+      handleBlur,
+      showImageEdit,
+      selectedImage,
+      newImages,
+      toggleImageEdit,
+      selectImage,
+      deleteImage,
+      handleNewImageUpload,
+      submitImageChanges
     };
   }
 };
@@ -815,5 +910,47 @@ export default {
 
 .dropdown-item:hover {
   background-color: #f8f9fa;
+}
+
+.thumbnail-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.thumbnail {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.thumbnail:hover {
+  border-color: #007bff;
+}
+
+.selected-image-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.selected-image {
+  max-width: 100%;
+  max-height: 300px;
+  border: 1px solid #ddd;
+}
+
+.add-images-title {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.file-input {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
 }
 </style>

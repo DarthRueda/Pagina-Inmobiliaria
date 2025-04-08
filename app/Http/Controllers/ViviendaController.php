@@ -6,6 +6,7 @@ use App\Models\Vivienda;
 use Illuminate\Http\Request;
 use App\Models\Filtro;
 use App\Http\Controllers\NotificacionController;
+use Illuminate\Support\Facades\Storage;
 
                         
 
@@ -15,9 +16,12 @@ class ViviendaController extends Controller
     public function show($id)
     {
         $vivienda = Vivienda::with('media', 'filtros')->findOrFail($id);
+
+        // Asegurarse de que la URL de la imagen sea correcta
         $vivienda->media->each(function ($media) {
-            $media->url = str_replace('http://localhost', config('app.url'), $media->getUrl());
+            $media->url = $media->getFullUrl(); // Usamos el método getFullUrl() para obtener la URL completa
         });
+
         $vivienda->image = $vivienda->getFirstMediaUrl('images') ?: '/images/placeholder.jpg';
         return response()->json($vivienda);
     }
@@ -25,6 +29,10 @@ class ViviendaController extends Controller
     public function store(Request $request)
     {
         $vivienda = Vivienda::create($request->all());
+
+        // Ensure disponibilidad is saved
+        $vivienda->disponibilidad = $request->input('disponibilidad');
+        $vivienda->save();
 
         if ($request->hasFile('images')) {
             foreach ($request->file('images') as $image) {
@@ -80,6 +88,8 @@ class ViviendaController extends Controller
             $orderDirection = 'desc';
         }
 
+        $disponibilidad = $request->query('disponibilidad');
+        $municipio = $request->query('municipio');
         $filters = $request->query('filters', []);
         $habitaciones = $request->query('habitaciones', []);
         $banyos = $request->query('banyos', []);
@@ -89,6 +99,12 @@ class ViviendaController extends Controller
         $surface = $request->query('surface');
 
         $viviendas = Vivienda::query()
+            ->when($disponibilidad, function ($query, $disponibilidad) {
+                return $query->where('disponibilidad', $disponibilidad);
+            })
+            ->when($municipio, function ($query, $municipio) {
+                return $query->where('localizacion', $municipio);
+            })
             ->when($filters, function ($query, $filters) {
                 return $query->whereHas('filtros', function ($query) use ($filters) {
                     $query->whereIn('nombre', $filters);
@@ -124,7 +140,7 @@ class ViviendaController extends Controller
             ->with('filtros', 'media')
             ->get();
 
-        // Asegurarse de que la URL de la imagen sea correcta
+        // Ensure the image URL is correct
         $viviendas->each(function ($vivienda) {
             $vivienda->image = $vivienda->getFirstMediaUrl('images') ?: '/images/placeholder.jpg';
         });
@@ -140,9 +156,15 @@ class ViviendaController extends Controller
 
         $vivienda->update($request->all());
 
+        // Update disponibilidad
+        $vivienda->disponibilidad = $request->input('disponibilidad');
+
+        // Update the updated_at column with the current timestamp
+        $vivienda->updated_at = now();
+        $vivienda->save();
+
         $notificacionController = new NotificacionController();
         $notificacionController->sendNotification($vivienda, $oldPrecio);
-
 
         if ($request->hasFile('images')) {
             $vivienda->clearMediaCollection('images');
@@ -175,5 +197,39 @@ class ViviendaController extends Controller
         });
 
         return response()->json($viviendas);
+    }
+
+    public function deleteMedia($viviendaId, $mediaId)
+    {
+        $vivienda = Vivienda::findOrFail($viviendaId);
+        $media = $vivienda->media()->findOrFail($mediaId);
+
+        // Eliminar el archivo de almacenamiento
+        Storage::delete($media->getPath());
+
+        // Eliminar de la base de datos
+        $media->delete();
+
+        return response()->json(['message' => 'Imagen eliminada correctamente.']);
+    }
+
+    public function addMedia(Request $request, $viviendaId)
+    {
+        $vivienda = Vivienda::findOrFail($viviendaId);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $vivienda->addMedia($image)->toMediaCollection('images');
+            }
+        }
+
+        return response()->json($vivienda->media);
+    }
+
+    public function destroy($id){
+    $vivienda = Vivienda::findOrFail($id);
+    $vivienda->delete();
+
+    return response()->json(['message' => 'Vivienda eliminada con éxito.']);
     }
 }

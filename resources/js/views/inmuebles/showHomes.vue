@@ -4,6 +4,7 @@
         <div class="container">
             <div class="filters col-md-3" style="background-color: white;">
                 <div class="filter-block">
+                    <Map class="map-style" :municipio="selectedMunicipio" />
                 </div>
                 <div class="form-group position-relative">
                     <label for="poblacion">Población</label>
@@ -21,7 +22,7 @@
                             <button v-if="searchQuery" @click="clearMunicipioFilter" class="btn btn-secondary btn-sm">X</button>
                         </div>
                     </div>
-                    <ul v-if="filteredMunicipios.length && inputFocused" class="dropdown-menu show">
+                    <ul v-if="filteredMunicipios.length && inputFocused" class="dropdown-menu municipios-dropdown show">
                       <li
                         v-for="municipio in filteredMunicipios"
                         :key="municipio.idMunicipio"
@@ -35,7 +36,7 @@
                 <div class="form-group">
                     <label for="price">Precio</label>
                     <input type="number" id="price-min" v-model="priceMin" placeholder="Mínimo" style="width: 131px; margin-right: 10px;" @change="applyFilters" />
-                    <input type="number" id="price-max" v-model="priceMax" placeholder="Máximo" style="width: 131px;" @change="applyFilters" />
+                    <input type="number" id="price-max" v-model="priceMax" placeholder="Máximo" style="width: 131px; margin-right: 10px;" @change="applyFilters" />
                 </div>
                 <div class="form-group">
                     <label for="surface">Superficie</label>
@@ -110,19 +111,28 @@
 
             <div class="list-inmuebles col-md-9">
                 <div class="tipo-de-inmueble">      
-                    <button>Comprar</button>
-                    <button>Alquilar</button>
+                    <button @click="filterByDisponibilidad('Comprar')">Comprar</button>
+                    <button @click="filterByDisponibilidad('Alquilar')">Alquilar</button>
                 </div>
-                <CardInmueble v-for="vivienda in viviendas" :key="vivienda.id" :vivienda="vivienda" class="card-inmueble" />
+                <CardInmueble 
+                    v-for="vivienda in paginatedViviendas" 
+                    :key="vivienda.id" 
+                    :vivienda="vivienda" 
+                    class="card-inmueble" 
+                />
             </div>
         </div>
         <div class="col-12 d-flex justify-content-center">
             <nav aria-label="Page navigation">
                 <ul class="paginacion">
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li 
+                        v-for="page in totalPages" 
+                        :key="page" 
+                        :class="{ 'active': currentPage === page }" 
+                        class="page-item"
+                    >
+                        <a class="page-link" href="#" @click.prevent="changePage(page)">{{ page }}</a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -130,19 +140,25 @@
 </template>
 
 <script>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import CardInmueble from '../../components/CardInmueble.vue';
 import axios from 'axios';
+import Map from '../../components/Map.vue';
 
 export default {
     name: 'ShowHomes',
     components: {
-        CardInmueble
+        CardInmueble,
+        Map,
     },
     setup() {
         const route = useRoute();
         const viviendas = ref([]);
+        const municipios = ref([]);
+        const filteredMunicipios = ref([]);
+        const searchQuery = ref(route.query.municipio || '');
+        const selectedMunicipio = ref(route.query.municipio || '');
         const selectedFilters = ref([]);
         const selectedHabitaciones = ref([]);
         const selectedBanyos = ref([]);
@@ -150,16 +166,44 @@ export default {
         const priceMin = ref(null);
         const priceMax = ref(null);
         const selectedSurface = ref(null);
-        const searchQuery = ref(route.query.municipio || '');
-        const filteredMunicipios = ref([]);
-        const municipios = ref([]);
-        const selectedMunicipio = ref(route.query.municipio || '');
+        const selectedDisponibilidad = ref(route.query.disponibilidad || null);
         const inputFocused = ref(false);
+
+        // Pagination state
+        const currentPage = ref(1);
+        const itemsPerPage = 10;
+
+        const totalPages = computed(() => {
+            return Math.ceil(viviendas.value.length / itemsPerPage);
+        });
+
+        const paginatedViviendas = computed(() => {
+            const start = (currentPage.value - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            return viviendas.value.slice(start, end);
+        });
+
+        const changePage = (page) => {
+            currentPage.value = page;
+        };
 
         const fetchViviendas = async () => {
             try {
-                const response = await axios.get('/api/viviendas');
+                const response = await axios.get('/api/viviendas/filterByCaracteristicas', {
+                    params: {
+                        disponibilidad: selectedDisponibilidad.value,
+                        municipio: selectedMunicipio.value,
+                        filters: selectedFilters.value,
+                        habitaciones: selectedHabitaciones.value,
+                        banyos: selectedBanyos.value,
+                        tipo: selectedTipo.value,
+                        price_min: priceMin.value,
+                        price_max: priceMax.value,
+                        surface: selectedSurface.value,
+                    }
+                });
                 viviendas.value = response.data;
+                currentPage.value = 1;
             } catch (error) {
                 console.error('Error fetching viviendas:', error);
             }
@@ -175,23 +219,7 @@ export default {
         };
 
         const applyFilters = async () => {
-            try {
-                const response = await axios.get('/api/viviendas/filterByCaracteristicas', {
-                    params: {
-                        filters: selectedFilters.value,
-                        habitaciones: selectedHabitaciones.value,
-                        banyos: selectedBanyos.value,
-                        tipo: selectedTipo.value,
-                        price_min: priceMin.value,
-                        price_max: priceMax.value,
-                        surface: selectedSurface.value,
-                        municipio: selectedMunicipio.value
-                    }
-                });
-                viviendas.value = response.data.filter(vivienda => !selectedMunicipio.value || vivienda.localizacion === selectedMunicipio.value);
-            } catch (error) {
-                console.error('Error applying filters:', error);
-            }
+            await fetchViviendas();
         };
 
         const filterMunicipios = () => {
@@ -219,18 +247,24 @@ export default {
             }, 100);
         };
 
+        const filterByDisponibilidad = (disponibilidad) => {
+            selectedDisponibilidad.value = disponibilidad;
+            applyFilters();
+        };
+
         onMounted(() => {
             fetchViviendas();
             fetchMunicipios();
-            if (selectedMunicipio.value) {
-                applyFilters();
-            }
         });
 
         watch([selectedFilters, selectedHabitaciones, selectedBanyos, selectedTipo, priceMin, priceMax, selectedSurface], applyFilters);
 
         return {
             viviendas,
+            municipios,
+            filteredMunicipios,
+            searchQuery,
+            selectedMunicipio,
             selectedFilters,
             selectedHabitaciones,
             selectedBanyos,
@@ -239,14 +273,17 @@ export default {
             priceMax,
             selectedSurface,
             applyFilters,
-            searchQuery,
-            filteredMunicipios,
             filterMunicipios,
             selectMunicipio,
             clearMunicipioFilter,
-            selectedMunicipio,
             inputFocused,
-            handleBlur
+            handleBlur,
+            selectedDisponibilidad,
+            filterByDisponibilidad,
+            currentPage,
+            totalPages,
+            paginatedViviendas,
+            changePage
         };
     }
 };
@@ -352,24 +389,34 @@ input[type="checkbox"] {
 
 .pagination {
     display: inline-block;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .page-item {
-    border: 2px solid black;
-    width: 40px;
-    height: 40px;
     display: inline-block;
-    justify-content: center;
-    align-items: center;
     margin-right: 8px;
 }
 
+.page-item.active .page-link {
+    background-color: #835EAE;
+    color: white;
+    border-color: #835EAE;
+}
+
 .page-link {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
+    display: block;
+    padding: 8px 12px;
+    color: #212529;
+    text-decoration: none;
+    border: 3px solid #835EAE; /* Thicker purple border */
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.page-link:hover {
+    background-color: #f8f9fa;
 }
 
 .dropdown-menu {
@@ -414,9 +461,28 @@ input[type="checkbox"] {
     background-color: #f8f9fa;
 }
 
-.btn-secondary {
-    background-color: red; 
-    border-color: red; 
+.municipios-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 100%;
+    padding: 0.5rem 0;
+    margin: 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 0.25rem;
+}
+
+.municipios-dropdown.show {
+    display: block;
 }
 
 @media (max-width: 768px) {
@@ -429,5 +495,10 @@ input[type="checkbox"] {
     .list-inmuebles {
         width: 100%;
     }
+}
+
+.map-style {
+   height: 194px; 
+   width: 266px;
 }
 </style>

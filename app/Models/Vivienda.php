@@ -15,7 +15,7 @@ class Vivienda extends Model implements HasMedia
 
     protected $fillable = [
         'id_usuario', 'id_inmobiliaria', 'precio', 'localizacion', 'descripcion', 
-        'habitaciones', 'banyos', 'dimensiones', 'planta', 'tipo', 'orientacion', 
+        'habitaciones', 'banyos', 'dimensiones', 'planta', 'tipo', 'disponibilidad', 'orientacion', 
         'agua_caliente', 'calefaccion', 'estado', 'antiguedad', 'parking', 'ascensor',
         'aire_acondicionado', 'terraza', 'trastero', 'electrodomesticos', 'balcon', 
         'puerta_blindada', 'jardin', 'patio', 'piscina', 'suite_con_bano', 

@@ -59,7 +59,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group mb-50">
+
+                    <!-- Fondo Section -->
+                    <div v-if="profile.tipo === 1" class="form-group mb-50">
                         <label for="fondo">Fondo</label>
                         <input 
                             type="file" 
@@ -71,7 +73,8 @@
                         <img v-if="profile.fondo" :src="profile.fondo" alt="Fondo" class="img-thumbnail mt-2" />
                     </div>
 
-                    <div class="form-group mb-50">
+                    <!-- Logo Section -->
+                    <div v-if="profile.tipo === 1" class="form-group mb-50">
                         <label for="logo">Logo</label>
                         <input 
                             type="file" 
@@ -157,6 +160,7 @@ watchEffect(() => {
     profile.name = profileData.value.name;
     profile.email = profileData.value.email;
     profile.telefono = profileData.value.telefono;
+    profile.tipo = profileData.value.tipo; // Añadirmos esta linea para comprobar el tipo del usuario
 
     originalProfile.name = profileData.value.name;
     originalProfile.email = profileData.value.email;

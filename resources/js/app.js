@@ -66,6 +66,8 @@ import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import 'sweetalert2/dist/sweetalert2.min.css';
 import '../css/theme.css';
+import 'leaflet/dist/leaflet.css';
+
 
 const app = createApp({
     created() {
@@ -154,4 +156,13 @@ app.directive('tooltip', Tooltip);
 app.directive('ripple', Ripple);
 app.directive('styleclass', StyleClass);
 
+
+
+
+
+
 app.mount('#app')
+
+
+
+

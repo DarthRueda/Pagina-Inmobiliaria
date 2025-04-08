@@ -59,6 +59,12 @@ export default {
       cuotaMensual: 0
     };
   },
+  mounted() {
+    const queryPrecioVivienda = this.$route.query.precioVivienda;
+    if (queryPrecioVivienda) {
+      this.form.precioVivienda = parseInt(queryPrecioVivienda, 10);
+    }
+  },
   methods: {
     calcularHipoteca() {
       const notaria = 1105;

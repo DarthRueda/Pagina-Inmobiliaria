@@ -22,9 +22,11 @@
                             <p class="card-text">{{ vivienda.descripcion }}</p>  
                         </div>
                     </div>
-                    <h5 class="card-price">{{ vivienda.precio }}</h5>
+                    <h5 class="card-price">
+                        {{ vivienda.precio }}<span v-if="vivienda.disponibilidad === 'Alquilar'">/mes</span>
+                    </h5>
                 </div>
-                <!-- Display the time since creation -->
+                <!-- Display the time since update -->
                 <h6>{{ timeSinceCreation }}</h6>
             </div>
         </router-link>
@@ -65,11 +67,11 @@ export default {
         const userTipo = ref(null);
         const userLogo = ref(null);
 
-        // Calculate the time since creation
+        // Calculate the time since update
         const timeSinceCreation = computed(() => {
-            const createdAt = new Date(vivienda.value.created_at); // Parse el string de fecha
+            const updatedAt = new Date(vivienda.value.updated_at); // Use updated_at instead of created_at
             const now = new Date();
-            const diffInMs = now - createdAt;
+            const diffInMs = now - updatedAt;
             const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
             const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
 
