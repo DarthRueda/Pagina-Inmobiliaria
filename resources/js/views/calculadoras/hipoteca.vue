@@ -269,4 +269,24 @@ export default {
   font-size: 24px;
   margin-bottom: 20px;
 }
+
+@media (max-width: 500px) {
+  .price-box-container{
+    width:125%
+  }
+
+  .overlay-content h2{
+    font-size: 15px;
+  }
+
+  .overlay-content p{
+    font-size: 15px;
+  }
+
+  .overlay-content .price-box{
+    padding: 5px;
+    margin: 5px;
+  }
+
+}
 </style>

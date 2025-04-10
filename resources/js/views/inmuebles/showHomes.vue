@@ -3,9 +3,7 @@
         <h1>Inmuebles</h1>
         <div class="container">
             <div class="filters col-md-3" style="background-color: white;">
-                <div class="filter-block">
-                    <Map class="map-style" :municipio="selectedMunicipio" />
-                </div>
+                <Map class="map-style" :municipio="selectedMunicipio" />
                 <div class="form-group position-relative">
                     <label for="poblacion">Población</label>
                     <div class="input-group">
@@ -485,6 +483,12 @@ input[type="checkbox"] {
     display: block;
 }
 
+@media (max-width: 1200px) {
+    #map {
+        width: 94%;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
@@ -493,7 +497,7 @@ input[type="checkbox"] {
         margin-bottom: 20px;
     }
     .list-inmuebles {
-        width: 100%;
+        width: 95%;
     }
 }
 

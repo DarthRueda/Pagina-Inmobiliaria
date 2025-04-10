@@ -4,8 +4,6 @@
         <InfoInmobiliaria :info="inmobiliaria" />
         <div class="container">
             <div class="filters col-md-3" style="background-color: white;">
-                <div class="filter-block">
-                </div>
                 <div class="form-group position-relative">
                     <label for="poblacion">Población</label>
                     <div class="input-group">
@@ -435,6 +433,15 @@ input[type="checkbox"] {
     }
     .list-inmuebles {
         width: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+    .info-inmobiliaria{
+        width: 95%;
+    }
+    button.search-button{
+        width: 110px;
     }
 }
 </style>

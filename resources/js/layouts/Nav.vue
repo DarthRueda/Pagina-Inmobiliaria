@@ -79,6 +79,18 @@
     height: 4px; /* Line height */
     background-color: white;
 }
+
+@media (max-width: 500px) {
+
+    .navbar{
+        height: 190px;
+    }
+
+}
+
+@media (max-width: 400px) {
+
+}
 </style>
 
 <script setup>

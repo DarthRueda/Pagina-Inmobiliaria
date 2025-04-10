@@ -199,4 +199,17 @@ h4 {
   width: 100%;
   height: 288px
 }
+
+@media (max-width: 500px) {
+  #map{
+    width: 133%;;
+  }
+  .col-3 {
+    width: 100%;
+  }
+}
+
+@media (max-width: 400px) {
+
+}
 </style>
