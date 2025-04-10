@@ -3,9 +3,6 @@ import { authStore } from "../store/auth";
 const AuthenticatedLayout = () => import('../layouts/Authenticated.vue')
 const AuthenticatedUserLayout = () => import('../layouts/AuthenticatedUser.vue')
 const GuestLayout = ()  => import('../layouts/Guest.vue');
-const PostsIndex  = ()  => import('../views/admin/posts/Index.vue');
-const PostsCreate  = ()  => import('../views/admin/posts/Create.vue');
-const PostsEdit  = ()  => import('../views/admin/posts/Edit.vue');
 
 async function requireLogin(to, from, next) {
     const auth = authStore();
@@ -66,21 +63,6 @@ export default [
                 path: '/',
                 name: 'home',
                 component: () => import('../views/home/index.vue'),
-            },
-            {
-                path: 'posts',
-                name: 'public-posts.index',
-                component: () => import('../views/posts/index.vue'),
-            },
-            {
-                path: 'posts/:id',
-                name: 'public-posts.details',
-                component: () => import('../views/posts/details.vue'),
-            },
-            {
-                path: 'category/:id',
-                name: 'category-posts.index',
-                component: () => import('../views/category/posts.vue'),
             },
             {
                 path: 'login',
@@ -237,77 +219,6 @@ export default [
                 component: () => import('../views/admin/profile/index.vue'),
                 meta: { breadCrumb: 'Profile' }
             },
-            {
-                name: 'posts.index',
-                path: 'posts',
-                component: PostsIndex,
-                meta: { breadCrumb: 'Posts' }
-            },
-            {
-                name: 'posts.create',
-                path: 'posts/create',
-                component: PostsCreate,
-                meta: { breadCrumb: 'Add new post' }
-            },
-            {
-                name: 'posts.edit',
-                path: 'posts/edit/:id',
-                component: PostsEdit,
-                meta: { breadCrumb: 'Edit post' }
-            },
-            {
-                name: 'categories',
-                path: 'categories',
-                meta: { breadCrumb: 'Categories'},
-                children: [
-                    {
-                        name: 'categories.index',
-                        path: '',
-                        component: () => import('../views/admin/categories/Index.vue'),
-                        meta: { breadCrumb: 'View category' }
-                    },
-                    {
-                        name: 'categories.create',
-                        path: 'create',
-                        component: () => import('../views/admin/categories/Create.vue'),
-                        meta: {
-                            breadCrumb: 'Add new category' ,
-                            linked: false,
-                        }
-                    },
-                    {
-                        name: 'categories.edit',
-                        path: 'edit/:id',
-                        component: () => import('../views/admin/categories/Edit.vue'),
-                        meta: {
-                            breadCrumb: 'Edit category',
-                            linked: false,
-                        }
-                    }
-                ]
-            },
-            {
-                name: 'authors',
-                path: 'authors',
-                meta: { breadCrumb: 'Autores'},
-                children: [
-                    {
-                        name: 'authors.index',
-                        path: '',
-                        component: () => import('../views/admin/authors/index.vue'),
-                        meta: { breadCrumb: 'Listado' }
-                    },
-                    {
-                        name: 'authors.edit',
-                        path: 'edit/:id',
-                        component: () => import('../views/admin/authors/edit.vue'),
-                        meta: {
-                            breadCrumb: 'Editar',
-                            linked: false,
-                        }
-                    }
-                ]
-             },
             {
                 name: 'permissions',
                 path: 'permissions',

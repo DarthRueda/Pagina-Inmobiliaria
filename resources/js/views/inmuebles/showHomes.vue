@@ -109,7 +109,7 @@
                 </div>
             </div>
 
-            <div class="list-inmuebles col-md-9">
+            <div class="list-inmuebles col-md-11">
                 <div class="tipo-de-inmueble">      
                     <button @click="filterByDisponibilidad('Comprar')">Comprar</button>
                     <button @click="filterByDisponibilidad('Alquilar')">Alquilar</button>

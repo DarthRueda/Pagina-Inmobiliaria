@@ -23,14 +23,8 @@
                     <li>
                          <a class="dropdown-item" href="#" @click="router.push({ name: 'user.panel' })">Perfil</a>
                     </li>
-                    <li>
-                        <a class="dropdown-item" href="#">Preferencias</a>
-                    </li>
                     <li v-if="true">
                         <a class="dropdown-item" href="#" @click="router.push({ name: 'admin.index' })">Panel Admin</a>
-                    </li>
-                    <li v-if="true">
-                        <a class="dropdown-item" href="#" @click="router.push({ name: 'app' })">Panel Usuario</a>
                     </li>
                     <li>
                         <hr class="dropdown-divider">

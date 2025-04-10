@@ -18,7 +18,7 @@ class NotificacionController extends Controller
         } else {
             $notificacion = Notificacion::create([
             'id_vivienda' => $vivienda->id, 
-            'mensaje' => 'Tu vienda favorita ' . $vivienda->tipo . ' en ' . $vivienda->localizacion .' ha sido actualizada.'
+            'mensaje' => 'Tu vivienda favorita ' . $vivienda->tipo . ' en ' . $vivienda->localizacion .' ha sido actualizada.'
             ]);
         }
 
