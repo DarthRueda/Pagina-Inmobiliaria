@@ -20,11 +20,21 @@ const logoUrl = computed(() => {
                     <span>©2025 Copyright</span>
                 </div>
                 <div class="col-4 text-center">
-                    <img src="/images/footer/facebook.svg" alt="Facebook" class="social-icon">
-                    <img src="/images/footer/instagram.svg" alt="Instagram" class="social-icon">
-                    <img src="/images/footer/youtube.svg" alt="YouTube" class="social-icon">
-                    <img src="/images/footer/link.svg" alt="LinkedIn" class="social-icon">
-                    <img src="/images/footer/tiktok.svg" alt="TikTok" class="social-icon">
+                    <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+                        <img src="/images/footer/facebook.svg" alt="Facebook" class="social-icon">
+                    </a>
+                    <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+                        <img src="/images/footer/instagram.svg" alt="Instagram" class="social-icon">
+                    </a>
+                    <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
+                        <img src="/images/footer/youtube.svg" alt="YouTube" class="social-icon">
+                    </a>
+                    <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+                        <img src="/images/footer/link.svg" alt="LinkedIn" class="social-icon">
+                    </a>
+                    <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer">
+                        <img src="/images/footer/tiktok.svg" alt="TikTok" class="social-icon">
+                    </a>
                 </div>
             </div>
             <div class="row full-width">
@@ -65,6 +75,11 @@ const logoUrl = computed(() => {
     flex: 0 0 33.3333%;
     text-align: center; // Center the content of all columns
 }
+.col-4.text-center {
+    display: flex;
+    justify-content: center;
+    gap: 5px; // Add gap between social icons
+}
 .text-center {
     text-align: center;
 }
@@ -74,7 +89,6 @@ const logoUrl = computed(() => {
 .social-icon {
     width: 26px;
     height: 26px;
-    margin-right: 10px;
 }
 .social-icon:last-child {
     margin-right: 0;

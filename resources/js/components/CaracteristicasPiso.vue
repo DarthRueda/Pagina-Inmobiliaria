@@ -343,4 +343,17 @@ export default defineComponent({
   width: 40px;
   height: 40px;
 }
+
+@media (max-width: 500px) {
+  .feature{
+    width: 50%;
+  }
+
+}
+
+@media (max-width: 400px) {
+  .feature{
+    width: 50%;
+  }
+}
 </style>

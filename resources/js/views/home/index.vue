@@ -139,6 +139,8 @@ export default {
                         disponibilidad: selectedOption.value === 'comprar' ? 'Comprar' : 'Alquilar' 
                     } 
                 });
+            } else {
+                router.push('/inmuebles');
             }
         };
 

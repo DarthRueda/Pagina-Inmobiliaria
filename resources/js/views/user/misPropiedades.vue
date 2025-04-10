@@ -7,12 +7,12 @@
       </div>
       <!-- Columna para el contenido -->
       <div class="col-md-9">
+        <h1 class="mb-30">Mis Propiedades</h1>
+        <button @click="toggleCreateForm" class="section-button">Añadir Propiedad</button>
         <div v-for="vivienda in viviendas" :key="vivienda.id" class="card-inmueble">
           <CardInmueble :vivienda="vivienda" />
           <button @click="editVivienda(vivienda)" class="btn btn-secondary mb-3">Editar Propiedad</button>
         </div>
-        <button @click="toggleCreateForm" class="btn btn-primary mb-3">Añadir Propiedad</button>
-        
         <!-- Formulario para crear -->
         <div v-if="showCreateForm" class="overlay">
           <div class="overlay-content">
@@ -227,8 +227,10 @@
                 <label for="images">Imágenes</label>
                 <input type="file" class="form-control" id="images" multiple @change="handleFileUpload">
               </div>
-              <button type="submit" class="btn btn-primary">Crear Vivienda</button>
-              <button type="button" @click="toggleCreateForm" class="btn btn-secondary ml-2">Cancelar</button>
+              <div class="button-group">
+                <button type="submit" class="form-button">Crear Vivienda</button>
+                <button type="button" @click="toggleCreateForm" class="cancel-button">Cancelar</button>
+              </div>
             </form>
           </div>
         </div>
@@ -424,13 +426,11 @@
                   </label>
                 </div>
               </div>
-              <div class="form-group">
-                <label for="images">Imágenes</label>
-                <input type="file" class="form-control" id="images" multiple @change="handleFileUpload">
+              <div class="button-group">
+                <button type="submit" class="form-button">Guardar Cambios</button>
+                <button type="button" @click="toggleImageEdit" class="edit-images-button">Editar Imágenes</button>
+                <button type="button" @click="toggleEditForm" class="cancel-button">Cancelar</button>
               </div>
-              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-              <button type="button" @click="toggleEditForm" class="btn btn-secondary ml-2">Cancelar</button>
-              <button type="button" @click="toggleImageEdit" class="btn btn-warning ml-2">Editar Imágenes</button>
             </form>
           </div>
         </div>
@@ -952,5 +952,77 @@ export default {
   display: block;
   margin: 0 auto;
   text-align: center;
+}
+
+.section-button {
+    width: 180px;
+    height: 48px;
+    background-color: #835EAE;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    margin-bottom: 10px; /* Added margin-bottom */
+}
+
+.section-button:hover {
+    background-color: #64428C;
+}
+
+.form-button {
+    width: 105x;
+    height: 40px;
+    background-color: #835EAE;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.form-button:hover {
+    background-color: #64428C;
+}
+
+.cancel-button {
+    width: 105px;
+    height: 40px;
+    background-color: #E74C3C;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.cancel-button:hover {
+    background-color: #C0392B;
+}
+
+.edit-images-button {
+    width: 105px;
+    height: 41px;
+    background-color: #d3ac70;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.edit-images-button:hover {
+    background-color: #b38e5c;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
 }
 </style>

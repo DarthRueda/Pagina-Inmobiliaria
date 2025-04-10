@@ -3,9 +3,7 @@
         <h1>Inmuebles</h1>
         <div class="container">
             <div class="filters col-md-3" style="background-color: white;">
-                <div class="filter-block">
-                    <Map class="map-style" :municipio="selectedMunicipio" />
-                </div>
+                <Map class="map-style" :municipio="selectedMunicipio" />
                 <div class="form-group position-relative">
                     <label for="poblacion">Población</label>
                     <div class="input-group">
@@ -111,8 +109,18 @@
 
             <div class="list-inmuebles col-md-11">
                 <div class="tipo-de-inmueble">      
-                    <button @click="filterByDisponibilidad('Comprar')">Comprar</button>
-                    <button @click="filterByDisponibilidad('Alquilar')">Alquilar</button>
+                    <button 
+                        @click="filterByDisponibilidad('Comprar')" 
+                        :class="{ 'active-button': selectedDisponibilidad === 'Comprar' }"
+                    >
+                        Comprar
+                    </button>
+                    <button 
+                        @click="filterByDisponibilidad('Alquilar')" 
+                        :class="{ 'active-button': selectedDisponibilidad === 'Alquilar' }"
+                    >
+                        Alquilar
+                    </button>
                 </div>
                 <CardInmueble 
                     v-for="vivienda in paginatedViviendas" 
@@ -323,6 +331,17 @@ export default {
     font-size: 24px;
     border: none;
     background-color: transparent;
+    position: relative;
+}
+
+.tipo-de-inmueble button.active-button::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #835eae;
 }
 
 .form-group {
@@ -485,6 +504,23 @@ input[type="checkbox"] {
     display: block;
 }
 
+.selected-disponibilidad {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #835EAE;
+}
+
+.checkbox-group.grid{
+    gap: 0px;
+}
+
+@media (max-width: 1200px) {
+    #map {
+        width: 94%;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
@@ -493,7 +529,7 @@ input[type="checkbox"] {
         margin-bottom: 20px;
     }
     .list-inmuebles {
-        width: 100%;
+        width: 95%;
     }
 }
 

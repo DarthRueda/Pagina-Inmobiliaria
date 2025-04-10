@@ -139,6 +139,7 @@ export default {
     border-radius: 0px !important;
     margin: 0;
     padding: 0;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow */
 }
 
 .card-img-container {
@@ -231,7 +232,7 @@ export default {
 }
 
 .card-title {
-    font-size: 16px;
+    font-size: 25px;
 }
 
 .card-subtitle {
@@ -268,5 +269,35 @@ export default {
 
 .card:hover .card-text, .card:hover h6 {
     color: black;
+}
+@media (max-width: 500px) {
+    .card{
+        width: 100%;
+    }
+    .card-img{
+        width: 180px;
+    }
+    .like-container {
+        left: 215px;
+    }
+    .card-price {
+        font-size: 18px;
+    }
+
+}
+
+@media (max-width: 400px) {
+    .card{
+        width: 103%;
+    }
+    .card-img{
+        width: 160px;
+    }
+    .like-container {
+        left: 195px;
+    }
+    .card-price {
+        font-size: 17px;
+    }
 }
 </style>

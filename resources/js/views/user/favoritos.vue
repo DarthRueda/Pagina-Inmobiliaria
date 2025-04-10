@@ -7,14 +7,9 @@
       </div>
       <!-- Columna para el contenido -->
       <div class="col-md-9">
-        <div class="row">
-          <!-- Escuchar el evento removeLike para actualizar la lista -->
-          <CardInmueble 
-            v-for="vivienda in viviendas" 
-            :key="vivienda.id" 
-            :vivienda="vivienda" 
-            @removeLike="handleRemoveLike" 
-          />
+        <h1 class="mb-30">Favoritos</h1>
+        <div v-for="vivienda in viviendas" :key="vivienda.id" class="card-inmueble">
+          <CardInmueble :vivienda="vivienda" />
         </div>
       </div>
     </div>
