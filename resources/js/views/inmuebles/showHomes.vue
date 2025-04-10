@@ -109,8 +109,18 @@
 
             <div class="list-inmuebles col-md-9">
                 <div class="tipo-de-inmueble">      
-                    <button @click="filterByDisponibilidad('Comprar')">Comprar</button>
-                    <button @click="filterByDisponibilidad('Alquilar')">Alquilar</button>
+                    <button 
+                        @click="filterByDisponibilidad('Comprar')" 
+                        :class="{ 'active-button': selectedDisponibilidad === 'Comprar' }"
+                    >
+                        Comprar
+                    </button>
+                    <button 
+                        @click="filterByDisponibilidad('Alquilar')" 
+                        :class="{ 'active-button': selectedDisponibilidad === 'Alquilar' }"
+                    >
+                        Alquilar
+                    </button>
                 </div>
                 <CardInmueble 
                     v-for="vivienda in paginatedViviendas" 
@@ -321,6 +331,17 @@ export default {
     font-size: 24px;
     border: none;
     background-color: transparent;
+    position: relative;
+}
+
+.tipo-de-inmueble button.active-button::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #835eae;
 }
 
 .form-group {
@@ -481,6 +502,17 @@ input[type="checkbox"] {
 
 .municipios-dropdown.show {
     display: block;
+}
+
+.selected-disponibilidad {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+    color: #835EAE;
+}
+
+.checkbox-group.grid{
+    gap: 0px;
 }
 
 @media (max-width: 1200px) {

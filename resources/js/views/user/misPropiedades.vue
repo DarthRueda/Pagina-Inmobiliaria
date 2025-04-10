@@ -7,12 +7,12 @@
       </div>
       <!-- Columna para el contenido -->
       <div class="col-md-9">
+        <h1 class="mb-30">Mis Propiedades</h1>
+        <button @click="toggleCreateForm" class="section-button">Añadir Propiedad</button>
         <div v-for="vivienda in viviendas" :key="vivienda.id" class="card-inmueble">
           <CardInmueble :vivienda="vivienda" />
           <button @click="editVivienda(vivienda)" class="btn btn-secondary mb-3">Editar Propiedad</button>
         </div>
-        <button @click="toggleCreateForm" class="section-button">Añadir Propiedad</button>
-        
         <!-- Formulario para crear -->
         <div v-if="showCreateForm" class="overlay">
           <div class="overlay-content">
@@ -428,8 +428,8 @@
               </div>
               <div class="button-group">
                 <button type="submit" class="form-button">Guardar Cambios</button>
-                <button type="button" @click="toggleEditForm" class="cancel-button">Cancelar</button>
                 <button type="button" @click="toggleImageEdit" class="edit-images-button">Editar Imágenes</button>
+                <button type="button" @click="toggleEditForm" class="cancel-button">Cancelar</button>
               </div>
             </form>
           </div>
@@ -964,6 +964,7 @@ export default {
     border: none;
     cursor: pointer;
     margin-top: 20px;
+    margin-bottom: 10px; /* Added margin-bottom */
 }
 
 .section-button:hover {

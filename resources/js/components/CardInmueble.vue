@@ -139,6 +139,7 @@ export default {
     border-radius: 0px !important;
     margin: 0;
     padding: 0;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow */
 }
 
 .card-img-container {
@@ -231,7 +232,7 @@ export default {
 }
 
 .card-title {
-    font-size: 16px;
+    font-size: 25px;
 }
 
 .card-subtitle {
@@ -269,7 +270,6 @@ export default {
 .card:hover .card-text, .card:hover h6 {
     color: black;
 }
-
 @media (max-width: 500px) {
     .card{
         width: 100%;

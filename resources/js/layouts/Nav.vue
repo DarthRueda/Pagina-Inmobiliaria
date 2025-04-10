@@ -69,17 +69,6 @@
     position: relative;
 }
 
-.nav-buttons .btn::after {
-    content: '';
-    position: absolute;
-    bottom: -5px; /* 10px below the button */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px; /* Line width */
-    height: 4px; /* Line height */
-    background-color: white;
-}
-
 @media (max-width: 500px) {
 
     .navbar{
@@ -97,12 +86,19 @@
 
 import useAuth from "@/composables/auth";
 import { authStore } from "../store/auth";
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
 const { processing, logout } = useAuth();
 const router = useRouter();
+const route = useRoute();
 
 const redirectToShowHomes = (disponibilidad) => {
-    router.push({ name: 'list-inmubles', query: { disponibilidad } });
+    if (route.name === 'list-inmubles' && route.query.disponibilidad !== disponibilidad) {
+        router.push({ name: 'list-inmubles', query: { disponibilidad } }).then(() => {
+            window.location.reload();
+        });
+    } else {
+        router.push({ name: 'list-inmubles', query: { disponibilidad } });
+    }
 };
 </script>

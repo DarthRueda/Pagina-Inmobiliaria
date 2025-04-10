@@ -2,6 +2,9 @@
   <div v-if="vivienda">
     <div class="row no-gutters">
       <ImageMosaic :images="viviendaImages" />
+    </div>
+    <button class="back-button" @click="goBackToInmuebles">Volver a Inmuebles</button>
+    <div class="row no-gutters">
       <div class="col-9">
         <div class="price">{{ vivienda.precio }}</div>
         <!-- Debug log -->
@@ -25,6 +28,7 @@
         <div class="ubicacion-block">
           <Map class="map-style" :municipio="vivienda.localizacion" />
         </div>
+
       </div>
       <div class="col-3 col-border">
         <h3>Contactanos</h3>
@@ -91,6 +95,10 @@ export default defineComponent({
       event.target.style.textDecoration = 'none';
     };
 
+    const goBackToInmuebles = () => {
+      router.push({ name: 'list-inmubles' });
+    };
+
     onMounted(() => {
       const viviendaId = route.params.id;
       fetchVivienda(viviendaId);
@@ -102,7 +110,8 @@ export default defineComponent({
       fetchVivienda,
       redirectToHipoteca,
       hoverMortgage,
-      leaveMortgage
+      leaveMortgage,
+      goBackToInmuebles
     };
   }
 });
@@ -198,6 +207,23 @@ h4 {
 .map-style {
   width: 100%;
   height: 288px
+}
+
+.back-button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #835EAE;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 200px;
+  align-self: center;
+}
+
+.back-button:hover {
+  background-color: #64428C;
 }
 
 @media (max-width: 500px) {
