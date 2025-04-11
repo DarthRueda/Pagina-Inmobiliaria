@@ -11,7 +11,7 @@
         <button @click="toggleCreateForm" class="section-button">Añadir Propiedad</button>
         <div v-for="vivienda in viviendas" :key="vivienda.id" class="card-inmueble">
           <CardInmueble :vivienda="vivienda" />
-          <button @click="editVivienda(vivienda)" class="btn btn-secondary mb-3">Editar Propiedad</button>
+          <button @click="editVivienda(vivienda)" class="edit-button">Editar Propiedad</button>
         </div>
         <!-- Formulario para crear -->
         <div v-if="showCreateForm" class="overlay">
@@ -450,7 +450,7 @@
             </div>
             <div v-if="selectedImage" class="selected-image-container">
               <img :src="selectedImage.url" class="selected-image" />
-              <button @click="deleteImage(selectedImage)" class="btn btn-danger mt-3">
+              <button @click="deleteImage(selectedImage)" class="cancel-button mt-3">
                 Eliminar Imagen
               </button>
             </div>
@@ -458,8 +458,8 @@
               <h4 class="add-images-title">Añadir Nuevas Imágenes</h4>
               <input type="file" id="newImages" multiple @change="handleNewImageUpload" class="file-input" />
             </div>
-            <button @click="submitImageChanges" class="btn btn-primary mt-3">Guardar Cambios</button>
-            <button @click="toggleImageEdit" class="btn btn-secondary mt-3">Cerrar</button>
+            <button @click="submitImageChanges" class="form-button mt-3">Guardar Cambios</button>
+            <button @click="toggleImageEdit" class="cancel-button mt-3">Cerrar</button>
           </div>
         </div>
       </div>
@@ -962,9 +962,10 @@ export default {
     font-weight: bold;
     font-size: 20px;
     border: none;
+    border-radius: 0; /* Ensure no rounded border */
     cursor: pointer;
     margin-top: 20px;
-    margin-bottom: 10px; /* Added margin-bottom */
+    margin-bottom: 10px;
 }
 
 .section-button:hover {
@@ -972,13 +973,14 @@ export default {
 }
 
 .form-button {
-    width: 105x;
+    width: 105px;
     height: 40px;
     background-color: #835EAE;
     color: white;
     font-weight: bold;
     font-size: 13px;
     border: none;
+    border-radius: 0; /* Ensure no rounded border */
     cursor: pointer;
     margin-top: 20px;
 }
@@ -995,6 +997,7 @@ export default {
     font-weight: bold;
     font-size: 13px;
     border: none;
+    border-radius: 0; /* Ensure no rounded border */
     cursor: pointer;
     margin-top: 20px;
 }
@@ -1011,6 +1014,7 @@ export default {
     font-weight: bold;
     font-size: 12px;
     border: none;
+    border-radius: 0; /* Ensure no rounded border */
     cursor: pointer;
     margin-top: 20px;
 }
@@ -1050,4 +1054,20 @@ input[type="radio"]:checked {
     padding: 0 15px;
 }
 
+.edit-button {
+    width: 140px;
+    height: 40px;
+    background-color: #d3ac70;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    border: none;
+    border-radius: 0; /* Ensure no rounded border */
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.edit-button:hover {
+    background-color: #b38e5c;
+}
 </style>
