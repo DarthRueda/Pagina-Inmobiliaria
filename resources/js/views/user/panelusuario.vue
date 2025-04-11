@@ -279,6 +279,57 @@ async function uploadLogo(event) {
     user-select: auto;
 }
 
+.btn-warning {
+    width: 140px;
+    height: 40px;
+    background-color: #d3ac70;
+    color: white;
+    font-weight: bold;
+    font-size: 15px;
+    border: none;
+    border-radius: 0; /* Ensure no rounded border */
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-warning:hover {
+    background-color: #b38e5c;
+}
+
+.btn-primary {
+    width: 105px;
+    height: 40px;
+    background-color: #835EAE;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    border: none;
+    border-radius: 0; /* Ensure no rounded border */
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn-primary:hover {
+    background-color: #64428C;
+}
+
+.btn-secondary {
+    width: 105px;
+    height: 40px;
+    background-color: #E74C3C;
+    color: white;
+    font-weight: bold;
+    font-size: 13px;
+    border: none;
+    border-radius: 0; /* Ensure no rounded border */
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.btn-secondary:hover {
+    background-color: #C0392B;
+}
+
 @media (min-width: 768px) {
     .col-md-3, .col-md-9 {
         float: none;
