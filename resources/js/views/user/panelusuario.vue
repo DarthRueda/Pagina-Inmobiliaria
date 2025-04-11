@@ -1,107 +1,109 @@
 <template>
-    <div class="panelusuario mt-50">
-        <div class="row">
-            <div class="col-md-3">
-                <PanelUsuarioOpciones/>
-            </div>
-            <div class="col-md-9">
-                <form @submit.prevent="submitForm">
-                    <h1 class="mb-30">Panel de Usuario</h1>
+    <div class="panelusuario-page">
+        <div class="panelusuario mt-50">
+            <div class="row">
+                <div class="col-md-3">
+                    <PanelUsuarioOpciones/>
+                </div>
+                <div class="col-md-9">
+                    <form @submit.prevent="submitForm">
+                        <h1 class="mb-30">Panel de Usuario</h1>
 
-                    <div class="form-group mb-50">
-                        <label for="nombre">Nombre</label>
-                        <input 
-                            type="text" 
-                            id="nombre" 
-                            class="form-control" 
-                            v-model="profile.name" 
-                            :disabled="!isEditing"
-                        >
-                        <div class="text-danger mt-1">{{ errors.name }}</div>
-                        <div class="text-danger mt-1">
-                            <div v-for="message in validationErrors?.name" :key="message">
-                                {{ message }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-6">
-                            <label for="email">Email</label>
+                        <div class="form-group mb-50">
+                            <label for="nombre">Nombre</label>
                             <input 
                                 type="text" 
-                                id="email" 
+                                id="nombre" 
                                 class="form-control" 
-                                v-model="profile.email" 
-                                disabled
-                            >
-                            <div class="text-danger mt-1">{{ errors.email }}</div>
-                            <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.email" :key="message">
-                                    {{ message }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group col-6">
-                            <label for="telefono">Teléfono</label>
-                            <input 
-                                type="text" 
-                                id="telefono" 
-                                class="form-control" 
-                                v-model="profile.telefono" 
+                                v-model="profile.name" 
                                 :disabled="!isEditing"
                             >
-                            <div class="text-danger mt-1">{{ errors.telefono }}</div>
+                            <div class="text-danger mt-1">{{ errors.name }}</div>
                             <div class="text-danger mt-1">
-                                <div v-for="message in validationErrors?.telefono" :key="message">
+                                <div v-for="message in validationErrors?.name" :key="message">
                                     {{ message }}
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Fondo Section -->
-                    <div v-if="profile.tipo === 1" class="form-group mb-50">
-                        <label for="fondo">Fondo</label>
-                        <input 
-                            type="file" 
-                            id="fondo" 
-                            class="form-control" 
-                            @change="uploadFondo"
-                            :disabled="!isEditing"
-                        >
-                        <img v-if="profile.fondo" :src="profile.fondo" alt="Fondo" class="img-thumbnail mt-2" />
-                    </div>
-
-                    <!-- Logo Section -->
-                    <div v-if="profile.tipo === 1" class="form-group mb-50">
-                        <label for="logo">Logo</label>
-                        <input 
-                            type="file" 
-                            id="logo" 
-                            class="form-control" 
-                            @change="uploadLogo"
-                            :disabled="!isEditing"
-                        >
-                        <img v-if="profile.logo" :src="profile.logo" alt="Logo" class="img-thumbnail mt-2" />
-                    </div>
-
-                    <div class="mb-3 mt-4">
-                        <button v-if="!isEditing" class="btn btn-warning" @click="enableEditing">
-                            Editar
-                        </button>
-                        <div v-if="isEditing">
-                            <button :disabled="isLoading" class="btn btn-primary">
-                                <div v-show="isLoading"></div>
-                                <span v-if="isLoading">Procesando...</span>
-                                <span v-else>Actualizar</span>
-                            </button>
-                            <button type="button" class="btn btn-secondary ml-2" @click="cancelEditing">
-                                Cancelar
-                            </button>
+                        <div class="form-row">
+                            <div class="form-group col-6">
+                                <label for="email">Email</label>
+                                <input 
+                                    type="text" 
+                                    id="email" 
+                                    class="form-control" 
+                                    v-model="profile.email" 
+                                    disabled
+                                >
+                                <div class="text-danger mt-1">{{ errors.email }}</div>
+                                <div class="text-danger mt-1">
+                                    <div v-for="message in validationErrors?.email" :key="message">
+                                        {{ message }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-6">
+                                <label for="telefono">Teléfono</label>
+                                <input 
+                                    type="text" 
+                                    id="telefono" 
+                                    class="form-control" 
+                                    v-model="profile.telefono" 
+                                    :disabled="!isEditing"
+                                >
+                                <div class="text-danger mt-1">{{ errors.telefono }}</div>
+                                <div class="text-danger mt-1">
+                                    <div v-for="message in validationErrors?.telefono" :key="message">
+                                        {{ message }}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </form>
+
+                        <!-- Fondo Section -->
+                        <div v-if="profile.tipo === 1" class="form-group mb-50">
+                            <label for="fondo">Fondo</label>
+                            <input 
+                                type="file" 
+                                id="fondo" 
+                                class="form-control" 
+                                @change="uploadFondo"
+                                :disabled="!isEditing"
+                            >
+                            <img v-if="profile.fondo" :src="profile.fondo" alt="Fondo" class="img-thumbnail mt-2" />
+                        </div>
+
+                        <!-- Logo Section -->
+                        <div v-if="profile.tipo === 1" class="form-group mb-50">
+                            <label for="logo">Logo</label>
+                            <input 
+                                type="file" 
+                                id="logo" 
+                                class="form-control" 
+                                @change="uploadLogo"
+                                :disabled="!isEditing"
+                            >
+                            <img v-if="profile.logo" :src="profile.logo" alt="Logo" class="img-thumbnail mt-2" />
+                        </div>
+
+                        <div class="mb-3 mt-4">
+                            <button v-if="!isEditing" class="btn btn-warning" @click="enableEditing">
+                                Editar
+                            </button>
+                            <div v-if="isEditing">
+                                <button :disabled="isLoading" class="btn btn-primary">
+                                    <div v-show="isLoading"></div>
+                                    <span v-if="isLoading">Procesando...</span>
+                                    <span v-else>Actualizar</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary ml-2" @click="cancelEditing">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -227,6 +229,16 @@ async function uploadLogo(event) {
 </script>
 
 <style scoped>
+.panelusuario-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 60vh; /* Asegura que la página ocupe toda la altura de la ventana */
+}
+
+.panelusuario {
+    flex: 1; /* Hace que el contenido principal ocupe el espacio disponible */
+}
+
 .row {
     margin-right: 0;
     margin-left: 0;

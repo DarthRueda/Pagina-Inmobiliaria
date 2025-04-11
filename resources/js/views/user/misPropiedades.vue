@@ -19,7 +19,7 @@
             <form @submit.prevent="submitCreateForm" class="form-container">
               <h3>Crea una propiedad para que la vea todo el mundo</h3>
               <div class="form-group text-center">
-                <label for="disponibilidad">Disponibilidad</label>
+                <label class="titulos" for="disponibilidad">Disponibilidad</label>
                 <div class="checkbox-group d-flex justify-content-center">
                   <label class="mr-3">
                     <input type="radio" value="Comprar" v-model="vivienda.disponibilidad" required /> Comprar
@@ -52,12 +52,12 @@
               </div>
               <!-- Form fields... -->
               <div class="form-group">
-                <label for="precio">Precio</label>
+                <label class="titulos" for="precio">Precio</label>
                 <input v-model="vivienda.precio" type="number" class="form-control" id="precio" required />
               </div>
               <!-- Other form fields identical to the edit form -->
               <div class="form-group">
-                <label for="descripcion">Descripción</label>
+                <label class="titulos" for="descripcion">Descripción</label>
                 <textarea v-model="vivienda.descripcion" class="form-control" id="descripcion" required></textarea>
               </div>
               <div class="row">
@@ -177,7 +177,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="caracteristicas">Características</label>
+                <label class="titulos" for="caracteristicas">Características</label>
                 <div class="checkbox-group grid">
                   <label>
                     <input type="checkbox" value="Aire acondicionado" v-model="selectedFilters" /> Aire acondicionado
@@ -224,7 +224,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="images">Imágenes</label>
+                <label  class="titulos" for="images">Imágenes</label>
                 <input type="file" class="form-control" id="images" multiple @change="handleFileUpload">
               </div>
               <div class="button-group">
@@ -241,15 +241,15 @@
             <form @submit.prevent="submitEditForm" class="form-container">
               <h3>Editar Propiedad</h3>
               <div class="form-group">
-                <label>Precio Actual: {{ originalPrice }}</label>
+                <label >Precio Actual: {{ originalPrice }}</label>
               </div>
               <div class="form-group">
                 <label>
-                  <input type="checkbox" v-model="changePrice" /> Cambiar Precio
+                  <input  type="checkbox" v-model="changePrice" /> Cambiar Precio
                 </label>
               </div>
               <div class="form-group">
-                <label for="precio">Nuevo Precio</label>
+                <label class="titulos" for="precio">Nuevo Precio</label>
                 <input
                   v-model="vivienda.precio"
                   type="number"
@@ -260,7 +260,7 @@
               </div>
               <!-- Other form fields identical to the create form -->
               <div class="form-group">
-                <label for="descripcion">Descripción</label>
+                <label class="titulos" for="descripcion">Descripción</label>
                 <textarea v-model="vivienda.descripcion" class="form-control" id="descripcion" required></textarea>
               </div>
               <div class="row">
@@ -380,7 +380,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="caracteristicas">Características</label>
+                <label class="titulos" for="caracteristicas">Características</label>
                 <div class="checkbox-group grid">
                   <label>
                     <input type="checkbox" value="Aire acondicionado" v-model="selectedFilters" /> Aire acondicionado
@@ -438,7 +438,7 @@
         <!-- Editar una Imagen -->
         <div v-if="showImageEdit" class="overlay">
           <div class="overlay-content">
-            <h3>Editar Imágenes</h3>
+            <h3 class="titulos">Editar Imágenes</h3>
             <div class="thumbnail-row">
               <img
                 v-for="image in vivienda.media"
@@ -838,7 +838,7 @@ export default {
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 22px; /* Incrementa el margen inferior para mayor separación */
 }
 
 .btn {
@@ -1025,4 +1025,29 @@ export default {
     justify-content: center;
     margin-top: 20px;
 }
+
+.titulos {
+  font-weight: bold; 
+  text-transform: uppercase;
+  margin: 7px;
+}
+
+input[type="checkbox"]:checked {
+  accent-color: #835EAE; 
+}
+
+input[type="radio"]:checked {
+  accent-color: #835EAE; 
+}
+
+.mt-50 {
+    margin-top: 50px;
+}
+.mb-30 {
+    margin-bottom: 30px;
+}
+.panelusuario {
+    padding: 0 15px;
+}
+
 </style>

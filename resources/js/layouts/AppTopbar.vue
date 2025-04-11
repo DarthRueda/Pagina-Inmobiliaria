@@ -1,11 +1,11 @@
 <template>
     <div class="layout-topbar">
         <router-link to="/" class="layout-topbar-logo">
-            <img src="/images/logo.svg" alt="logo" />
+            <img src="/images/Header/logotipo.svg" alt="logo" />
             <span></span>
         </router-link>
 
-        <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
+        <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()" style="color: white;">
             <i class="pi pi-bars"></i>
         </button>
 
@@ -22,9 +22,6 @@
                 <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm">
                     <li>
                          <a class="dropdown-item" href="#" @click="router.push({ name: 'user.panel' })">Perfil</a>
-                    </li>
-                    <li v-if="true">
-                        <a class="dropdown-item" href="#" @click="router.push({ name: 'admin.index' })">Panel Admin</a>
                     </li>
                     <li>
                         <hr class="dropdown-divider">
@@ -74,5 +71,10 @@ const topbarMenuClasses = computed(() => {
     border: 0;
     border-radius: 0%;
     padding: 1em;
+    color: white;
+}
+
+.layout-topbar {
+    background-color: #835EAE;
 }
 </style>

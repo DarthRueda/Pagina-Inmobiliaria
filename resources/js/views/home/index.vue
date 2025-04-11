@@ -291,6 +291,10 @@ export default {
 
 .Seccion1 {
     background-color: #F4F4FB;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 80px;
 }
 
 .row {
@@ -305,8 +309,10 @@ export default {
 .bloque-inmobiliaria .row {
     display: flex;
     align-items: center;
-    margin-left: 80px;
-    margin-right: 80px;
+    justify-content: space-between;
+    max-width: 1200px;
+    width: 100%;
+    margin-bottom: 60px; 
 }
 
 .bloque-casa .row {
@@ -318,7 +324,7 @@ export default {
 .bloque-inmobiliaria .col-6 img {
     width: 402px;
     height: 308px;
-    margin-left: 0;
+    margin-right: 40px; 
 }
 
 .bloque-hipoteca,
@@ -330,7 +336,9 @@ export default {
 .text-section {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    justify-content: center;
+    width: 402px;
+    margin-left: 40px; 
 }
 
 .icon-text {
@@ -425,7 +433,7 @@ export default {
     }
 }
 
-.dropdown-menu {
+.search-container .municipios-dropdown {
     position: absolute;
     top: calc(100% - 21px);
     left: 35px;
@@ -445,11 +453,11 @@ export default {
     border-radius: 0 0 0.25rem 0.25rem;
 }
 
-.dropdown-menu.show {
+.search-container .municipios-dropdown.show {
     display: block;
 }
 
-.dropdown-item {
+.search-container .dropdown-item {
     display: block;
     width: 100%;
     padding: 0.25rem 1.5rem;
@@ -463,31 +471,47 @@ export default {
     cursor: pointer;
 }
 
-.dropdown-item:hover {
+.search-container .dropdown-item:hover {
     background-color: #f8f9fa;
 }
 
-.municipios-dropdown {
-    position: absolute;
-    top: calc(100% - 21px);
-    left: 35px;
-    z-index: 1000;
-    display: none;
-    float: left;
-    min-width: 620px; 
-    padding: 0.5rem 0;
-    margin: 0; 
-    font-size: 1rem;
-    color: #212529;
-    text-align: left;
-    list-style: none;
-    background-color: #fff;
-    background-clip: padding-box;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 0 0 0.25rem 0.25rem;
-}
+/*CSS HOME*/
+@media (max-width: 425px) {
+    .Seccion1 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 10px; /* Reduce los márgenes laterales */
+    }
 
-.municipios-dropdown.show {
-    display: block;
+    .bloque-hipoteca .row,
+    .bloque-casa .row,
+    .bloque-inmobiliaria .row {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .bloque-hipoteca .col-6 img,
+    .bloque-casa .col-6 img,
+    .bloque-inmobiliaria .col-6 img {
+        width: 100%;
+        max-width: 300px; /* Ajusta el tamaño máximo de las imágenes */
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .text-section {
+        width: 100%;
+        max-width: 300px; /* Alinea el ancho del texto con las imágenes */
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .section-button {
+        width: 100%;
+        max-width: 300px; /* Ajusta el ancho del botón */
+    }
 }
 </style>

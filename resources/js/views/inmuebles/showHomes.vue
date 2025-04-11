@@ -107,7 +107,7 @@
                 </div>
             </div>
 
-            <div class="list-inmuebles col-md-11">
+            <div class="list-inmuebles col-md-9">
                 <div class="tipo-de-inmueble">      
                     <button 
                         @click="filterByDisponibilidad('Comprar')" 
@@ -536,7 +536,11 @@ input[type="checkbox"] {
 
 .map-style {
    height: 200px; 
-   width:300px;
+   width:255px;
    margin: 15px;
+}
+
+.list-inmuebles {
+    width: 85%;
 }
 </style>

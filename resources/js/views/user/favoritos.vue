@@ -1,15 +1,17 @@
 <template>
-  <div class="panelusuario mt-50">
-    <div class="row">
-      <!-- Columna para las opciones -->
-      <div class="col-md-3">
-        <PanelUsuarioOpciones />
-      </div>
-      <!-- Columna para el contenido -->
-      <div class="col-md-9">
-        <h1 class="mb-30">Favoritos</h1>
-        <div v-for="vivienda in viviendas" :key="vivienda.id" class="card-inmueble">
-          <CardInmueble :vivienda="vivienda" />
+  <div class="favoritos-page">
+    <div class="panelusuario mt-50">
+      <div class="row">
+        <!-- Columna para las opciones -->
+        <div class="col-md-3">
+          <PanelUsuarioOpciones />
+        </div>
+        <!-- Columna para el contenido -->
+        <div class="col-md-9">
+          <h1 class="mb-30">Favoritos</h1>
+          <div v-for="vivienda in viviendas" :key="vivienda.id" class="card-inmueble">
+            <CardInmueble :vivienda="vivienda" />
+          </div>
         </div>
       </div>
     </div>
@@ -70,57 +72,39 @@ export default {
 </script>
 
 <style scoped>
+.favoritos-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Asegura que la página ocupe toda la altura de la ventana */
+}
+
+.panelusuario {
+  flex: 1; /* Hace que el contenido principal ocupe el espacio disponible */
+}
+
 .row {
   margin-right: 0;
   margin-left: 0;
-}
-
-.ml-20 {
-  margin-left: 20px;
-  width: 23%;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.overlay-content {
-  background: white;
-  padding: 20px;
-  text-align: center;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 50%;
-  height: 80%;
-  overflow-y: auto;
-}
-
-.form-container {
-  width: 100%;
-  max-height: 100%;
-  overflow-y: auto;
 }
 
 .form-group {
   margin-bottom: 15px;
 }
 
-.btn {
-  margin-top: 10px;
-}
-
 .card-inmueble {
   margin-bottom: 15px;
 }
+
+.mt-50 {
+  margin-top: 50px;
+}
+
+.mb-30 {
+  margin-bottom: 30px;
+}
+
+.panelusuario {
+  padding: 0 15px;
+}
 </style>
+
