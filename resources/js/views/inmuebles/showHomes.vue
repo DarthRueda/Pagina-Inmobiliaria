@@ -193,6 +193,7 @@ export default {
 
         const changePage = (page) => {
             currentPage.value = page;
+            window.scrollTo({ top: 0, behavior: 'smooth' }); // Desplaza hacia arriba suavemente
         };
 
         const fetchViviendas = async () => {
@@ -534,7 +535,8 @@ input[type="checkbox"] {
 }
 
 .map-style {
-   height: 194px; 
-   width: 266px;
+   height: 200px; 
+   width:300px;
+   margin: 15px;
 }
 </style>
