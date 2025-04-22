@@ -186,7 +186,7 @@ class UserController extends Controller
         $this->authorize('user-delete');
         $user->delete();
 
-        return response()->noContent();
+        return response()->json(['message' => 'Usuario eliminado correctamente.']);
     }
     
 }

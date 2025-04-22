@@ -28,11 +28,8 @@ class CreateAdminUserSeeder extends Seeder
         $role = Role::create(['name' => 'admin']);
         $role2 = Role::create(['name' => 'user']);
         $permissions = [
-            'post-list',
-            'post-create',
-            'post-edit',
-            'post-delete',
-            'post-list'
+            'vivienda-list'
+
         ];
         $role2->syncPermissions($permissions);
 
