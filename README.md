@@ -59,6 +59,9 @@ npm run dev
 ```
 ### Instalar los requisitos
 ```bash
+php artisan storage:link
+```
+```bash
 npm install vue-leaflet
 ```
 ```bash
