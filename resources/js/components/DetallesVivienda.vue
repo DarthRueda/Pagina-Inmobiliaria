@@ -21,7 +21,7 @@
         <CaracteristicasPiso :caracteristicas="vivienda" />
         
         <div v-for="filtro in vivienda.filtros"> 
-          <Chip>{{filtro.nombre}}</Chip>
+          <Chip class="dark-grey-chip">{{filtro.nombre}}</Chip>
         </div>
 
         <h2>Ubicacion vivienda</h2>
@@ -122,6 +122,7 @@ export default defineComponent({
   margin-left: 37px;
   margin-right: 37px;
   width: 68%;
+  word-wrap: break-word;
 }
 .col-3 {
   height: 20%;
@@ -224,6 +225,16 @@ h4 {
 
 .back-button:hover {
   background-color: #64428C;
+}
+
+.dark-grey-chip {
+  background-color: #835EAE;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 14px;
+  display: inline-block;
+  margin: 5px;
 }
 
 @media (max-width: 500px) {

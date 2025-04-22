@@ -272,7 +272,10 @@ export default {
 }
 @media (max-width: 500px) {
     .card{
-        width: 100%;
+        width: 117%;
+    }
+    .card-title {
+        font-size: 15px;
     }
     .card-img{
         width: 180px;
@@ -288,7 +291,7 @@ export default {
 
 @media (max-width: 400px) {
     .card{
-        width: 103%;
+        width: 117%;
     }
     .card-img{
         width: 160px;
