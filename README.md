@@ -1,34 +1,16 @@
+# Introducción
+
+Este repositorio contiene un proyecto de ejemplo desarrollado con **Laravel** y **Vue**, diseñado para el curso de Desarrollo de Aplicaciones Web (DAW). El objetivo principal es proporcionar una base sólida para construir aplicaciones web modernas utilizando tecnologías avanzadas como VueRouter, PrimeVue, y más.
+
+El proyecto incluye funcionalidades completas como autenticación, gestión de usuarios, roles y permisos, y un panel de administración. Además, cuenta con una interfaz moderna basada en Bootstrap 5.
+
+El propósito principal de este proyecto es simular una plataforma moderna para la compra y venta de inmuebles.
 # Requisitos
 Se recomienda usar Laragon
 
 - ✅ PHP 8.2 o mayor (php -v)
 - ✅ Composer (composer -v)
 - ✅ Node JS (node -v)
-
-
-
-# Características
-
-Ejemplo proyecto Laravel 10 + vue3 PAra DAW
-
-- ✅ Laravel 10
-- ✅ Vue 3
-- ✅ VueRouter + Pinia
-- ✅ PrimeVue
-- ✅ Vue i18n Multi Idioma
-- ✅ Iniciar sesión
-- ✅ Restablecimiento de contraseña
-- ✅ Login
-- ✅ Panel de administración
-- ✅ Gestión de perfiles
-- ✅ Gestión de usuarios
-- ✅ Gestión de roles
-- ✅ Gestión de permisos (Spatie)
-- ✅ Cambio de contraseña
-- ✅ Verificación de correo electrónico
-- ✅ Gestión de Posts
-- ✅ Blog de Frontend
-- ✅ Boostrap 5
 
 
 ## Como usar
@@ -74,6 +56,13 @@ php artisan db:seed
 npm install
 
 npm run dev
+```
+### Instalar los requisitos
+```bash
+npm install vue-leaflet
+```
+```bash
+composer install && npm install
 ```
 
 ### Lanzar servidor
