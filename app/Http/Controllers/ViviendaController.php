@@ -230,6 +230,6 @@ class ViviendaController extends Controller
     $vivienda = Vivienda::findOrFail($id);
     $vivienda->delete();
 
-    return response()->json(['message' => 'Vivienda eliminada con éxito.']);
+    return response()->json(['message' => 'Vivienda eliminada correctamente.']);
     }
 }

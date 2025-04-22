@@ -162,7 +162,7 @@ watchEffect(() => {
     profile.name = profileData.value.name;
     profile.email = profileData.value.email;
     profile.telefono = profileData.value.telefono;
-    profile.tipo = profileData.value.tipo; // Añadirmos esta linea para comprobar el tipo del usuario
+    profile.tipo = profileData.value.tipo;
 
     originalProfile.name = profileData.value.name;
     originalProfile.email = profileData.value.email;
