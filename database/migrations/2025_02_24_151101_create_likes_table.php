@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_usuario');
             $table->unsignedBigInteger('id_vivienda');
             $table->timestamps();
-            $table->foreign('id_usuario')->references('id')->on('users');
-            $table->foreign('id_vivienda')->references('id')->on('viviendas');
+            $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_vivienda')->references('id')->on('viviendas')->onDelete('cascade');
         });
     }
 

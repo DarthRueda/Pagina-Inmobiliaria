@@ -1,5 +1,6 @@
 <template>
   <div class="formulario-hipoteca">
+    <button @click="volver" class="back-button"><i class="arrow-left"></i> Volver</button>
     <h1 class="title">Calcular Hipoteca</h1>
     <form @submit.prevent="calcularHipoteca">
       <div>
@@ -83,7 +84,11 @@ export default {
     },
     formatNumber(value) {
       return value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&.').replace('.', ',');
-    }
+    },
+
+    volver() {
+      this.$router.go(-1);
+    },
   }
 };
 </script>
@@ -288,5 +293,46 @@ export default {
     margin: 5px;
   }
 
+}
+
+.back-button {
+  align-self: flex-start;
+  margin-top: 10px;
+  background-color: #835EAE;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.back-button:hover {
+  background-color: #64428C;
+}
+
+.arrow-left {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+  transform: rotate(-45deg);
+  margin-right: 8px;
+}
+
+@media (max-width: 768px) {
+  .formulario-hipoteca {
+    margin-left: 30px;
+    margin-right: 30px;
+    padding-top: 30px; /* Añadir padding superior para compensar el navbar */
+    padding-bottom: 30px;
+  }
+  
+  .back-button {
+    margin-top: 20px; /* Reducir el margen superior ya que tenemos padding en el contenedor */
+  }
 }
 </style>

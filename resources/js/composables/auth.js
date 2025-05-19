@@ -100,7 +100,7 @@ export default function useAuth() {
                 // await loginUser()
                 swal({
                     icon: 'success',
-                    title: 'Registration successfully',
+                    title: 'Registro exitoso',
                     showConfirmButton: false,
                     timer: 1500         
                 })
@@ -149,7 +149,7 @@ export default function useAuth() {
             .then(async response => {
                 swal({
                     icon: 'success',
-                    title: 'We have emailed your password reset link! Please check your mail inbox.',
+                    title: '¡Hemos enviado un enlace para restablecer tu contraseña! Por favor, revisa tu bandeja de entrada.',
                     showConfirmButton: false,
                     timer: 1500
                 })
@@ -173,7 +173,7 @@ export default function useAuth() {
             .then(async response => {
                 swal({
                     icon: 'success',
-                    title: 'Password successfully changed.',
+                    title: 'Contraseña cambiada con exito.',
                     showConfirmButton: false,
                     timer: 1500
                 })

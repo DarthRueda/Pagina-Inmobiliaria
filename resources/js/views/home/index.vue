@@ -203,6 +203,7 @@ export default {
     background-image: url("/images/Home/imagen_incio.png");
     text-align: center;
     background-size: cover;
+    background-position: center;
     height: 440px;
 }
 
@@ -512,6 +513,126 @@ export default {
     .section-button {
         width: 100%;
         max-width: 300px; /* Ajusta el ancho del botón */
+    }
+}
+
+@media (max-width: 768px) {
+    .Banner h1 {
+        margin-top: 80px;
+        font-size: 24px;
+        padding: 0 15px;
+    }
+    
+    .search-container {
+        width: 95%;
+    }
+    
+    .search-options {
+        width: 95%;
+        
+    }
+    
+    .search-bar {
+        width: 95%;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .search-input {
+        width: 90%;
+        margin: 20px 5px 10px 5px;
+    }
+    
+    .search-button {
+        margin: 10px 5px 20px 5px;
+    }
+    
+    .search-container .municipios-dropdown {
+        top: calc(100% - 50px);
+        left: 5%;
+        width: 90%;
+        min-width: auto;
+    }
+    
+    .Seccion1 {
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 425px) {
+    .Banner {
+        height: 400px;
+    }
+    
+    .Banner h1 {
+        margin-top: 60px;
+        font-size: 20px;
+    }
+    
+    .search-container {
+        width: 95%;
+    }
+    
+    .option-button {
+        width: 110px;
+        padding: 10px 10px;
+        font-size: 14px;
+    }
+    
+    .search-bar {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .search-input {
+        width: 90%;
+        margin: 20px 0 10px 0;
+    }
+    
+    .search-button {
+        width: 90%;
+        margin: 0 0 20px 0;
+    }
+    
+    .Seccion1 {
+        padding: 0 10px;
+    }
+    
+    .text-section {
+        width: 100%;
+        max-width: 300px;
+        margin-left: 0;
+        text-align: center;
+    }
+    
+    .section-button {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .bloque-hipoteca .col-6,
+    .bloque-casa .col-6,
+    .bloque-inmobiliaria .col-6 {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .icon-text {
+        justify-content: center;
+    }
+    
+    .text-content, .text-regular, .text-bold {
+        text-align: center;
+    }
+}
+
+/* Fix para el dropdown en todos los tamaños */
+@media (max-width: 1024px) {
+    .search-container .municipios-dropdown {
+        min-width: auto;
+        width: 90%;
+        left: 5%;
     }
 }
 </style>

@@ -79,7 +79,7 @@ export default function useUsers() {
                 router.push({name: 'users.index'})
                 swal({
                     icon: 'success',
-                    title: 'User saved successfully'
+                    title: 'Usuario guardado correctamente'
                 })
             })
             .catch(error => {
@@ -102,7 +102,7 @@ export default function useUsers() {
 
                 swal({
                     icon: 'success',
-                    title: 'User updated successfully'
+                    title: 'Usuario actualizado correctamente'
                 })
             })
             .catch(error => {
@@ -115,11 +115,11 @@ export default function useUsers() {
 
     const deleteUser = async (id, index) => {
         swal({
-            title: 'Are you sure?',
-            text: 'You won\'t be able to revert this action!',
+            title: '¿Estás seguro?',
+            text: '¡No podrás revertir esta acción!',
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
+            confirmButtonText: 'Sí, eliminar',
             confirmButtonColor: '#ef4444',
             timer: 20000,
             timerProgressBar: true,
@@ -135,13 +135,13 @@ export default function useUsers() {
                             //router.push({name: 'users.index'})
                             swal({
                                 icon: 'success',
-                                title: 'User deleted successfully'
+                                title: 'Usuario eliminado correctamente'
                             })
                         })
                         .catch(error => {
                             swal({
                                 icon: 'error',
-                                title: 'Something went wrong'
+                                title: 'Algo salió mal'
                             })
                         })
                 }

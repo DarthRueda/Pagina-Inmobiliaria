@@ -7,7 +7,7 @@
       </div>
       <!-- Columna para el contenido -->
       <div class="col-md-9">
-        <h1 class="mb-30">Mis Propiedades</h1>
+        <h1 class="mb-20">Mis Propiedades</h1>
         <button @click="toggleCreateForm" class="section-button">Añadir Propiedad</button>
         <div v-for="vivienda in viviendas" :key="vivienda.id" class="card-inmueble">
           <CardInmueble :vivienda="vivienda" />
@@ -437,29 +437,64 @@
 
         <!-- Editar una Imagen -->
         <div v-if="showImageEdit" class="overlay">
-          <div class="overlay-content">
-            <h3 class="titulos">Editar Imágenes</h3>
-            <div class="thumbnail-row">
-              <img
-                v-for="image in vivienda.media"
-                :key="image.id"
-                :src="image.url"
-                class="thumbnail"
-                @click="selectImage(image)"
-              />
+          <div class="overlay-content image-edit-panel">
+            <h3 class="titulos image-edit-title">Galería de Imágenes</h3>
+            
+            <div class="image-edit-container">
+              <div class="thumbnails-container">
+                <h4 class="section-subtitle">Imágenes actuales</h4>
+                <div class="thumbnail-grid">
+                  <div 
+                    v-for="image in vivienda.media" 
+                    :key="image.id" 
+                    class="thumbnail-wrapper"
+                    :class="{ 'selected': selectedImage && selectedImage.id === image.id }"
+                    @click="selectImage(image)"
+                  >
+                    <img :src="image.url" class="thumbnail" />
+                    <div class="thumbnail-overlay">
+                      <span class="thumbnail-icon"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="selected-image-section">
+                <div v-if="selectedImage" class="selected-image-container">
+                  <h4 class="section-subtitle">Imagen seleccionada</h4>
+                  <div class="selected-image-wrapper">
+                    <img :src="selectedImage.url" class="selected-image" />
+                  </div>
+                  <button @click="deleteImage(selectedImage)" class="delete-image-button">
+                    <i class="fa fa-trash"></i> Eliminar esta imagen
+                  </button>
+                </div>
+                <div v-else class="no-image-selected">
+                  <p>Selecciona una imagen para verla en detalle</p>
+                </div>
+              </div>
             </div>
-            <div v-if="selectedImage" class="selected-image-container">
-              <img :src="selectedImage.url" class="selected-image" />
-              <button @click="deleteImage(selectedImage)" class="cancel-button mt-3">
-                Eliminar Imagen
+            
+            <div class="upload-section">
+              <h4 class="section-subtitle">Añadir Nuevas Imágenes</h4>
+              <div class="upload-container">
+                <label for="newImages" class="upload-label">
+                  <i class="fa fa-cloud-upload"></i>
+                  <span>Seleccionar archivos</span>
+                </label>
+                <input type="file" id="newImages" multiple @change="handleNewImageUpload" class="file-input" />
+                <span v-if="newImages.length" class="file-count">{{ newImages.length }} archivo(s) seleccionado(s)</span>
+              </div>
+            </div>
+            
+            <div class="button-group image-edit-buttons">
+              <button @click="submitImageChanges" class="form-button save-button">
+                <i class="fa fa-save"></i> Guardar Cambios
+              </button>
+              <button @click="toggleImageEdit" class="cancel-button">
+                <i class="fa fa-times"></i> Cerrar
               </button>
             </div>
-            <div class="form-group mt-3">
-              <h4 class="add-images-title">Añadir Nuevas Imágenes</h4>
-              <input type="file" id="newImages" multiple @change="handleNewImageUpload" class="file-input" />
-            </div>
-            <button @click="submitImageChanges" class="form-button mt-3">Guardar Cambios</button>
-            <button @click="toggleImageEdit" class="cancel-button mt-3">Cerrar</button>
           </div>
         </div>
       </div>
@@ -916,42 +951,224 @@ export default {
   display: flex;
   gap: 10px;
   overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.image-edit-panel {
+  width: 80%;
+  max-width: 1000px;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.image-edit-title {
+  color: #835EAE;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #f0f0f0;
+  width: 100%;
+  text-align: center;
+}
+
+.image-edit-container {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.thumbnails-container {
+  flex: 1;
+  max-height: 350px;
+}
+
+.section-subtitle {
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.thumbnail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 0;
+  background-color: #f9f9f9;
+}
+
+.thumbnail-wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 0;
+  overflow: hidden;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.thumbnail-wrapper:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.thumbnail-wrapper.selected {
+  border-color: #835EAE;
 }
 
 .thumbnail {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  cursor: pointer;
-  border: 2px solid transparent;
+  transition: transform 0.3s ease;
 }
 
-.thumbnail:hover {
-  border-color: #007bff;
+.thumbnail-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.thumbnail-wrapper:hover .thumbnail-overlay {
+  opacity: 1;
+}
+
+.thumbnail-icon {
+  color: white;
+  font-size: 20px;
+}
+
+.selected-image-section {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
 }
 
 .selected-image-container {
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+}
+
+.selected-image-wrapper {
+  width: 100%;
+  height: 300px;
+  border-radius: 0;
+  overflow: hidden;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .selected-image {
   max-width: 100%;
-  max-height: 300px;
-  border: 1px solid #ddd;
+  max-height: 100%;
+  object-fit: contain;
 }
 
-.add-images-title {
-  text-align: center;
-  margin-bottom: 15px;
-  font-size: 1.5rem;
+.no-image-selected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  background-color: #f5f5f5;
+  border-radius: 0;
+  color: #999;
+  font-style: italic;
+}
+
+.delete-image-button {
+  background-color: #E74C3C;
+  color: white;
+  border: none;
+  border-radius: 0;
+  padding: 8px 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.delete-image-button:hover {
+  background-color: #C0392B;
+}
+
+.upload-section {
+  width: 100%;
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 0;
+  border: 1px dashed #ccc;
+}
+
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px 25px;
+  background-color: #835EAE;
+  color: white;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  gap: 8px;
   font-weight: bold;
 }
 
+.upload-label:hover {
+  background-color: #64428C;
+}
+
 .file-input {
-  display: block;
-  margin: 0 auto;
-  text-align: center;
+  display: none;
+}
+
+.file-count {
+  margin-top: 10px;
+  color: #555;
+  font-weight: bold;
+}
+
+.image-edit-buttons {
+  width: 100%;
+  margin-top: 25px;
+  justify-content: center;
+  gap: 20px;
+}
+
+.save-button {
+  min-width: 150px;
 }
 
 .section-button {
@@ -1069,5 +1286,21 @@ input[type="radio"]:checked {
 
 .edit-button:hover {
     background-color: #b38e5c;
+}
+
+
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+    .filters {
+        margin-bottom: 20px;
+    }
+  
+    .panelusuario {
+        width: 90%;
+        padding-left: 0;
+    }
 }
 </style>

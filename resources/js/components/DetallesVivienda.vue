@@ -1,9 +1,11 @@
 <template>
   <div v-if="vivienda">
-    <div class="row no-gutters">
-      <ImageMosaic :images="viviendaImages" />
+    <div class="image-container">
+      <div class="row no-gutters">
+        <ImageMosaic :images="viviendaImages" />
+      </div>
+      <button class="back-button overlay-button" @click="goBackToInmuebles"><i class="arrow-left"></i>Volver a Inmuebles</button>
     </div>
-    <button class="back-button" @click="goBackToInmuebles">Volver a Inmuebles</button>
     <div class="row no-gutters">
       <div class="col-9">
         <div class="price">{{ vivienda.precio }}</div>
@@ -211,20 +213,28 @@ h4 {
 }
 
 .back-button {
-  margin-top: 10px;
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #835EAE;
+  background-color: rgba(131, 94, 174, 0.9);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   width: 200px;
-  align-self: center;
 }
 
 .back-button:hover {
-  background-color: #64428C;
+  background-color: rgba(100, 66, 140, 0.9);
+}
+
+.arrow-left {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid white;
+  border-left: 2px solid white;
+  transform: rotate(-45deg);
+  margin-right: 8px;
 }
 
 .dark-grey-chip {
@@ -235,6 +245,18 @@ h4 {
   font-size: 14px;
   display: inline-block;
   margin: 5px;
+}
+
+.image-container {
+  position: relative;
+}
+
+.overlay-button {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  z-index: 10;
+  margin: 0;
 }
 
 @media (max-width: 500px) {

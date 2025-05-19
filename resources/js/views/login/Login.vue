@@ -3,8 +3,8 @@
         <div class="row justify-content-center my-5">
             <div class="col-md-6">
                 <div class="text-center mb-4">
-                    <h1 class="h1-title">{{ $t('Inicia Session') }}</h1>
-                    <h2 class="h2-subtitle">{{ $t('Inicia Session y disfruta de todas las ventajas ') }}</h2>
+                    <h1 class="h1-title">{{ $t('Iniciar Sesión') }}</h1>
+                    <h2 class="h2-subtitle">{{ $t('Inicia sesión y disfruta de todas las ventajas ') }}</h2>
                 </div>
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">

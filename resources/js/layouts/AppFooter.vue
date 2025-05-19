@@ -12,39 +12,41 @@ const logoUrl = computed(() => {
 <template>
     <div class="layout-footer">
         <div class="column">
-            <div class="row full-width">
-                <div class="col-4 text-center">
-                    <img src="/images/footer/logo2.svg" alt="Logo">
+            <div class="row full-width logo-copyright-row">
+                <div class="col-md-4 col-sm-12 text-center logo-container">
+                    <img src="/images/footer/logo2.svg" alt="Logo" class="footer-logo">
                 </div>
-                <div class="col-4 text-center">
+                <div class="col-md-4 col-sm-12 text-center copyright-container">
                     <span>©2025 Copyright</span>
                 </div>
-                <div class="col-4 text-center">
-                    <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
-                        <img src="/images/footer/facebook.svg" alt="Facebook" class="social-icon">
-                    </a>
-                    <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
-                        <img src="/images/footer/instagram.svg" alt="Instagram" class="social-icon">
-                    </a>
-                    <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
-                        <img src="/images/footer/youtube.svg" alt="YouTube" class="social-icon">
-                    </a>
-                    <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
-                        <img src="/images/footer/link.svg" alt="LinkedIn" class="social-icon">
-                    </a>
-                    <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer">
-                        <img src="/images/footer/tiktok.svg" alt="TikTok" class="social-icon">
-                    </a>
+                <div class="col-md-4 col-sm-12 text-center social-icons-container">
+                    <div class="social-icons-wrapper">
+                        <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer">
+                            <img src="/images/footer/facebook.svg" alt="Facebook" class="social-icon">
+                        </a>
+                        <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
+                            <img src="/images/footer/instagram.svg" alt="Instagram" class="social-icon">
+                        </a>
+                        <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer">
+                            <img src="/images/footer/youtube.svg" alt="YouTube" class="social-icon">
+                        </a>
+                        <a href="https://www.linkedin.com" target="_blank" rel="noopener noreferrer">
+                            <img src="/images/footer/link.svg" alt="LinkedIn" class="social-icon">
+                        </a>
+                        <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer">
+                            <img src="/images/footer/tiktok.svg" alt="TikTok" class="social-icon">
+                        </a>
+                    </div>
                 </div>
             </div>
-            <div class="row full-width">
-                <div class="col-4 text-center">
+            <div class="row full-width policy-row">
+                <div class="col-md-4 col-sm-12 text-center policy-item">
                     <span>Politica de Cookies</span>
                 </div>
-                <div class="col-4 text-center">
+                <div class="col-md-4 col-sm-12 text-center policy-item">
                     <span class="aviso-legal">Aviso Legal</span>
                 </div>
-                <div class="col-4 text-center">
+                <div class="col-md-4 col-sm-12 text-center policy-item">
                     <span>Protecció de dades</span>
                 </div>
             </div>
@@ -57,40 +59,101 @@ const logoUrl = computed(() => {
     color: white;
     background-color: #835EAE;
 }
+
 .column {
     display: flex;
     flex-direction: column;
-    width: 100%; // Ensure the column spans the entire width of the footer
+    width: 100%;
 }
+
 .row {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px; // Add some space between rows
+    margin-bottom: 15px;
 }
+
 .full-width {
-    width: 100%; // Ensure the row spans the entire width of the footer
+    width: 100%;
 }
-.col-4 {
+
+.col-md-4 {
     flex: 0 0 33.3333%;
-    text-align: center; // Center the content of all columns
+    padding: 0 10px;
 }
-.col-4.text-center {
-    display: flex;
-    justify-content: center;
-    gap: 5px; // Add gap between social icons
-}
+
 .text-center {
     text-align: center;
 }
-.aviso-legal {
-    margin-top: 0; // Reset margin-top since it's now in a new row
+
+.social-icons-wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 15px;
 }
+
 .social-icon {
     width: 26px;
     height: 26px;
+    transition: transform 0.2s;
 }
-.social-icon:last-child {
-    margin-right: 0;
+
+.social-icon:hover {
+    transform: scale(1.2);
+}
+
+.footer-logo {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Media queries para responsive */
+@media (max-width: 768px) {
+    .col-md-4 {
+        flex: 0 0 100%;
+        margin-bottom: 15px;
+    }
+    
+    .row {
+        flex-direction: column;
+    }
+    
+    .social-icons-container {
+        margin: 15px 0;
+    }
+    
+    .social-icons-wrapper {
+        gap: 20px;
+    }
+    
+    .social-icon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .policy-item {
+        margin: 10px 0;
+    }
+    
+    .logo-copyright-row > div,
+    .policy-row > div {
+        margin-bottom: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .layout-footer {
+        padding: 15px 10px;
+    }
+    
+    .social-icons-wrapper {
+        gap: 25px;
+    }
+    
+    .policy-row {
+        margin-top: 10px;
+    }
 }
 </style>

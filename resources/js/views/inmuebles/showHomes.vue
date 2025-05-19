@@ -67,23 +67,23 @@
                 <div class="form-group">
                     <label for="habitaciones">Habitaciones</label>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="habitaciones-1" value="1" v-model="selectedHabitaciones" @change="applyFilters" /> 1
-                        <input type="checkbox" id="habitaciones-2" value="2" v-model="selectedHabitaciones" @change="applyFilters" /> 2
+                        <input type="checkbox" id="habitaciones-1" value="1" v-model="selectedHabitaciones" @change="applyFilters" /> 1+
+                        <input type="checkbox" id="habitaciones-2" value="2" v-model="selectedHabitaciones" @change="applyFilters" /> 2+
                     </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="habitaciones-3" value="3" v-model="selectedHabitaciones" @change="applyFilters" /> 3
-                        <input type="checkbox" id="habitaciones-4" value="4" v-model="selectedHabitaciones" @change="applyFilters" /> 4
+                        <input type="checkbox" id="habitaciones-3" value="3" v-model="selectedHabitaciones" @change="applyFilters" /> 3+
+                        <input type="checkbox" id="habitaciones-4" value="4" v-model="selectedHabitaciones" @change="applyFilters" /> 4+
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="banos">Baños</label>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="banos-1" value="1" v-model="selectedBanyos" @change="applyFilters" /> 1
-                        <input type="checkbox" id="banos-2" value="2" v-model="selectedBanyos" @change="applyFilters" /> 2
+                        <input type="checkbox" id="banos-1" value="1" v-model="selectedBanyos" @change="applyFilters" /> 1+
+                        <input type="checkbox" id="banos-2" value="2" v-model="selectedBanyos" @change="applyFilters" /> 2+
                     </div>
                     <div class="checkbox-group">
-                        <input type="checkbox" id="banos-3" value="3" v-model="selectedBanyos" @change="applyFilters" /> 3
-                        <input type="checkbox" id="banos-4" value="4" v-model="selectedBanyos" @change="applyFilters" /> 4
+                        <input type="checkbox" id="banos-3" value="3" v-model="selectedBanyos" @change="applyFilters" /> 3+
+                        <input type="checkbox" id="banos-4" value="4" v-model="selectedBanyos" @change="applyFilters" /> 4+
                     </div>
                 </div>
                 <div class="form-group">
@@ -383,6 +383,14 @@ h1 {
 input[type="checkbox"] {
     width: 16px;
     height: 16px;
+    accent-color: #835EAE; /* Cambio de color a lila */
+    cursor: pointer;
+}
+
+/* Estilos personalizados para navegadores que no soportan accent-color */
+input[type="checkbox"]:checked {
+    background-color: #835EAE;
+    border-color: #835EAE;
 }
 
 .input-group{
